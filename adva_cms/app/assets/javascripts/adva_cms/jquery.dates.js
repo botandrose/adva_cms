@@ -41,9 +41,11 @@ createAndFormatDateSpan = function(abbr) {
   abbr.html('<span title="' + abbr.html() + '">' + timeAgoInWords(abbr.attr('title')) + '</span>'); // only used for past dates right now so we can safely use time_ago_in_words here
 }
 
-$(document).ready(function() {
-  // parse all microformatted dates and re-format them as time distance
-  $('abbr.datetime').each(function() {
-    createAndFormatDateSpan($(this));
+(function($) {
+  $(document).ready(function() {
+    // parse all microformatted dates and re-format them as time distance
+    $('abbr.datetime').each(function() {
+      createAndFormatDateSpan($(this));
+    });
   });
-});
+})(jQuery);
