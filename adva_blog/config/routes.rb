@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   scope :constraints => lambda { |req| Blog.where(:permalink => req.params[:section_permalink]).exists? } do
     get "/:section_permalink" => "blog_articles#index", :as => :blog
+    get "/:section_permalink/categories/:category_id" => "blog_articles#index", :as => :blog_category
     get "/:section_permalink/:year/:month/:day/:permalink" => "blog_articles#show", :constraints => { :year => /\d{4}/, :month => /\d{1,2}/, :day => /\d{1,2}/ }, :as => :blog_article
   end
 
@@ -27,13 +28,6 @@ Rails.application.routes.draw do
       end
     end
   end
-
-  # map.blog_category      'blogs/:section_id/categories/:category_id/:year/:month',
-  #                        :controller   => 'blog_articles',
-  #                        :action       => 'index',
-  #                        :year => nil, :month => nil,
-  #                        :requirements => { :year => /\d{4}/, :month => /\d{1,2}/},
-  #                        :conditions   => { :method => :get }
 
   # map.blog_tag           'blogs/:section_id/tags/:tags/:year/:month',
   #                        :controller   => 'blog_articles',
