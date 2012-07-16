@@ -1,3 +1,5 @@
+require 'action_view'
+require 'action_view/helpers'
 require 'action_view/helpers/form_helper'
 
 module ActionView
