@@ -1,7 +1,0 @@
-<% if @contents.present? -%>
-  <ul>
-  <% @contents.each do |content| %>
-    <li><%= content[:type] %>: <%= link_to_content content %></li>
-  <% end %>
-  </ul>
-<% end -%>

@@ -1,0 +1,36 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+ 		<meta name="generator" content="adva-cms - Open source content management platform" /> 
+    <title>adva-cms: <%= controller.controller_name %></title>
+
+    <%= stylesheet_link_tag "adva_cms/admin/reset" %>
+    <%= stylesheet_link_tag "adva_cms/admin/common" %>
+    <%= stylesheet_link_tag "adva_cms/admin/forms" %>
+    <%= stylesheet_link_tag "adva_cms/layout/login" %>
+    <%= javascript_include_tag "jquery" %>
+    <%= javascript_include_tag "jquery_ujs" %>
+    <%= javascript_include_tag "adva_cms/jquery/jquery-lowpro" %>
+    <%= javascript_include_tag "adva_cms/jquery/jquery-ui" %>
+    <%= javascript_include_tag "adva_cms/jquery.common" %>
+    <%= javascript_include_tag "adva_cms/json" %>
+    <%= javascript_include_tag "adva_cms/cookie" %>
+    <%= javascript_include_tag "adva_cms/jquery.flash" %>
+    <%= javascript_include_tag "application" %>
+
+    <%= yield :head %>
+  </head>
+  <body>   
+    <div id="header">
+    </div>
+    
+    <div id="main">
+      <div id="flashes"><%= render :partial => 'shared/flash' %></div>
+      <div id="content">
+        <%= yield %>      
+      </div>
+    </div>
+
+  </body>
+</html>
