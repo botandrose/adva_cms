@@ -34,9 +34,6 @@ class Content < ActiveRecord::Base
 
   before_validation :set_site
 
-  # more explicit to make nested category contents to work
-  default_scope :order => 'lft'
-
   scope :published, Proc.new { |*args|
     options = args.extract_options!
     conditions = ['contents.published_at IS NOT NULL AND contents.published_at <= ?', Time.zone.now]

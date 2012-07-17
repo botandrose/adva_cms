@@ -12,7 +12,7 @@ module ActiveRecord
         before_destroy :prune_branch
         belongs_to :parent, :class_name => self.name
 
-        default_scope :order => 'lft'
+        default_scope :order => "#{table_name}.lft"
 
         klass = options[:class] || self
         scopes = Array(options[:scope]).map { |s| s.to_s !~ /_id$/ ? :"#{s}_id" : s }
