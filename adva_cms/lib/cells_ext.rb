@@ -9,9 +9,8 @@ module Cell
 
     private
     def require_all_cells
-      # cell_files = Dir[Rails.root + '/app/cells/*.rb'] + Dir[File.join(Rails.root, 'vendor', 'adva', 'engines') + '/*/app/cells/*.rb'] +
-      #   Dir[File.join(Rails.root, 'vendor', 'adva', 'plugins') + '/*/app/cells/*.rb']
-      cell_files = Dir[Rails.root + '/app/cells/*.rb'] + Dir[File.join(Rails.root, 'vendor', 'plugins') + '/*/app/cells/*.rb']
+      # TODO pull in cells from engines, too
+      cell_files = Dir[::Rails.root.join('app/cells/*.rb')]
       cell_files.each { |cell_file| require cell_file }
     end
   end
