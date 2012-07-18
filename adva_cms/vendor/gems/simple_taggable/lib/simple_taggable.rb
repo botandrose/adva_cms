@@ -1,6 +1,11 @@
+require "simple_taggable/version"
+
 require 'tag_list'
 require 'tag'
 require 'tagging'
+
+module SimpleTaggable
+end
 
 module ActiveRecord
   module Acts

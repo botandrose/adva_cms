@@ -33,6 +33,7 @@ module AdvaCms
       require "globalize2_versioning"
       require "has_filter"
       require "simple_nested_set"
+      require "simple_taggable"
       require "xss_terminate"
     end
 
