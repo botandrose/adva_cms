@@ -27,6 +27,8 @@
 #   that hook in here
 # * renamed and refactored a bit more :)
 
+require "xss_terminate/version"
+
 module XssTerminate
   mattr_accessor :default_filter
   @@default_filter = :strip_tags
