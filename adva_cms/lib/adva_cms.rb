@@ -30,6 +30,7 @@ module AdvaCms
       require "has_counter"
       require "belongs_to_cacheable"
       require "filtered_column"
+      require "globalize2_versioning"
     end
   end
 end

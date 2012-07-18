@@ -1,3 +1,7 @@
+require "globalize2_versioning/version"
+module Globalize2Versioning
+end
+
 module Globalize
   module Model
     class Adapter
@@ -212,3 +216,5 @@ module Globalize
     end     # ActiveRecord
   end       # Model
 end         # Globalize
+
+ActiveRecord::Base.send :include, Globalize::Model::ActiveRecord::Versioned
