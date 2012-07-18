@@ -1,6 +1,7 @@
 class BaseController < ApplicationController
   class SectionRoutingError < ActionController::RoutingError; end
-  helper :base, :resource, :content, :filter
+  helper :base, :resource, :content
+  helper HasFilter::Helper
   helper TableBuilder
 
   include CacheableFlash

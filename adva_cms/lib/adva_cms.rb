@@ -31,6 +31,7 @@ module AdvaCms
       require "belongs_to_cacheable"
       require "filtered_column"
       require "globalize2_versioning"
+      require "has_filter"
       require "xss_terminate"
     end
 
