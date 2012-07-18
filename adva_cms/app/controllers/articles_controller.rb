@@ -10,8 +10,6 @@ class ArticlesController < BaseController
   before_filter :set_article,  :only => :show
   before_filter :guard_view_permissions, :only => [:index, :show]
 
-  # caches_page_with_references :index, :show, :comments,
-  #   :track => ['@article', '@articles', '@category', '@commentable', {'@site' => :tag_counts, '@section' => :tag_counts}]
     # TODO move :comments and @commentable to acts_as_commentable
 
   acts_as_commentable

@@ -183,13 +183,5 @@ module Menus
         end
       end
     end
-
-    class CachedPages < SettingsBase
-      define do
-        menu :actions, :class => 'actions' do
-          item :clear_all, :content => link_to_clear_cached_pages(@site) unless @site.cached_pages.empty?
-        end
-      end
-    end
   end
 end

@@ -50,8 +50,6 @@ ActionDispatch::Callbacks.to_prepare do
     :'destroy user'       => [:admin],
     :'manage user'        => [:admin],
 
-    :'manage cached_page' => [:admin],
-
     :'manage roles'       => [:admin],
 
     :'show category'      => [:author],
