@@ -28,6 +28,7 @@
 # * renamed and refactored a bit more :)
 
 require "xss_terminate/version"
+require "rails_sanitize"
 
 module XssTerminate
   mattr_accessor :default_filter
