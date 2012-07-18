@@ -1,3 +1,5 @@
+require "table_builder/version"
+
 require 'action_view/helpers/tag_helper'
 
 require 'table_builder/tag'
@@ -22,3 +24,4 @@ module TableBuilder
   end
 end
 
+TableBuilder.options[:i18n_scope] = :adva

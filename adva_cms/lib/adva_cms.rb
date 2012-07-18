@@ -35,6 +35,7 @@ module AdvaCms
       require "simple_nested_set"
       require "simple_taggable"
       require "stringex"
+      require "table_builder"
       require "xss_terminate"
     end
 
