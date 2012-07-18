@@ -23,5 +23,11 @@ require 'cells_ext'
 
 module AdvaCms
   class Engine < Rails::Engine
+    initializer "load_vendored_gems" do
+      Dir["#{File.expand_path("#{File.dirname(__FILE__)}/../vendor/gems")}/**/lib"].each do |vendored_gem_path|
+        $: << vendored_gem_path
+      end
+      require "has_counter"
+    end
   end
 end
