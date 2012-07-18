@@ -28,6 +28,7 @@ module AdvaCms
         $: << vendored_gem_path
       end
       require "has_counter"
+      require "belongs_to_cacheable"
     end
   end
 end
