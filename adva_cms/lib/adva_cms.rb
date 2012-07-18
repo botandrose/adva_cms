@@ -29,6 +29,7 @@ module AdvaCms
       end
       require "has_counter"
       require "belongs_to_cacheable"
+      require "filtered_column"
     end
   end
 end
