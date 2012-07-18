@@ -21,24 +21,25 @@ require 'cells_ext'
 #   }
 # end
 
+# load vendored gems
+Dir["#{File.expand_path("#{File.dirname(__FILE__)}/../vendor/gems")}/**/lib"].each do |vendored_gem_path|
+  $: << vendored_gem_path
+end
+
+require "has_counter"
+require "belongs_to_cacheable"
+require "filtered_column"
+require "globalize2_versioning"
+require "has_filter"
+require "simple_nested_set"
+require "simple_taggable"
+require "stringex"
+require "tags"
+require "table_builder"
+require "xss_terminate"
+
 module AdvaCms
   class Engine < Rails::Engine
-    initializer "load_vendored_gems" do
-      Dir["#{File.expand_path("#{File.dirname(__FILE__)}/../vendor/gems")}/**/lib"].each do |vendored_gem_path|
-        $: << vendored_gem_path
-      end
-      require "has_counter"
-      require "belongs_to_cacheable"
-      require "filtered_column"
-      require "globalize2_versioning"
-      require "has_filter"
-      require "simple_nested_set"
-      require "simple_taggable"
-      require "stringex"
-      require "table_builder"
-      require "xss_terminate"
-    end
-
     initializer "setup xss_terminate" do
       XssTerminate.untaint_after_find = true
 
