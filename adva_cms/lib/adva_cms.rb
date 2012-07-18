@@ -32,6 +32,7 @@ module AdvaCms
       require "filtered_column"
       require "globalize2_versioning"
       require "has_filter"
+      require "simple_nested_set"
       require "xss_terminate"
     end
 

@@ -1,3 +1,7 @@
+require "simple_nested_set/version"
+module SimpleNestedSet
+end
+
 module ActiveRecord
   module NestedSet
     module ActMacro
