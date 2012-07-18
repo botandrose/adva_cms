@@ -34,6 +34,7 @@ module AdvaCms
       require "has_filter"
       require "simple_nested_set"
       require "simple_taggable"
+      require "stringex"
       require "xss_terminate"
     end
 
