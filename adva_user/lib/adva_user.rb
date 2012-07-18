@@ -1,4 +1,11 @@
 require "adva_user/version"
+
+# load vendored gems
+Dir["#{File.expand_path("#{File.dirname(__FILE__)}/../vendor/gems")}/**/lib"].each do |vendored_gem_path|
+  $: << vendored_gem_path
+end
+require "authentication"
+
 require "rails"
 
 require "action_controller/authenticate_user"

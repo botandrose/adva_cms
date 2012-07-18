@@ -1,3 +1,4 @@
+require "authentication/version"
 require 'authentication/salted_hash'
 require 'authentication/remember_me'
 require 'authentication/single_token'
@@ -263,3 +264,7 @@ module Authentication
     end
   end
 end
+
+require 'authentication/active_record_extensions'
+ActiveRecord::Base.extend Authentication::Macros
+

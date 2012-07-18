@@ -1,7 +1,9 @@
+#!/usr/bin/env rake
+require "bundler/gem_tasks"
+
 PKG_NAME = 'authentication'
 PKG_VERSION = 0.02
 
-require 'rake'
 require 'rake/testtask'
 require 'rake/rdoctask'
 require 'rake/packagetask'
