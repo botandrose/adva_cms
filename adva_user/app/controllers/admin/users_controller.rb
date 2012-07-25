@@ -73,8 +73,8 @@ class Admin::UsersController < Admin::BaseController
     end
 
     def set_users
-      @users = @site ? @site.users_and_superusers.paginate(:page => current_page) :
-                       User.admins_and_superusers.paginate(:page => current_page)
+      @users = @site ? @site.users_and_superusers :
+                       User.admins_and_superusers
     end
 
     def set_user
