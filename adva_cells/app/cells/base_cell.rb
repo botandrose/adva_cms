@@ -1,38 +1,77 @@
 class BaseCell < Cell::Base
-  protected
-    def symbolize_options!
-      @opts.symbolize_keys!
-    end
+  def self.to_xml(options={})
+    options[:root]    ||= 'cell'
+    options[:indent]  ||= 2
+    options[:builder] ||= Builder::XmlMarkup.new(:indent => options[:indent])
 
-    def set_site
-      @site = controller.site or raise "can not set site from controller"
-    end
+    cell_name = self.to_s.gsub('Cell', '').underscore
 
-    def set_section
-      if section = @opts[:section]
-        @section = @site.sections.find(:first, :conditions => ["id = ? OR permalink = ?", section, section])
+    options[:builder].tag!(options[:root]) do |cell_node|
+      cell_node.id   cell_name
+      cell_node.name cell_name.humanize
+      cell_node.states do |states_node|
+        self.action_methods.uniq.each do |state|
+          states_node.state do |state_node|
+            state = state.to_s
+
+            # FIXME: this implementation is brittle at best and needs to be refactored/corrected ASAP!!!
+            cells_paths = Rails::Engine.subclasses.collect(&:paths).collect do |root|
+              root.collect { |key, value| value.expanded }
+            end
+            cells_paths = cells_paths.flatten.select { |p| p.include?("app/cells") }
+            template_path = "app/cells/#{cell_name}/#{state}_form.html.erb"
+            possible_templates = cells_paths.inject(Dir[Rails.root.join(template_path)]) do |memo, path|
+              memo += Dir[File.join(path, template_path)]
+              memo
+            end
+            template = possible_templates.first
+            form = template ? ERB.new(File.read(template)).result : ''
+
+            state_node.id          state
+            state_node.name        state.humanize
+            state_node.description I18n.translate(:"adva.cells.#{cell_name}.states.#{state}.description", :default => '')
+            state_node.form        form
+          end
+        end
       end
-      @section ||= controller.section
-      @section ||= @site.sections.root
     end
+  end
 
-    # TODO make this a class level dsl, so cells can say something like:
-    # has_option :include_child_section => {:type => :boolean, :default => true}
-    def include_child_sections?
-      boolean_option(:include_child_sections)
+  protected
+
+  def symbolize_options!
+    @opts.symbolize_keys!
+  end
+
+  def set_site
+    @site = controller.site or raise "can not set site from controller"
+  end
+
+  def set_section
+    if section = @opts[:section]
+      @section = @site.sections.find(:first, :conditions => ["id = ? OR permalink = ?", section, section])
     end
+    @section ||= controller.section
+    @section ||= @site.sections.root
+  end
 
-    def boolean_option(key)
-      value = @opts[key]
-      !!(value.blank? || value == 'false' || value == '0' ? false : true)
-    end
+  # TODO make this a class level dsl, so cells can say something like:
+  # has_option :include_child_section => {:type => :boolean, :default => true}
+  def include_child_sections?
+    boolean_option(:include_child_sections)
+  end
 
-    def with_sections_scope(klass, &block)
-      conditions = include_child_sections? ?
-        ["(sections.lft >= ?) and (sections.rgt <= ?)", @section.lft, @section.rgt] :
-        { :section_id => @section.id }
-      options = { :find => { :conditions => conditions, :include => 'section' }}
+  def boolean_option(key)
+    value = @opts[key]
+    !!(value.blank? || value == 'false' || value == '0' ? false : true)
+  end
 
-      klass.send :with_scope, options, &block
-    end
+  def with_sections_scope(klass, &block)
+    conditions = include_child_sections? ?
+      ["(sections.lft >= ?) and (sections.rgt <= ?)", @section.lft, @section.rgt] :
+      { :section_id => @section.id }
+    options = { :find => { :conditions => conditions, :include => 'section' }}
+
+    klass.send :with_scope, options, &block
+  end
 end
