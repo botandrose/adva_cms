@@ -1,4 +1,4 @@
-require "adva_rbac/version"
+# require "adva_rbac/version"
 require "rails"
 
 require "rbac"

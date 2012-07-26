@@ -1,4 +1,4 @@
-require "adva_comments/version"
+# require "adva_comments/version"
 require "rails"
 
 require "active_record/has_many_comments"

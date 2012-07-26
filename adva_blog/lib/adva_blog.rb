@@ -1,4 +1,4 @@
-require "adva_blog/version"
+# require "adva_blog/version"
 require "rails"
 
 module AdvaBlog

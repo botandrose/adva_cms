@@ -1,4 +1,4 @@
-require "adva_cms/version"
+# require "adva_cms/version"
 require "rails"
 require "globalize3"
 require "will_paginate"

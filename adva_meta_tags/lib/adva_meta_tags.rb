@@ -1,4 +1,4 @@
-require "adva_meta_tags/version"
+# require "adva_meta_tags/version"
 require "rails"
 
 module AdvaMetaTags

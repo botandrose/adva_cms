@@ -1,4 +1,4 @@
-require "adva_activity/version"
+# require "adva_activity/version"
 require "rails"
 
 module AdvaActivity

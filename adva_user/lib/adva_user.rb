@@ -1,4 +1,4 @@
-require "adva_user/version"
+# require "adva_user/version"
 
 # load vendored gems
 Dir["#{File.expand_path("#{File.dirname(__FILE__)}/../vendor/gems")}/**/lib"].each do |vendored_gem_path|

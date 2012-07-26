@@ -1,4 +1,4 @@
-require "adva_cells/version"
+# require "adva_cells/version"
 require "rails"
 
 require "output_filter/cells"
