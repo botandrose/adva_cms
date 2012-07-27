@@ -1,3 +1,6 @@
+require "cells"
+require "cell/base"
+
 class BaseCell < Cell::Base
   def self.to_xml(options={})
     options[:root]    ||= 'cell'

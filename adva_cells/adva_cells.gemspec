@@ -14,4 +14,6 @@ Gem::Specification.new do |gem|
   gem.name          = "adva_cells"
   gem.require_paths = ["lib"]
   gem.version       = AdvaCells::VERSION
+
+  gem.add_dependency "cells"
 end
