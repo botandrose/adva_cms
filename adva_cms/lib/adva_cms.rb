@@ -29,7 +29,6 @@ end
 require "has_counter"
 require "belongs_to_cacheable"
 require "filtered_column"
-require "globalize2_versioning"
 require "has_filter"
 require "simple_nested_set"
 require "simple_taggable"
@@ -42,12 +41,6 @@ module AdvaCms
   class Engine < Rails::Engine
     initializer "setup xss_terminate" do
       XssTerminate.untaint_after_find = true
-
-      module ::Globalize::Model::ActiveRecord::Translated::Callbacks
-        def disables_xss_terminate_on_proxy_records
-          globalize_proxy.filters_attributes :none => true
-        end
-      end
     end
   end
 end
