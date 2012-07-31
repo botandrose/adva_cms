@@ -21,7 +21,7 @@ class ArticlesController < BaseController
   end
 
   def show
-    if stale? :etag => @article, :last_modified => [@article, @section, @site].collect(&:updated_at).compact.max.utc, :public => true
+    if skip_caching? or stale?(:etag => @article, :last_modified => [@article, @section, @site].collect(&:updated_at).compact.max.utc, :public => true)
       render :template => "#{@section.type.tableize}/articles/show"
     end
   end
@@ -85,7 +85,6 @@ class ArticlesController < BaseController
     def guard_view_permissions
       if @article && @article.draft?
         raise ActiveRecord::RecordNotFound unless has_permission?('update', 'article')
-        skip_caching!
       end
     end
 end

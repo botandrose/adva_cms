@@ -26,7 +26,6 @@ class BaseController < ApplicationController
 
       unless @section.published?(true)
         raise ActiveRecord::RecordNotFound unless has_permission?('update', 'section')
-        skip_caching!
       end
     end
     alias :section :set_section
@@ -88,6 +87,10 @@ class BaseController < ApplicationController
     
     def set_cache_root
       self.class.page_cache_directory = page_cache_directory.to_s
+    end
+
+    def skip_caching?
+      @section.published?(true) or @article.try(:draft?)
     end
 end
 
