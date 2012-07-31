@@ -82,6 +82,10 @@ class Content < ActiveRecord::Base
     section
   end
 
+  def category_titles
+    categories.collect(&:title)
+  end
+
   attr_accessor :draft
   def published_at=(published_at)
     write_attribute(:published_at, draft.to_i == 1 ? nil : published_at)
