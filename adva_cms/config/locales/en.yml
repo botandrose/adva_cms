@@ -281,8 +281,8 @@ en:
       confirm_delete: Are you sure you want to delete this section?
       flash:
         destroy:
-          success: The section has been destroyed.
-          failure: The section could not be destroyed.
+          success: The section has been deleted.
+          failure: The section could not be deleted.
         create:
           success: The section has been created.
           failure: The section could not be created.

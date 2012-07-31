@@ -49,7 +49,7 @@ class Content < ActiveRecord::Base
   }
 
   scope :unpublished, Proc.new { |*args|
-    drafts(*args).scope(:find)
+    drafts(*args)
   }
 
   scope :by_category, lambda { |category|

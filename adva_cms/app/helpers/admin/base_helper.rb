@@ -111,4 +111,7 @@ module Admin::BaseHelper
     end
   end
 
+  def editor_class_for content
+    "big wysiwyg"
+  end
 end

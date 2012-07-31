@@ -16,19 +16,22 @@
       Body
 	    <span class="inline" id="add_excerpt_hint">(<%= link_to t(:'adva.articles.excerpt_add'), '#', :id => 'add_excerpt' %>)</span>
 	  </label>
-	  <%= f.text_area :body, :class => 'big wysiwyg' %>
 
-	  <%= f.label :draft, t(:'adva.articles.question_save_as_draft') %>
-	  <%= f.check_box :draft?, :id => 'toggle_draft', :label => :'adva.articles.confirm_save_as_draft' %>
-
-	  <p id="publish_date_wrapper" style="<%= @article.draft? ? "display:none" : "" %>">
-	    <%= f.label :published_at, t(:'adva.articles.publish_on_date') %>
-	    <%= f.datetime_select :published_at,
-	                          :start_year => (@article.published_at || Time.zone.now).year-1,
-	                          :end_year => (Time.zone.now.year + 5),
-	                          :order => [:month, :day, :year] %>
-		</p>
+    <%= f.text_area :body, :class => editor_class_for(@article) %>
   </div>
 </fieldset>
 
 <%= render :partial => 'options', :locals => { :f => f } %>
+
+<%= content_for :sidebar do %>
+  <%= f.label :draft, t(:'adva.articles.question_save_as_draft') %>
+  <%= f.check_box :draft?, :id => 'toggle_draft', :label => :'adva.articles.confirm_save_as_draft' %>
+
+  <p id="publish_date_wrapper" style="<%= @article.draft? ? "display:none" : "" %>">
+    <%= f.label :published_at, t(:'adva.articles.publish_on_date') %>
+    <%= f.datetime_select :published_at,
+                          :start_year => (@article.published_at || Time.zone.now).year-1,
+                          :end_year => (Time.zone.now.year + 5),
+                          :order => [:month, :day, :year] %>
+  </p>
+<% end %>
