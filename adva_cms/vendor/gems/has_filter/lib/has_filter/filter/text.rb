@@ -43,7 +43,7 @@ module HasFilter
   		    options = self.class.scopes.map do |scope| 
   		      [I18n.t(scope, :scope => :'has_filter.scopes', :default => scope.to_s.gsub('_', ' ')), scope]
 		      end
-  		    options = "\n" + view.options_for_select(options, selected[:scope].try(:to_sym)) + "\n"
+  		    options = view.options_for_select(options, selected[:scope].try(:to_sym))
   		    view.select_tag(form_field_name(attribute, :scope), options, :id => form_field_id(attribute, :scope))
 		    end
   		

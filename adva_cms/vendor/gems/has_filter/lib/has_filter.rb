@@ -6,7 +6,7 @@ module HasFilter
   module Helper
     def filter_for(klass, options = {})
       form_tag(options.delete(:url) || request.path, :method => :get, :id => 'filters', :class => 'filters') do
-        klass.filter_chain.to_form_fields(self, options).join("\n") + "\n" +
+        # klass.filter_chain.to_form_fields(self, options).join(raw("\n")) + 
         content_tag(:div, :class => 'submit') do
           content_tag(:button, I18n.t(:'filter.submit.value', :default => 'Apply'))
           # link_to I18n.t(:'filter.submit.value', :default => 'Apply'), :href => '#'
