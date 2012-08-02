@@ -227,7 +227,7 @@ module ActiveRecord
         end
 
         def move_to(target, position)
-          return if callback(:before_move) == false
+          return if run_callbacks(:before_move) == false
           transaction do
             target.reload_nested_set if target.is_a?(nested_set.klass)
             self.reload_nested_set
