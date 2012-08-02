@@ -7,7 +7,6 @@ class ArticlesController < BaseController
   before_filter :set_category, :only => :index
   before_filter :set_tags,     :only => :index
   before_filter :set_articles, :only => :index
-  before_filter :set_article,  :only => :show
   before_filter :guard_view_permissions, :only => [:index, :show]
 
     # TODO move :comments and @commentable to acts_as_commentable
@@ -21,6 +20,12 @@ class ArticlesController < BaseController
   end
 
   def show
+    if params[:permalink]
+      @article = @section.articles.find_by_permalink!(params[:permalink], :include => :author)
+    elsif @section.try(:single_article_mode)
+      @article = @section.articles.first
+    end
+
     if skip_caching? or stale?(:etag => @article, :last_modified => [@article, @section, @site].collect(&:updated_at).compact.max.utc, :public => true)
       render :template => "#{@section.type.tableize}/articles/show"
     end
@@ -49,15 +54,6 @@ class ArticlesController < BaseController
       @articles = scope.paginate(:page  => current_page, :limit => @section.contents_per_page)
     end
 
-    def set_article
-      if params[:permalink]
-        @article = @section.articles.find_by_permalink(params[:permalink], :include => :author)
-        raise ActiveRecord::RecordNotFound unless valid_article?
-      elsif @section.try(:single_article_mode)
-        @article = @section.articles.first
-      end
-    end
-
     def set_category
       if params[:category_id]
         @category = @section.categories.find params[:category_id]
@@ -76,10 +72,6 @@ class ArticlesController < BaseController
     def set_commentable
       set_article if params[:permalink]
       super
-    end
-
-    def valid_article?
-      @article
     end
 
     def guard_view_permissions
