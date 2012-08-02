@@ -2,6 +2,7 @@
 require "rails"
 require "globalize3"
 require "will_paginate"
+require "awesome_nested_set"
 
 require 'extensible_forms'
 require 'time_hacks'
@@ -30,7 +31,6 @@ require "has_counter"
 require "belongs_to_cacheable"
 require "filtered_column"
 require "has_filter"
-require "simple_nested_set"
 require "simple_taggable"
 require "stringex"
 require "tags"

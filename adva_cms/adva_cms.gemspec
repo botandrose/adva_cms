@@ -17,4 +17,5 @@ Gem::Specification.new do |gem|
 
   gem.add_dependency "globalize3"
   gem.add_dependency "will_paginate"
+  gem.add_dependency "awesome_nested_set"
 end

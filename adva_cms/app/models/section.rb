@@ -13,10 +13,6 @@ class Section < ActiveRecord::Base
 
   belongs_to :site
   has_many :categories, :dependent => :destroy, :order => 'lft' do
-    def roots
-      find(:all, :conditions => { :parent_id => nil }, :order => 'lft')
-    end
-
     def update_paths!
       paths = Hash[*roots.map { |r|
         r.self_and_descendants.map { |n| [n.id, { 'path' => n.send(:build_path) }] } }.flatten]

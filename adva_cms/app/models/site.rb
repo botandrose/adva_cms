@@ -3,14 +3,6 @@ class Site < ActiveRecord::Base
   serialize :spam_options
 
   has_many :sections, :dependent => :destroy, :order => :lft do
-    def root
-      Section.root(:site_id => proxy_association.owner.id)
-    end
-
-    def roots
-      Section.roots(:site_id => proxy_association.owner.id)
-    end
-
     def paths
       map(&:path)
     end
