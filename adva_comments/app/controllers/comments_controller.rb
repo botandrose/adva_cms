@@ -35,15 +35,23 @@ class CommentsController < BaseController
   def create
     @comment = @commentable.comments.build(params[:comment])
     if @comment.save
-      Mailer.comment_notification(@comment).deliver
       trigger_events @comment
-      # FIXME move this to a comment after filter that checks for body_changed?
-      # @comment.check_approval(:permalink => show_url(@comment.commentable), :authenticated => authenticated?)
-      flash[:notice] = t(:'adva.comments.flash.thank_you')
-      render :json => true
+      if current_user.anonymous
+        flash[:notice] = "Your comment is being reviewed, and will be posted shortly. Thank you for commenting!"
+      else
+        @comment.update_attribute :approved, true
+        flash[:notice] = "You're an admin, so your comment is being posted immediately! Refresh the page to see it."
+      end
+      respond_to do |format|
+        format.html { redirect_to article_path(@commentable.section, @commentable, :anchor => "comments") }
+        format.js { render :json => true }
+      end
     else
       flash[:error] = @comment.errors.full_messages.to_sentence # TODO hu.
-      render :json => false
+      respond_to do |format|
+        format.html { redirect_to article_path(@commentable.section, @commentable, :anchor => "comments") }
+        format.js { render :json => false }
+      end
     end
   end
 
