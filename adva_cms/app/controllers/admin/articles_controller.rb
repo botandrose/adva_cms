@@ -3,7 +3,6 @@ class Admin::ArticlesController < Admin::BaseController
 
   before_filter :protect_single_article_mode
   before_filter :set_section
-  before_filter :set_articles,   :only => [:index]
   before_filter :set_article,    :only => [:show, :edit, :update, :destroy]
   before_filter :set_categories, :only => [:new, :edit]
   before_filter :optimistic_lock, :only => :update
@@ -13,6 +12,7 @@ class Admin::ArticlesController < Admin::BaseController
   guards_permissions :article, :update => :update_all
 
   def index
+    @articles = @section.articles
   end
 
   def show
@@ -91,10 +91,6 @@ class Admin::ArticlesController < Admin::BaseController
 
     def set_menu
       @menu = Menus::Admin::Articles.new
-    end
-
-    def set_articles
-      @articles = @section.articles
     end
 
     def set_article
