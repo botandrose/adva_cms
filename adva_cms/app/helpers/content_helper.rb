@@ -8,6 +8,10 @@ module ContentHelper
     section_path *args
   end
 
+  def page_article_path *args
+    article_path *args
+  end
+
   # def article_url(section, article, options = {})
   #   if article.section.is_a?(Blog)
   #     blog_article_url(section, article.full_permalink.merge(options))
