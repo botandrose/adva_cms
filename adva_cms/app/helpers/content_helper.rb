@@ -4,14 +4,6 @@ module ContentHelper
     l(article.published_at, :format => (article.published_at.year == Time.now.year ? :short : :long))
   end
 
-  def page_path *args
-    section_path *args
-  end
-
-  def page_article_path *args
-    article_path *args
-  end
-
   # def article_url(section, article, options = {})
   #   if article.section.is_a?(Blog)
   #     blog_article_url(section, article.full_permalink.merge(options))

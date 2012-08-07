@@ -40,9 +40,8 @@ module CommentsHelper
 
     text = t(text) if text.is_a?(Symbol)
     text ||= t(:'adva.comments.titles.comment_with_count', :count => content.approved_comments_count)
-    path = show_path(content, :namespace => nil, :anchor => (comment ? dom_id(comment) : 'comments'))
-
-    link_to(text, path, options)
+    options.merge! :anchor => (comment ? dom_id(comment) : 'comments')
+    link_to text, [content.section, content], options
   end
 
   def link_to_content_comment(*args)
