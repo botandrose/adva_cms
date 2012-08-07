@@ -10,11 +10,7 @@ class Admin::ContentsController < Admin::BaseController
   guards_permissions :content, :update => :update_all
 
   def index
-    if @section.respond_to?(:articles)
-      redirect_to [:admin, @site, @section, :articles]
-    else
-      @contents = @section.contents #.filtered params[:filters]
-    end
+    @contents = @section.contents #.filtered params[:filters]
   end
 
   def update_all

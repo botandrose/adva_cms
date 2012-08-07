@@ -8,42 +8,10 @@ Rails.application.routes.draw do
 
   namespace :admin do
     resources :sites do
-      resources :sections do
+      resources :sections, :pages do
         put "update_all", :on => :collection
 
-        resources :contents do
-          put "update_all", :on => :collection
-        end
-
-        resources :articles do
-          put "update_all", :on => :collection
-        end
-
-        resources :links do
-          put "update_all", :on => :collection
-        end
-
-        resources :categories do
-          put "update_all", :on => :collection
-        end
-      end
-
-      resources :pages do
-        put "update_all", :on => :collection
-
-        resources :contents do
-          put "update_all", :on => :collection
-        end
-
-        resources :articles do
-          put "update_all", :on => :collection
-        end
-
-        resources :links do
-          put "update_all", :on => :collection
-        end
-
-        resources :categories do
+        resources :contents, :articles, :links, :categories do
           put "update_all", :on => :collection
         end
       end

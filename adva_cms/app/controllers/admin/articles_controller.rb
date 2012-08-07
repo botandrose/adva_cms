@@ -12,7 +12,7 @@ class Admin::ArticlesController < Admin::BaseController
   guards_permissions :article, :update => :update_all
 
   def index
-    @articles = @section.articles
+    redirect_to [:admin, @site, @section, :contents]
   end
 
   def show
@@ -75,7 +75,7 @@ class Admin::ArticlesController < Admin::BaseController
     if @article.destroy
       trigger_events(@article)
       flash[:notice] = t(:'adva.articles.flash.destroy.success')
-      redirect_to [:admin, @site, @section, :articles]
+      redirect_to [:admin, @site, @section, :contents]
     else
       set_categories
       flash.now[:error] = t(:'adva.articles.flash.destroy.failure')

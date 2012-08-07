@@ -1,5 +1,5 @@
 <%=
-  table_for @articles do |t|
+  table_for @contents do |t|
     if @section.categories.any?
       t.column :article, :category, :comments, :published, :actions
     else
@@ -24,8 +24,8 @@
   end
 %>
 
-<!--
 <%= content_for :sidebar do -%>
+  <!--
   <div class="tabs">
     <ul>
       <li class="active"><a href="#filters" onclick="return false;">Filters</a></li>
@@ -34,5 +34,5 @@
       <%= filter_for(Article, :categories => @section.categories) %>
     </div>
   </div>
+  -->
 <% end -%>
--->
