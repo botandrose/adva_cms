@@ -1,5 +1,5 @@
 # -*- encoding: utf-8 -*-
-require File.expand_path('../lib/adva/version', __FILE__)
+require File.expand_path('../lib/adva_cms/version', __FILE__)
 
 Gem::Specification.new do |gem|
   gem.authors       = ["Micah Geisel"]
@@ -11,7 +11,11 @@ Gem::Specification.new do |gem|
   gem.files         = `git ls-files`.split($\)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
-  gem.name          = "adva"
+  gem.name          = "adva_cms"
   gem.require_paths = ["lib"]
-  gem.version       = Adva::VERSION
+  gem.version       = AdvaCms::VERSION
+
+  gem.add_dependency "globalize3"
+  gem.add_dependency "will_paginate"
+  gem.add_dependency "awesome_nested_set"
 end
