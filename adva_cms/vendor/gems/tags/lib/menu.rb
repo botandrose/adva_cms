@@ -143,7 +143,7 @@ module Menu
 
     def populate(scope)
       scope.instance_eval(&@options[:populate]).each do |s|
-	      @sections << Base.new(s.title, :level => s.level, :url => scope.admin_section_contents_path(s)) unless s.new_record?
+	      @sections << Base.new(s.title, :level => s.level, :url => scope.url_for([:admin, s.site, s, :contents])) unless s.new_record?
       end
     end
 

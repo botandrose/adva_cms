@@ -1,4 +1,4 @@
-class Admin::CategoriesController < Admin::BaseController
+class Admin::Page::CategoriesController < Admin::BaseController
   before_filter :set_category, :only => [:edit, :update, :destroy]
 
   guards_permissions :category, :update => :update_all

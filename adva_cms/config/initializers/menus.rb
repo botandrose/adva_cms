@@ -13,7 +13,7 @@ module Menus
       define do
         namespace :admin
         id :sites
-        breadcrumb :site, :content => link_to_show(@site.name, @site) if @site && !@site.new_record?
+        breadcrumb :site, :content => link_to(@site.name, [:admin, @site]) if @site && !@site.new_record?
 
         menu :left, :class => 'main' do
           item :sites, :action => :index, :resource => :site if Site.multi_sites_enabled
@@ -95,14 +95,14 @@ module Menus
         menu :left, :class => 'left', :type => Sections::Content
         menu :actions, :class => 'actions' do
           activates object.parent.find(:contents)
-          item :new_article, :action => :new, :resource => [@section, :article]
-          item :new_link,    :action => :new, :resource => [@section, :link]
+          item :new_article, :action => :new, :resource => [@site, @section, :article]
+          item :new_link,    :action => :new, :resource => [@site, @section, :link]
           if @content and !@content.new_record?
-            item :show,   :content  => link_to_show(@content, :cl => content_locale, :namespace => nil)
-            item :edit,   :action   => :edit, :resource => @content
-            item :delete, :content  => link_to_delete(@content)
+            item :show,   :content  => link_to("Show", [@section, @content])
+            item :edit,   :content  => link_to("Edit", [:edit, :admin, @site, @section, @content])
+            item :delete, :content  => link_to("Delete", [:admin, @site, @section, @content], :method => :delete)
           elsif !@content and @section.is_a?(Page) and @section.contents.size > 1
-            item :reorder, :content => link_to_index(:'adva.links.reorder', [@section, :content], :id => 'reorder_contents', :class => 'reorder')
+            item :reorder, :content => link_to("Reorder", [:admin, @site, @section, :contents], :id => 'reorder_contents', :class => 'reorder')
           end
         end
       end
@@ -119,9 +119,9 @@ module Menus
           item :new_article, :action => :new, :resource => [@section, :article]
           item :new_link,    :action => :new, :resource => [@section, :link] unless @section.is_a?(Blog)
           if @article and !@article.new_record?
-            item :show,   :content  => link_to("Show", article_path(@section, @article))
-            item :edit,   :action   => :edit, :resource => @article
-            item :delete, :content  => link_to_delete(@article)
+            item :show,   :content  => link_to("Show", [@section, @article])
+            item :edit,   :content  => link_to("Edit", [:edit, :admin, @site, @section, @article])
+            item :delete, :content  => link_to("Delete", [:admin, @site, @section, @article], :method => :delete)
           end
         end
       end
@@ -140,7 +140,7 @@ module Menus
           if @link and !@link.new_record?
             item :show,   :content  => link_to_show(@link, :cl => content_locale, :namespace => nil)
             item :edit,   :action   => :edit, :resource => @link
-            item :delete, :content  => link_to_delete(@link)
+            item :delete, :content  => link_to("Delete", [:admin, @site, @section, @link], :method => :delete)
           end
         end
       end
@@ -157,7 +157,7 @@ module Menus
           item :new, :action => :new, :resource => [@section, :category]
           if @category && !@category.new_record?
             item :edit,   :action  => :edit,   :resource => @category
-            item :delete, :content => link_to_delete(@category)
+            item :delete, :content  => link_to("Delete", [:admin, @site, @section, @category], :method => :delete)
           elsif !@category and @section.categories.size > 1
             item :reorder, :content => link_to_index(:'adva.links.reorder', [@section, :category], :id => 'reorder_categories', :class => 'reorder')
           end

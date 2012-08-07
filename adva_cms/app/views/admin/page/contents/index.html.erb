@@ -1,0 +1,39 @@
+<%=
+  table_for @contents do |t|
+    if @section.categories.any?
+      t.column :content, :category, :comments, :published, :actions
+    else
+      t.column :content, :comments, :published, :actions
+    end
+
+    t.row do |r, content|
+      r.add_class "level_#{content.level}"
+      r.cell content_status(content) + link_to(content.title, [:edit, :admin, @site, @section, content], :class => content.state)
+      r.cell content.category_titles.join(", ") if @section.categories.any?
+      r.cell content.accept_comments? && content.comments.present? ? link_to(content.comments.size, admin_comments_path) : t(:"adva.common.none")
+      r.cell published_at_formatted(content)
+      r.cell link_to("Edit", [:edit, :admin, @site, @section, content], :class => "edit content") +
+        link_to("Delete", [:admin, @site, @section, content], :method => :delete, :class => "delete content")
+    end
+
+    t.empty :p, :class => 'empty' do
+      raw params[:filters] ?
+        t(:'adva.content.no_filtered_contents') :
+        t(:'adva.contents.no_contents', :section => @section.title) + "\n" +
+        link_to(t(:'adva.contents.links.create_now'), [:new, :admin, @site, @section, :content])
+    end
+  end
+%>
+
+<%= content_for :sidebar do -%>
+  <!--
+  <div class="tabs">
+    <ul>
+      <li class="active"><a href="#filters" onclick="return false;">Filters</a></li>
+    </ul>
+    <div class="tab active" id="tab_filters">
+      <%= filter_for(Article, :categories => @section.categories) %>
+    </div>
+  </div>
+  -->
+<% end -%>

@@ -1,4 +1,4 @@
-class Admin::LinksController < Admin::BaseController
+class Admin::Page::LinksController < Admin::BaseController
   default_param :link, :author_id, :only => [:create, :update], &lambda { current_user.id }
 
   before_filter :protect_single_link_mode

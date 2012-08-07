@@ -1,6 +1,4 @@
 class BlogArticlesController < ArticlesController
-  helper :blog
-
   def index
     respond_to do |format|
       format.html { render :template => "blogs/articles/index" }

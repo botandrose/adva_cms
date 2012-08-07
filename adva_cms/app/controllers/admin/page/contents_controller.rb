@@ -1,4 +1,4 @@
-class Admin::ContentsController < Admin::BaseController
+class Admin::Page::ContentsController < Admin::BaseController
   default_param :content, :author_id, :only => [:create, :update], &lambda { current_user.id }
 
   before_filter :protect_single_content_mode

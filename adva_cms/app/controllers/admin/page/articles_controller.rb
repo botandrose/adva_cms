@@ -1,4 +1,4 @@
-class Admin::ArticlesController < Admin::BaseController
+class Admin::Page::ArticlesController < Admin::BaseController
   default_param :article, :author_id, :only => [:create, :update], &lambda { current_user.id }
 
   before_filter :protect_single_article_mode
