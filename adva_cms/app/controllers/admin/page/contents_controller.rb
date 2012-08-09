@@ -12,11 +12,15 @@ class Admin::Page::ContentsController < Admin::BaseController
   end
 
   def update_all
-    # FIXME we currently use :update_all to update the position for a single object
-    # instead we should either use :update_all to batch update all objects on this
-    # resource or use :update. applies to contents, sections, categories etc.
-    logger.info @section.contents.update(params[:contents].keys, params[:contents].values)
-    expire_cached_pages_by_reference(@section) # TODO should be in the sweeper
+    params[:contents].each do |id, attrs|
+      content = Content.find id
+      if attrs[:parent_id] =~ /^\d+$/
+        content.move_to_child_of attrs[:parent_id]
+      else
+        content.move_to_root
+      end
+      content.move_to_right_of attrs[:left_id] if attrs[:left_id]
+    end
     render :text => 'OK'
   end
   

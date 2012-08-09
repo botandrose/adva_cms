@@ -11,7 +11,7 @@ Rails.application.routes.draw do
       resources :blogs do
         scope :module => :blog do
           resources :contents, :articles, :categories do
-            put "update_all", :on => :collection
+            put "/", :action => "update_all", :on => :collection
           end
         end
       end

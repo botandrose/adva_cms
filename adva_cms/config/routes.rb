@@ -9,16 +9,16 @@ Rails.application.routes.draw do
   namespace :admin do
     resources :sites do
       resources :sections do
-        put "update_all", :on => :collection
+        put "/", :action => "update_all", :on => :collection
         resources :contents, :articles, :links, :categories do
-          put "update_all", :on => :collection
+          put "/", :action => "update_all", :on => :collection
         end
       end
 
       resources :pages do
         scope :module => :page do
           resources :contents, :articles, :links, :categories do
-            put "update_all", :on => :collection
+            put "/", :action => "update_all", :on => :collection
           end
         end
       end
