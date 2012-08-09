@@ -93,7 +93,7 @@ module Menus
             item :show,   :content  => link_to("Show", [@section, @content])
             item :edit,   :content  => link_to("Edit", [:edit, :admin, @site, @section, @content])
             item :delete, :content  => link_to("Delete", [:admin, @site, @section, @content], :method => :delete)
-          elsif !@content and @section.is_a?(Page) and @section.contents.size > 1
+          elsif @contents and @section.contents.size > 1
             item :reorder, :content => link_to("Reorder", [:admin, @site, @section, :contents], :id => 'reorder_contents', :class => 'reorder')
           end
         end

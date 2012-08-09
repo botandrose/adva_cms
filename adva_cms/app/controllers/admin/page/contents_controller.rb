@@ -3,9 +3,7 @@ class Admin::Page::ContentsController < Admin::BaseController
 
   before_filter :protect_single_content_mode
   before_filter :set_section
-  before_filter :set_content,    :only => [:show, :edit, :update, :destroy]
   before_filter :set_categories, :only => [:new, :edit]
-  before_filter :optimistic_lock, :only => :update
 
   guards_permissions :content, :update => :update_all
 
@@ -30,10 +28,6 @@ class Admin::Page::ContentsController < Admin::BaseController
 
     def set_menu
       @menu = Menus::Admin::Contents.new
-    end
-
-    def set_content
-      @content = @section.contents.find(params[:id])
     end
 
     def set_categories

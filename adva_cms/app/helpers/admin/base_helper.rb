@@ -45,17 +45,6 @@ module Admin::BaseHelper
   define_shallow_resource_helpers :from => [:admin, :link], :to => [:admin, :site, :section, :link]
 
 
-  def admin_section_contents_path(section)
-    content_type = section.class.content_type.pluralize.gsub('::', '_').underscore.downcase
-    send(:"admin_site_section_#{content_type}_path", section.site, section)
-  end
-
-  def admin_section_contents_url(section)
-    content_type = section.class.content_type.pluralize.gsub('::', '_').underscore.downcase
-    send(:"admin_site_section_#{content_type}_url", section.site, section)
-  end
-
-
   def save_or_cancel_links(builder, options = {})
     save_text   = options.delete(:save_text)   || t(:'adva.common.save')
     or_text     = options.delete(:or_text)     || t(:'adva.common.connector.or')
