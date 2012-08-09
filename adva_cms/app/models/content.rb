@@ -68,6 +68,10 @@ class Content < ActiveRecord::Base
       conditions.first << " AND contents.published_at BETWEEN ? AND ?"
       conditions.concat Time.delta(*args)
     end
+
+    def primary
+      published(:limit => 1).first
+    end
   end
 
   def to_param

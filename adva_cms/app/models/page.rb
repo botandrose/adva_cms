@@ -1,23 +1,9 @@
 class Page < Section
   has_option :single_article_mode, :default => true, :type => :boolean
 
-  has_many :contents, :order => :lft, :foreign_key => 'section_id', :dependent => :destroy do
-    def primary
-      published(:limit => 1).first
-    end
-  end
-
-  has_many :articles, :order => :lft, :foreign_key => 'section_id', :dependent => :destroy do
-    def primary
-      published(:limit => 1).first
-    end
-  end
-
-  has_many :links, :order => :lft, :foreign_key => 'section_id', :dependent => :destroy do
-    def primary
-      published(:limit => 1).first
-    end
-  end
+  has_many :contents, :order => :lft, :foreign_key => 'section_id', :dependent => :destroy
+  has_many :articles, :order => :lft, :foreign_key => 'section_id', :dependent => :destroy
+  has_many :links, :order => :lft, :foreign_key => 'section_id', :dependent => :destroy
 
   class << self
     def content_type
