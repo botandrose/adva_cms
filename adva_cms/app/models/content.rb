@@ -57,8 +57,8 @@ class Content < ActiveRecord::Base
     {
       :include => [:categories, :section],
       :conditions => [
-        "categories.lft >= ? AND categories.rgt <= ? AND contents.type = ? AND sections.type = ?",
-        category.lft, category.rgt, section_type.content_type, section_type.to_s
+        "categories.lft >= ? AND categories.rgt <= ? AND sections.type = ?",
+        category.lft, category.rgt, section_type.to_s
       ]
     }
   }
