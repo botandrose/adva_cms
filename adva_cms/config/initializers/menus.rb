@@ -70,18 +70,9 @@ module Menus
 
       class Content < Menu::Menu
         define do
-          type = @section.class.content_type.underscore
           item :section, :content => content_tag(:h4, "#{@section.title}:")
-          item type.pluralize.to_sym, :action => :index, :resource => [@section, type]
-          
-          if type == 'article'
-            if !(@section.try(:single_article_mode) ? @section.single_article_mode : false)
-              item :categories, :action => :index, :resource => [@section, :category]
-            end
-          else
-            item :categories, :action => :index, :resource => [@section, :category]
-          end
-          
+          item :contents, :content => link_to("Contents", [:admin, @site, @section, :contents])
+          item :categories, :action => :index, :resource => [@section, :category]
           item :settings,   :action => :edit,  :resource => @section
         end
       end
@@ -95,8 +86,9 @@ module Menus
         menu :left, :class => 'left', :type => Sections::Content
         menu :actions, :class => 'actions' do
           activates object.parent.find(:contents)
-          item :new_article, :action => :new, :resource => [@site, @section, :article]
-          item :new_link,    :action => :new, :resource => [@site, @section, :link]
+          @section.class.content_types.each do |content_type|
+            item :"new_#{content_type.underscore}", :content => link_to("New #{content_type.underscore.titleize}", [:new, :admin, @site, @section, content_type.underscore.to_sym])
+          end
           if @content and !@content.new_record?
             item :show,   :content  => link_to("Show", [@section, @content])
             item :edit,   :content  => link_to("Edit", [:edit, :admin, @site, @section, @content])
@@ -116,31 +108,13 @@ module Menus
         menu :left, :class => 'left', :type => Sections::Content
         menu :actions, :class => 'actions' do
           activates object.parent.find(:contents)
-          item :new_article, :action => :new, :resource => [@section, :article]
-          item :new_link,    :action => :new, :resource => [@section, :link] unless @section.is_a?(Blog)
+          @section.class.content_types.each do |content_type|
+            item :"new_#{content_type.underscore}", :content => link_to("New #{content_type.underscore.titleize}", [:new, :admin, @site, @section, content_type.underscore.to_sym])
+          end
           if @article and !@article.new_record?
             item :show,   :content  => link_to("Show", [@section, @article])
             item :edit,   :content  => link_to("Edit", [:edit, :admin, @site, @section, @article])
             item :delete, :content  => link_to("Delete", [:admin, @site, @section, @article], :method => :delete)
-          end
-        end
-      end
-    end
-
-    class Links < Menu::Group
-      define do
-        id :main
-        parent Sites.new.build(scope).find(:sections)
-
-        menu :left, :class => 'left', :type => Sections::Content
-        menu :actions, :class => 'actions' do
-          activates object.parent.find(:contents)
-          item :new_article, :action => :new, :resource => [@section, :article]
-          item :new_link,    :action => :new, :resource => [@section, :link]
-          if @link and !@link.new_record?
-            item :show,   :content  => link_to_show(@link, :cl => content_locale, :namespace => nil)
-            item :edit,   :action   => :edit, :resource => @link
-            item :delete, :content  => link_to("Delete", [:admin, @site, @section, @link], :method => :delete)
           end
         end
       end

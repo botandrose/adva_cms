@@ -7,8 +7,8 @@ class Blog < Section
   end
 
   class << self
-    def content_type
-      'Article'
+    def content_types
+      %w(Article)
     end
   end
 

@@ -1,13 +1,15 @@
 class Page < Section
   has_option :single_article_mode, :default => true, :type => :boolean
 
-  has_many :contents, :order => :lft, :foreign_key => 'section_id', :dependent => :destroy
-  has_many :articles, :order => :lft, :foreign_key => 'section_id', :dependent => :destroy
-  has_many :links, :order => :lft, :foreign_key => 'section_id', :dependent => :destroy
+  with_options :order => :lft, :foreign_key => 'section_id' do |options|
+    options.has_many :contents # avoid double destroy hook
+    options.has_many :articles, :dependent => :destroy
+    options.has_many :links, :dependent => :destroy
+  end
 
   class << self
-    def content_type
-      'Content'
+    def content_types
+      %w(Article Link)
     end
   end
 
