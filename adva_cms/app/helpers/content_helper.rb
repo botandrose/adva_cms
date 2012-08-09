@@ -12,6 +12,10 @@ module ContentHelper
   #   end
   # end
 
+  def page_link_path section, link
+    link.body_html
+  end
+
   def content_path(section, content)
     return article_path(section, content) if content.is_a? Article
     link_path(section, content)

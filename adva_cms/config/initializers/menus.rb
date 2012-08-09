@@ -120,6 +120,26 @@ module Menus
       end
     end
 
+    class Links < Menu::Group
+      define do
+        id :main
+        parent Sites.new.build(scope).find(:sections)
+
+        menu :left, :class => 'left', :type => Sections::Content
+        menu :actions, :class => 'actions' do
+          activates object.parent.find(:contents)
+          @section.class.content_types.each do |content_type|
+            item :"new_#{content_type.underscore}", :content => link_to("New #{content_type.underscore.titleize}", [:new, :admin, @site, @section, content_type.underscore.to_sym])
+          end
+          if @link and !@link.new_record?
+            item :show,   :content  => link_to("Show", [@section, @link])
+            item :edit,   :content  => link_to("Edit", [:edit, :admin, @site, @section, @link])
+            item :delete, :content  => link_to("Delete", [:admin, @site, @section, @link], :method => :delete)
+          end
+        end
+      end
+    end
+
     class Categories < Menu::Group
       define do
         id :main
