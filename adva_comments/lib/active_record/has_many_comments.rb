@@ -6,7 +6,7 @@ module ActiveRecord
 
     module ActMacro
       def has_many_comments(options = {})
-        # return if has_many_comments? # would not work for Section < Content which both have_many_comments
+        return if has_many_comments?
 
         options[:order] = 'comments.created_at, comments.id'
         options[:class_name] ||= 'Comment'
