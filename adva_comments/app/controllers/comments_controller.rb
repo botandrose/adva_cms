@@ -43,13 +43,13 @@ class CommentsController < BaseController
         flash[:notice] = "You're an admin, so your comment is being posted immediately! Refresh the page to see it."
       end
       respond_to do |format|
-        format.html { redirect_to article_path(@commentable.section, @commentable, :anchor => "comments") }
+        format.html { redirect_to "#{url_for([@commentable.section, @commentable])}#comments") }
         format.js { render :json => true }
       end
     else
       flash[:error] = @comment.errors.full_messages.to_sentence # TODO hu.
       respond_to do |format|
-        format.html { redirect_to article_path(@commentable.section, @commentable, :anchor => "comments") }
+        format.html { redirect_to "#{url_for([@commentable.section, @commentable])}#comments") }
         format.js { render :json => false }
       end
     end
