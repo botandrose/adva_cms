@@ -26,4 +26,5 @@ module BlogHelper
       :day => article.published_at.day,
       :permalink => article.permalink
   end
+  alias_method :blog_article_url, :blog_article_path
 end
