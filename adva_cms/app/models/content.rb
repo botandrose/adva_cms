@@ -18,6 +18,10 @@ class Content < ActiveRecord::Base
     :if_changed => [ :title, :body, :excerpt ], :limit => 5
   acts_as_taggable
 
+  def translations *args
+    super.order("content_translations.updated_at DESC")
+  end
+
   instantiates_with_sti
   has_permalink :title, :url_attribute => :permalink, :sync_url => true, :only_when_blank => true, :scope => :section_id
   filtered_column :body, :excerpt
