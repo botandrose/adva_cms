@@ -19,40 +19,22 @@ class Admin::Page::LinksController < Admin::BaseController
       flash[:notice] = t(:'adva.links.flash.create.success')
       redirect_to [:edit, :admin, @site, @section, @link]
     else
-      set_categories
       flash.now[:error] = t(:'adva.links.flash.create.failure')
       render :action => 'new'
     end
   end
 
   def update
-    params[:link][:version].present? ? rollback : update_attributes
-  end
-
-  def update_attributes
     @link.attributes = params[:link]
 
-    if save_with_revision? ? @link.save : @link.save_without_revision
+    if @link.save
       trigger_events(@link)
       flash[:notice] = t(:'adva.links.flash.update.success')
       redirect_to [:edit, :admin, @site, @section, @link]
     else
-      set_categories
       flash.now[:error] = t(:'adva.links.flash.update.failure')
       render :action => 'edit', :cl => content_locale
     end
-  end
-
-  def rollback
-    version = params[:link][:version].to_i
-
-    if @link.version != version and @link.revert_to(version)
-      trigger_event(@link, :rolledback)
-      flash[:notice] = t(:'adva.links.flash.rollback.success', :version => version)
-    else
-      flash[:error] = t(:'adva.links.flash.rollback.failure', :version => version)
-    end
-    redirect_to [:edit, :admin, @site, @section, @link]
   end
 
   def destroy
@@ -61,7 +43,6 @@ class Admin::Page::LinksController < Admin::BaseController
       flash[:notice] = t(:'adva.links.flash.destroy.success')
       redirect_to [:admin, @site, @section, :contents]
     else
-      set_categories
       flash.now[:error] = t(:'adva.links.flash.destroy.failure')
       render :action => 'edit'
     end
