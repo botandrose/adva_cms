@@ -1,32 +1,15 @@
-var LoginLinks = {
-	init: function() {
-		var user_id = Cookie.get('uid');
-		var user_name = unescape(Cookie.get('uname')).replace(/\+/g, " ");
-		try { 
-			LoginLinks.update_user_links(user_name) 
-		} catch(err) {}
-		if (user_id) {
-			try { 
-				$('#logout_links').show(); 
-				$('#login_links').hide();
-			} catch(err) {}
-		}
-	},
-
-	update_user_links: function(user_name) {
-		if($('#logout_link')) $('#logout_link').href = $('#logout_link').href + "?return_to=" + escape(document.location.href);
-		if($('#login_link'))  $('#login_link').href  = $('#login_link').href  + "?return_to=" + escape(document.location.href);
-		
-		$('span.user_name').each(function() {
-		  $(this).html(user_name);
-		});
-	}
-};
-
-URI.parseOptions.strictMode = true;
-
-$(document).ready(function() {
-	if($('#logout_links')) {
-		LoginLinks.init();
-	}
-});
+//= require jquery
+//= require jquery_ujs
+//= require adva_cms/jquery/jquery.qtip.min
+//= require adva_cms/jquery/jquery-lowpro
+//= require adva_cms/jquery/jquery-ui
+//= require adva_cms/jquery.common
+//= require adva_cms/json
+//= require adva_cms/cookie
+//= require adva_cms/jquery.flash
+//= require adva_cms/admin/jquery.admin
+//= require adva_cms/jquery/jquery.tablednd_0_5
+//= require adva_cms/jquery/jquery.table_tree
+//= require adva_cms/admin/jquery.table_tree
+//= require adva_cms/admin/jquery.article
+//= require adva_cms/admin/jquery.cached_pages
