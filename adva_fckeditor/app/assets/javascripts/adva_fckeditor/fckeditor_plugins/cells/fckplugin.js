@@ -30,39 +30,22 @@ String.prototype.camelize = function() {
     return this.replace(/[^a-z0-9]+(.)?/gi, function(match, char) { return (char || '').toUpperCase() }).replace(/^(.)?/, function(match, char) { return (char || '').toUpperCase() });
 }
 
-CellReplacers = {
-  ReplacementFor: function(cell) {
-    fn = cell.attributes['name'].value.camelize();
-    replace = this.DefaultReplacer(cell);
-    if(this[fn]) { replace = this[fn](cell, replace); }
-    return replace;
-  },
-  DefaultReplacer: function(cell) {
-    replace = FCKDocumentProcessor_CreateFakeImage('FCK__Cell', cell.cloneNode(true));
-    replace.style.border = '#a9a9a9 1px solid';
-    replace.style.background = 'url(/assets/adva_fckeditor/fckeditor/editor/css/images/fck_plugin.gif) center center no-repeat';
-    replace.style.width = cell.attributes['width'] ? cell.attributes['width'].value + "px" : "80px";
-    replace.style.height = cell.attributes['height'] ? cell.attributes['height'].value + "px" : "80px";
-    return replace;
-  },
+CellReplacers = FCKConfig.CellReplacers || {};
 
-  EmbedFeaturedListings: function(cell, replace) {
-    replace.style.width = "260px";
-    replace.style.height = "274px";
-    return replace;
-  },
+CellReplacers.ReplacementFor = function(cell) {
+  fn = cell.attributes['name'].value.camelize();
+  replace = this.DefaultReplacer(cell);
+  if(this[fn]) { replace = this[fn](cell, replace); }
+  return replace;
+};
 
-  EmbedFeaturedListingsAndArticle: function(cell, replace) {
-    replace.style.width = "700px";
-    replace.style.height = "300px";
-    return replace;
-  },
-
-  FormsSearchForm: function(cell, replace) {
-    replace.style.width = "700px";
-    replace.style.height = "80px";
-    return replace;
-  }
+CellReplacers.DefaultReplacer = function(cell) {
+  replace = FCKDocumentProcessor_CreateFakeImage('FCK__Cell', cell.cloneNode(true));
+  replace.style.border = '#a9a9a9 1px solid';
+  replace.style.background = 'url(/assets/adva_fckeditor/fckeditor/editor/css/images/fck_plugin.gif) center center no-repeat';
+  replace.style.width = cell.attributes['width'] ? cell.attributes['width'].value + "px" : "80px";
+  replace.style.height = cell.attributes['height'] ? cell.attributes['height'].value + "px" : "80px";
+  return replace;
 };
 
 // display dialog when cell is double clicked
