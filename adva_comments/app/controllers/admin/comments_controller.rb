@@ -1,12 +1,20 @@
 class Admin::CommentsController < Admin::BaseController
   layout "admin"
 
-  before_filter :set_comments, :only => :index
   before_filter :set_comment, :only => [:edit, :update, :destroy]
   before_filter :set_commentable, :set_comment_params, :only => :create
   after_filter :postback_spaminess, :only => [:update]
 
   guards_permissions :comment
+
+  def index
+    # FIXME how to remove the Topic dependency here? 
+    # maybe make Comment a subclass of Comment::Base or something so that we can use STI to exclude 
+    # special comment types?
+    @comments = @site.comments.where(['commentable_type NOT IN (?)', 'Topic']).
+      reorder("comments.created_at DESC").
+      paginate(:page => current_page, :per_page => 25)
+  end
 
   def update
     if @comment.update_attributes params[:comment]
@@ -43,24 +51,12 @@ class Admin::CommentsController < Admin::BaseController
                               :author => current_user
     end
 
-    def set_comments
-      source = @content || @section || @site
-      # FIXME how to remove the Topic dependency here? 
-      # maybe make Comment a subclass of Comment::Base or something so that we can use STI to exclude 
-      # special comment types?
-      collection = source.comments.where(['commentable_type NOT IN (?)', 'Topic'])
-
-      options = { :page => current_page, :per_page => 25, :order => 'created_at.id DESC' }
-      @comments = collection.paginate filter_options #.filtered(params[:filters])
-    end
-
     def set_comment
       source = @section || @site
       @comment = source.comments.find(params[:id])
     end
     
-    def filter_options
-      options = {:page => current_page, :per_page => params[:per_page], :order => 'created_at DESC'}
+    def filter_options options
       case params[:filter]
       when 'state'
         params[:state] == 'approved' ? options[:conditions] = "approved = '1'" : options[:conditions] = "approved = '0'"

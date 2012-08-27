@@ -1,3 +1,18 @@
+<%= content_for :sidebar do %>
+  <!--
+  <div class="tabs">
+    <ul>
+      <li class="active"><a href="#filters" onclick="return false;"><%= t(:'adva.titles.filters') %></a></li>
+    </ul>
+    <div class="tab active" id="tab_filters">
+      <%= filter_for(Comment) %>
+    </div>
+  </div>
+  -->
+<% end %>
+
+<%= will_paginate @comments %>
+
 <ul id="comments_list">
   <% if @comments.present? %>
     <% @comments.each do |comment, i| %>
@@ -24,3 +39,5 @@
     <li class="alt"><%= params[:filters] ? t(:'adva.comments.no_filtered_comments') : t(:'adva.comments.no_comments') %></li>
   <% end %>
 </ul>
+
+<%= will_paginate @comments %>

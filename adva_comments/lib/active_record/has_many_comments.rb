@@ -8,7 +8,7 @@ module ActiveRecord
       def has_many_comments(options = {})
         return if has_many_comments?
 
-        options[:order] = 'comments.created_at, comments.id'
+        options[:order] = [:created_at, :id]
         options[:class_name] ||= 'Comment'
 
         has_counter :comments,
