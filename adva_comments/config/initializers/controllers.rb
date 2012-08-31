@@ -11,4 +11,15 @@ ActionDispatch::Callbacks.to_prepare do
   end
   
   Admin::BaseController.helper :comments, :'admin/comments'
+
+  ArticleController.class_eval do
+    acts_as_commentable
+
+    private
+
+    def set_commentable
+      set_article if params[:permalink]
+      super
+    end
+  end
 end

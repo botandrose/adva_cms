@@ -15,8 +15,6 @@ class Site < ActiveRecord::Base
     end
   end
 
-  has_many :quick_searches, :dependent => :destroy, :order => :lft
-
   has_many :users, :through => :memberships, :dependent => :destroy
   has_many :memberships, :dependent => :delete_all
   has_many :cached_pages, :dependent => :destroy, :order => 'cached_pages.updated_at desc'

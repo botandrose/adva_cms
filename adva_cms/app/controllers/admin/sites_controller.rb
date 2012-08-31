@@ -11,7 +11,7 @@ class Admin::SitesController < Admin::BaseController
 
   def show
     @users = @site.users_and_superusers # TODO wanna show only *recent* users here
-    @contents = @site.unapproved_comments.group_by(&:commentable)
+    @contents = @site.unapproved_comments.group_by(&:commentable) if @site.respond_to?(:unapproved_comments)
     @activities = @site.activities.find_coinciding_grouped_by_dates(Time.zone.now.to_date, 1.day.ago.to_date)
   end
 

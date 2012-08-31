@@ -9,9 +9,6 @@ class ArticlesController < BaseController
   before_filter :set_articles, :only => :index
   before_filter :guard_view_permissions, :only => [:index, :show]
 
-    # TODO move :comments and @commentable to acts_as_commentable
-
-  acts_as_commentable
   authenticates_anonymous_user
 
   def index
@@ -67,11 +64,6 @@ class ArticlesController < BaseController
         @tags = Tag.find(:all, :conditions => ['name IN(?)', names]).map(&:name)
         raise ActiveRecord::RecordNotFound unless @tags.size == names.size
       end
-    end
-
-    def set_commentable
-      set_article if params[:permalink]
-      super
     end
 
     def guard_view_permissions

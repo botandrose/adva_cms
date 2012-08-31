@@ -20,7 +20,6 @@ module Menus
           if @site && !@site.new_record?
             item :overview, :action => :show,  :resource => @site
             item :sections, :action => :index, :resource => [@site, :section], :type => Menu::SectionsMenu, :populate => lambda { @site.sections }
-            item :comments, :action => :index, :resource => [@site, :comment]
           end
         end
 

@@ -1,5 +1,15 @@
 module Menus
   module Admin
+    # will be concatenated onto existing sites menu via javascript
+    class Sites < Menu::Group
+      define do
+        namespace :admin
+        menu :left, :class => 'main' do
+          item :comments, :action => :index, :resource => [@site, :comment]
+        end
+      end
+    end
+
     class Comments < Menu::Group
       define do
         id :main
