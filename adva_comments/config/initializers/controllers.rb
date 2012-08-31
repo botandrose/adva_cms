@@ -12,7 +12,7 @@ ActionDispatch::Callbacks.to_prepare do
   
   Admin::BaseController.helper :comments, :'admin/comments'
 
-  ArticleController.class_eval do
+  ArticlesController.class_eval do
     acts_as_commentable
 
     private
