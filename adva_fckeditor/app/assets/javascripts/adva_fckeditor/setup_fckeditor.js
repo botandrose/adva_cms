@@ -24,6 +24,10 @@ applyOrRemoveFCKeditors = function() {
           oFCKeditor.Config[key] = FCKGlobalConfig[key];
         }
       }
+      var bodyClass = $(this).attr("data-body-class");
+      if(bodyClass) {
+        oFCKeditor.Config.BodyClass = bodyClass;
+      }
       oFCKeditor.ReplaceTextarea();
     } else {
       f = $('#' + id + '___Frame');
