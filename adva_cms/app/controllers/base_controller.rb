@@ -90,7 +90,7 @@ class BaseController < ApplicationController
     end
 
     def skip_caching?
-      @skip_caching or @section.published?(true) or @article.try(:draft?)
+      @skip_caching or @article.try(:draft?)
     end
 
     def skip_caching!
