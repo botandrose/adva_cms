@@ -2,11 +2,8 @@
   content_for :sidebar do
     f.tabs do
       f.tab :options do
-        # html = label_tag(:content_locale, t(:'adva.common.locale')) +
-        #         %(<select id="content_locale" name="cl">#{options_for_select I18n.available_locales, Article.locale}</select>).html_safe +
-        html = (@section.try(:single_link_mode) ? '' : f.text_field(:permalink, :label => true)).html_safe +
-          %(<p class="hint" for="content_locale">#{t(:'adva.hints.locale')}</p>).html_safe +
-          f.text_field(:tag_list, :label => true, :hint => :'adva.hints.tags')
+        html = (@section.try(:single_link_mode) ? '' : f.text_field(:permalink, :label => true)).html_safe
+        html << f.text_field(:tag_list, :label => true, :hint => :'adva.hints.tags')
 
         if @categories.present?
           if !(@section.try(:single_link_mode) ? @section.single_link_mode : false)
