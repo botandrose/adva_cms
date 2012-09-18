@@ -4,8 +4,8 @@ require File.expand_path('../lib/adva_fckeditor/version', __FILE__)
 Gem::Specification.new do |gem|
   gem.authors       = ["Micah Geisel"]
   gem.email         = ["micah@botandrose.com"]
-  gem.description   = %q{TODO: Write a gem description}
-  gem.summary       = %q{TODO: Write a gem summary}
+  gem.description   = %q{Adva FCKEditor}
+  gem.summary       = %q{Engine for Adva CMS editing via FCKEditor}
   gem.homepage      = ""
 
   gem.files         = `git ls-files`.split($\)
