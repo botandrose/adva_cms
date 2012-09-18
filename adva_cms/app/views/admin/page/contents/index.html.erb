@@ -1,5 +1,5 @@
 <%=
-  table_for @contents do |t|
+  table_for @contents, :class => "articles list tree" do |t|
     columns = [:content]
     columns << :category if @section.categories.any?
     columns << :comments if defined?(Comment)
