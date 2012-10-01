@@ -1,4 +1,8 @@
 en:
+  i18n:
+    transliterate:
+      rule:
+        a: a
   activemodel:
     errors:
       models:
