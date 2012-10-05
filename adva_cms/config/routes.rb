@@ -6,6 +6,16 @@ Rails.application.routes.draw do
     end
   end
 
+  scope :constraints => lambda { |req|
+    Section.any? && begin
+      permalinks = Article.where(:section_id => Section.first.id).pluck(:permalink)
+      permalinks.include? req.fullpath[1..-1]
+    end
+  } do
+    get "/:permalink" => "articles#show"
+  end
+
+
   namespace :admin do
     resources :sites do
       resources :sections do
