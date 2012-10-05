@@ -1,4 +1,6 @@
 class Section < ActiveRecord::Base
+  default_scope order(:lft)
+
   @@types = ['Page']
   cattr_reader :types
 

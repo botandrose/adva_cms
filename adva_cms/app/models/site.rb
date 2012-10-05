@@ -2,7 +2,7 @@ class Site < ActiveRecord::Base
   serialize :permissions
   serialize :spam_options
 
-  has_many :sections, :dependent => :destroy, :order => :lft do
+  has_many :sections, :dependent => :destroy do
     def paths
       map(&:path)
     end
