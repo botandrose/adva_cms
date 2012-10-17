@@ -14,12 +14,14 @@ class Admin::Page::ContentsController < Admin::BaseController
   def update_all
     params[:contents].each do |id, attrs|
       content = Content.find id
-      if attrs[:parent_id] =~ /^\d+$/
-        content.move_to_child_of attrs[:parent_id]
+      parent = Content.find_by_id attrs[:parent_id]
+      left = Content.find_by_id attrs[:left_id]
+      if parent
+        content.move_to_child_with_index parent, 0
       else
         content.move_to_root
       end
-      content.move_to_right_of attrs[:left_id] if attrs[:left_id]
+      content.move_to_right_of left if left
     end
     render :text => 'OK'
   end
