@@ -216,7 +216,7 @@ TableTree.Node.prototype = jQuery.extend(new TableTree.Base(), {
 	left: function() {
 		siblings = this.siblings().get();
 		ix = siblings.indexOf(this) - 1;
-		if(ix > 0) return siblings[ix];
+		if(ix >= 0) return siblings[ix];
 	},
 	to_int: function(str) { 
 		if(str) return str.replace(/[\D]+/, '') 
