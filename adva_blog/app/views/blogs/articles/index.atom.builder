@@ -7,11 +7,11 @@ atom_feed :url => request.url do |feed|
   feed.title title
   feed.updated @articles.first ? @articles.first.updated_at : Time.now.utc
 
-  @articles.each do |article|
-    url = url_for([@section, article])
+  @articles[0..12].each do |article|
+    url = "http://#{@site.host}#{url_for([@section, article])}"
     feed.entry article, :url => url do |entry|
       entry.title article.title
-      entry.content article.body_html, :type => 'html'
+      entry.content "#{absolutize_links(article.excerpt_html)} #{absolutize_links(article.body_html)}", :type => 'html'
       entry.author do |author|
         author.name article.author_name
         author.email article.author_email
