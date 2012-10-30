@@ -21,6 +21,8 @@ class CommentsController < BaseController
   before_filter :set_commentable, :only => [:show, :preview, :create]
   before_filter :set_comment_params, :only => [:preview, :create]
 
+  before_filter :are_you_a_human_or_not, :only => :create
+
   guards_permissions :comment, :except => :show, :create => :preview
 
   def show
