@@ -1,6 +1,14 @@
 class Comment < ActiveRecord::Base
   class CommentNotAllowed < StandardError; end
 
+  def self.approved
+    where :approved => true
+  end
+
+  def self.unapproved
+    where :approved => false
+  end
+
   define_model_callbacks :approve, :unapprove
 
   def around_save
