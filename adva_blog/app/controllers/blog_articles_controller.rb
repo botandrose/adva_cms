@@ -1,8 +1,10 @@
 class BlogArticlesController < ArticlesController
   def index
-    respond_to do |format|
-      format.html { render :template => "blogs/articles/index" }
-      format.atom { render :template => "blogs/articles/index", :layout => false }
+    if skip_caching? or stale?(:etag => @section, :last_modified => [@articles.to_a, @section, @site].flatten.collect(&:updated_at).compact.max.utc, :public => true)
+      respond_to do |format|
+        format.html { render :template => "blogs/articles/index" }
+        format.atom { render :template => "blogs/articles/index", :layout => false }
+      end
     end
   end
 

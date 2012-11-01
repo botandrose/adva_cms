@@ -13,7 +13,7 @@ class Section < ActiveRecord::Base
   acts_as_nested_set :scope => :site_id
   instantiates_with_sti
 
-  belongs_to :site
+  belongs_to :site, :touch => true
   has_many :categories, :dependent => :destroy, :order => 'lft' do
     def update_paths!
       paths = Hash[*roots.map { |r|

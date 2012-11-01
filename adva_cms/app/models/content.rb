@@ -27,7 +27,7 @@ class Content < ActiveRecord::Base
   filtered_column :body, :excerpt
 
   belongs_to :site
-  belongs_to :section
+  belongs_to :section, :touch => true
   belongs_to_author :validate => true
 
   has_many :assets, :through => :asset_assignments
