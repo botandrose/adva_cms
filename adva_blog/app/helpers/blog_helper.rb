@@ -20,11 +20,15 @@ module BlogHelper
   end
 
   def blog_article_path section, article
-    super :section_permalink => section.permalink,
-      :year => article.published_at.year,
-      :month => article.published_at.month,
-      :day => article.published_at.day,
-      :permalink => article.permalink
+    if article.published_at
+      super :section_permalink => section.permalink,
+        :year => article.published_at.year,
+        :month => article.published_at.month,
+        :day => article.published_at.day,
+        :permalink => article.permalink
+    else
+      unpublished_blog_article_path section, article
+    end
   end
   alias_method :blog_article_url, :blog_article_path
 end
