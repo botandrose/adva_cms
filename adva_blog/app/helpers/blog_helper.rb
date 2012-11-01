@@ -31,4 +31,8 @@ module BlogHelper
     end
   end
   alias_method :blog_article_url, :blog_article_path
+
+  def absolutize_links html
+    html.gsub /href="\//, %(href="http://#{@site.host}/)
+  end
 end
