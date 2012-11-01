@@ -30,7 +30,18 @@ module BlogHelper
       unpublished_blog_article_path section, article
     end
   end
-  alias_method :blog_article_url, :blog_article_path
+
+  def blog_article_url section, article
+    if article.published_at
+      super :section_permalink => section.permalink,
+        :year => article.published_at.year,
+        :month => article.published_at.month,
+        :day => article.published_at.day,
+        :permalink => article.permalink
+    else
+      unpublished_blog_article_url section, article
+    end
+  end
 
   def absolutize_links html
     html.gsub /href="\//, %(href="http://#{@site.host}/)
