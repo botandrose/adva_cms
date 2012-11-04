@@ -135,7 +135,8 @@
       
       // set form values
       $('cellForm').getElements().each(function(element) {
-        name = element.id.replace('cell_options_', '');
+        // name = element.id.replace('cell_options_', '');
+        name = element.name.match(/\[(.+)\]$/)[1]; // name is whats inbetween the square brackets
         element.setValue(cellElement.getAttribute(name));
       });
       
@@ -198,7 +199,8 @@
     if($F('name')) {
       // we fetch all form elements and transform them to attributes for the cell element
       attributes = $('cellForm').getElements().inject({}, function(attributes, option) {
-        name = option.id.replace('cell_options_', ''); // all ids start with "cell_options_"
+        // name = option.id.replace('cell_options_', ''); // all ids start with "cell_options_"
+        name = option.name.match(/\[(.+)\]$/)[1]; // name is whats inbetween the square brackets
         attributes[name] = $F(option);
         return attributes;
       });
