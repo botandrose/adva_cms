@@ -22,6 +22,7 @@ module OutputFilter
 
       body.gsub!(/(#{cells.keys.join('|')})/) do |tag|
         name, state, attrs = cells[tag]
+        attrs = HashWithIndifferentAccess.new(attrs)
         cell = "#{name.camelize}Cell".constantize.new
         args = [state]
         attrs.delete "class" # ignore styling class
