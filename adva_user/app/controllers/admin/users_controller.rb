@@ -1,5 +1,3 @@
-# FIXME clean up dependencies to rbac
-
 class Admin::UsersController < Admin::BaseController
   include Admin::UsersHelper
 
@@ -8,7 +6,7 @@ class Admin::UsersController < Admin::BaseController
   before_filter :authorize_access
   before_filter :authorize_params, :only => :update
 
-  guards_permissions :user
+  # guards_permissions :user
 
   def index
   end
