@@ -33,7 +33,7 @@ class Content < ActiveRecord::Base
   has_many :assets, :through => :asset_assignments
   has_many :asset_assignments # TODO :dependent => :delete_all?
   has_many :activities, :as => :object # move to adva_activity?
-  has_many :categories, :through => :categorizations, :touch => true
+  has_many :categories, :through => :categorizations
   has_many :categorizations, :as => :categorizable, :dependent => :destroy, :include => :category
 
   before_validation :set_site
