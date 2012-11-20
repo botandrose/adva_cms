@@ -36,6 +36,10 @@ class Content < ActiveRecord::Base
   has_many :categories, :through => :categorizations
   has_many :categorizations, :as => :categorizable, :dependent => :destroy, :include => :category
 
+  after_save do
+    categories.each(&:touch)
+  end
+
   before_validation :set_site
 
   scope :published, Proc.new { |*args|
