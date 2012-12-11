@@ -20,6 +20,7 @@ FCKConfig.PluginsPath = FCKConfig.BasePath + '../../fckeditor_plugins/';
 
 // add our Cells plugin
 FCKConfig.Plugins.Add('cells', 'en,de');
+FCKConfig.Plugins.Add('youtube', 'en,ja');
 
 // table tools plugins
 var originalPluginsPath = FCKConfig.BasePath + 'plugins/';
