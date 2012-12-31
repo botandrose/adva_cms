@@ -10,7 +10,11 @@ module CacheableFlash
   def write_flash_to_cookie
     yield
 
-    cookie_flash = cookies['flash'] ? JSON.parse(cookies['flash']) : {}
+    cookie_flash = begin
+      JSON.parse(cookies["flash"])
+    rescue JSON::ParseError
+      {}
+    end
 
     flash.each do |key, value|
       if cookie_flash[key.to_s].blank?
