@@ -11,7 +11,7 @@ module CacheableFlash
     yield
 
     cookie_flash = begin
-      JSON.parse(cookies["flash"])
+      JSON.parse(cookies["flash"] || "{}")
     rescue JSON::ParserError
       {}
     end
