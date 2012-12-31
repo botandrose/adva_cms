@@ -1,6 +1,6 @@
 # require "adva_cells/version"
 require "rails"
-
+require "cells"
 require "output_filter/cells"
 
 module AdvaCells
