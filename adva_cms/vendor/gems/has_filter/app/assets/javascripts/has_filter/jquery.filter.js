@@ -16,8 +16,8 @@ var Filter = {
   }
 }
 
-$(document).ready(function() {
-  $('.selected_filter').live('click', Filter.select);
-  $('.filter_add').live('click', Filter.add);
-  $('.filter_remove').live('click', Filter.remove);
+$(function() {
+  $(document).on('click', '.selected_filter', Filter.select);
+  $(document).on('click', '.filter_add', Filter.add);
+  $(document).on('click', '.filter_remove', Filter.remove);
 });

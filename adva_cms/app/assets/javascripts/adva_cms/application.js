@@ -1,8 +1,8 @@
 //= require jquery
+//= require jquery-ui
 //= require jquery_ujs
 //= require adva_cms/jquery/jquery.qtip.min
 //= require adva_cms/jquery/jquery-lowpro
-//= require adva_cms/jquery/jquery-ui
 //= require adva_cms/jquery.common
 //= require adva_cms/json
 //= require adva_cms/cookie
