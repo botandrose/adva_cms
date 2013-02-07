@@ -18,5 +18,10 @@ ActiveRecord::Base.class_eval do
         permalink.blank?
       end
     end
+
+    define_method :"#{options[:url_attribute]}=" do |value|
+      value = value.parameterize if value
+      super value
+    end
   end
 end
