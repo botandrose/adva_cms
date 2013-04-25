@@ -13,7 +13,10 @@ module MetaTagsHelper
         r.respond_to?(:"meta_#{name}")
       end
 
-      meta_tag(name, resource.send(:"meta_#{name}")) if resource
+      if resource
+        content = meta_value_from(resource.send(:"meta_#{name}"), resource.try(:"default_meta_#{name}"))
+        meta_tag(name, content)
+      end
     end.join("\n").html_safe
   end
 

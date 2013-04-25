@@ -1,9 +1,11 @@
 ActionDispatch::Callbacks.to_prepare do
-  require_dependency 'article'
-
-  class Article
+  Article.class_eval do
     cattr_reader :meta_fields
     @@meta_fields = %w(keywords description author copyright geourl)
+
+    def default_meta_description
+      HTML::FullSanitizer.new.sanitize(body).gsub(/\s+/, " ").strip.truncate(160)
+    end
   end
 end
 
