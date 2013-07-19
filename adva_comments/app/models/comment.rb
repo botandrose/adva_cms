@@ -40,7 +40,6 @@ class Comment < ActiveRecord::Base
   end
 
   belongs_to_author
-  has_many :activities, :as => :object # move to adva_activity?
 
   validates_presence_of :body, :commentable
 

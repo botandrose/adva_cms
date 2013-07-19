@@ -1,9 +1,11 @@
 <%# FIXME should be translated properly %>
 <h2><%= t(:'adva.titles.history') %>: <%= @site.title %></h2>
 
-<%= render :partial => 'admin/activities/activities', :object => @activities %>
+<% if defined?(AdvaActivity) %>
+  <%= render :partial => 'admin/activities/activities', :object => @activities %>
+<% end %>
 
-<% content_for :sidebar do %>
+<%= content_for :sidebar do %>
 	<div class="tabs">
 		<div class="tab active">
 		  <%= render :partial => 'recent_users', :locals => {:users => @users} %>

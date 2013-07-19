@@ -21,7 +21,7 @@
     = stylesheet_link_tag "adva_cms/admin/users.css"
     = stylesheet_link_tag "adva_cms/jquery/jquery-ui.css"
     = stylesheet_link_tag "adva_cms/jquery/jquery.tooltip.css"
-    = stylesheet_link_tag "adva_activity/admin/activities.css"
+    = stylesheet_link_tag "adva_activity/admin/activities.css" if defined?(AdvaActivity)
     = stylesheet_link_tag "adva_comments/admin/comments.css" if defined?(Comment)
     = stylesheet_link_tag "has_filter/filter.css"
     = stylesheet_link_tag "adva_cms/admin/projection.css"
