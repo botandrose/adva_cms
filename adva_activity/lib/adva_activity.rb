@@ -22,7 +22,7 @@ module AdvaActivity
     config.to_prepare do
       Site.send :include, SiteExtensions
       Content.send :include, HasManyActivities
-      Comment.send :include, HasManyActivities
+      Comment.send :include, HasManyActivities if defined?(Comment)
     end
   end
 end
