@@ -19,7 +19,9 @@ module Menus
           item :sites, :action => :index, :resource => :site if Site.multi_sites_enabled
           if @site && !@site.new_record?
             item :overview, :action => :show,  :resource => @site
-            item :sections, :action => :index, :resource => [@site, :section], :type => Menu::SectionsMenu, :populate => lambda { @site.sections }
+            item :sections, :action => :index, :resource => [@site, :section],
+              :type => Menu::SectionsMenu,
+              :populate => lambda { |scope| @site.sections }
           end
         end
 
