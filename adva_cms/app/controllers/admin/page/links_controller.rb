@@ -1,5 +1,5 @@
 class Admin::Page::LinksController < Admin::BaseController
-  default_param :link, :author_id, :only => [:create, :update], &lambda { current_user.id }
+  default_param :link, :author_id, :only => [:create, :update], &lambda { |*| current_user.id }
 
   before_filter :set_section
   before_filter :set_links,   :only => [:index]

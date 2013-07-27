@@ -8,7 +8,7 @@ module CacheableFlash
   end
 
   def write_flash_to_cookie
-    yield
+    yield self
 
     cookie_flash = begin
       JSON.parse(cookies["flash"] || "{}")
