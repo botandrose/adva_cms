@@ -39,7 +39,7 @@ class Comment < ActiveRecord::Base
     super(sType.to_s.classify.constantize.base_class.to_s)
   end
 
-  belongs_to_author
+  belongs_to_author :validate => false
 
   validates_presence_of :body, :commentable
 
