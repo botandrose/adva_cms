@@ -20,7 +20,7 @@ module TableBuilder
     
     def render
       build if respond_to?(:build)
-      super(@rows.map(&:render))
+      super(@rows.map(&:render).join)
     end
   end
 end

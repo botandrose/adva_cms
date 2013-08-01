@@ -39,8 +39,8 @@ module TableBuilder
 
     def render(content = nil)
       yield(content = '') if content.nil? && block_given?
-      content = lf(indent(content.to_s.html_safe))
-      lf(content_tag(tag_name, content, options))
+      content = content.html_safe
+      content_tag(tag_name, content, options)
     end
     
     def add_class(klass)
@@ -48,14 +48,6 @@ module TableBuilder
     end
     
     protected
-      def lf(str)
-        "\n#{str}\n".html_safe
-      end
-      
-      def indent(str)
-        str.gsub(/^/, "  ").html_safe
-      end
-      
       def add_class!(options, klass)
         unless klass.blank?
           options[:class] ||= ''

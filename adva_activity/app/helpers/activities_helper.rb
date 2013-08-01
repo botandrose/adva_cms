@@ -4,7 +4,7 @@ module ActivitiesHelper
       html = activities.collect do |activity|
         render :partial => "admin/activities/#{activity.object_type.downcase}",
                :locals => { :activity => activity, :recent => recent }
-      end
+      end.join
     else
       html = %(<li class="empty shade">#{I18n.t(:'adva.activity.none')}.</li>)
     end
