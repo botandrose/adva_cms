@@ -18,6 +18,8 @@ en:
           invalid: is invalid
   attributes:
     author: Author
+    author_name: Author name
+    author_email: Author email
     body: Body
     first_name: First name
     last_name: Last name
