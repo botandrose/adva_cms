@@ -7,7 +7,8 @@ ActionController::Base.class_eval do
     end
   end
 
-  @@field_error_procs = {
+  cattr_accessor :field_error_procs
+  self.field_error_procs = {
     :above_field => Proc.new { |html_tag, instance|
       html_tag =~ /<label/ ? html_tag : %(<span class="error_message">#{Array(instance.error_message).to_sentence}</span>) + html_tag
     },
@@ -15,7 +16,6 @@ ActionController::Base.class_eval do
       html_tag =~ /<label/ ? html_tag : html_tag + %(<span class="error_message">#{Array(instance.error_message).to_sentence}</span>)
     }
   }
-  cattr_accessor :field_error_procs
   
   def render_with_error_proc(*args, &block)
     options = args.last.is_a?(Hash) ? args.last : {}
