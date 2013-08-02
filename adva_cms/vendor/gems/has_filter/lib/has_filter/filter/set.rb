@@ -66,15 +66,15 @@ module HasFilter
   		
   		protected
     
-        def find_filter(type)
-          # FIXME ask the filter instead: filter.matches?(type) or something
-          detect { |filter| filter.matches?(type) }
-        end
-  		
-    		def filter_select_tag(view)
-  	      options = view.options_for_select(map(&:filter_select_option), selected)
-  		    view.select_tag :'filters[][selected]', options, :id => "selected_filter_#{index}", :class => 'selected_filter'
-  	    end
+      def find_filter(type)
+        # FIXME ask the filter instead: filter.matches?(type) or something
+        detect { |filter| filter.matches?(type) }
+      end
+    
+      def filter_select_tag(view)
+        options = view.options_for_select(map(&:filter_select_option), selected)
+        view.select_tag :'filters[][selected]', options, :id => "selected_filter_#{index}", :class => 'selected_filter'
+      end
     end
   end
 end

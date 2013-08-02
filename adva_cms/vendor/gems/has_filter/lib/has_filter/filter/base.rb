@@ -49,19 +49,19 @@ module HasFilter
         end
       end
   	  
-  	  protected
-  	    
-    		def filter_select_option
-		      [I18n.t(type, :scope => :'has_filter.filters', :default => type.to_s.gsub('_', ' ')), type]
-  	    end
+      def filter_select_option
+        [I18n.t(type, :scope => :'has_filter.filters', :default => type.to_s.gsub('_', ' ')), type]
+      end
 
-    		def form_field_name(*keys)
-    		  "filters[]" + keys.map { |key| "[#{key}]" }.join
-  		  end
-		  
-  		  def form_field_id(*keys)
-    		  "filter" + keys.map { |key| "_#{key}" }.join + "_#{set.index}"
-  	    end
+      protected
+
+      def form_field_name(*keys)
+        "filters[]" + keys.map { |key| "[#{key}]" }.join
+      end
+    
+      def form_field_id(*keys)
+        "filter" + keys.map { |key| "_#{key}" }.join + "_#{set.index}"
+      end
   	end
 	end
 end

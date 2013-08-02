@@ -33,23 +33,23 @@ module HasFilter
   	    query.blank? ? target : target.send(scope, attribute, query)
   		end
   		
+      def filter_select_option
+        [I18n.t(attribute, :scope => :'has_filter.filters', :default => attribute.to_s.gsub('_', ' ')), attribute]
+      end
+
   		protected
   		
-    		def filter_select_option
-		      [I18n.t(attribute, :scope => :'has_filter.filters', :default => attribute.to_s.gsub('_', ' ')), attribute]
-  	    end
-
-  		  def scopes_select_tag
-  		    options = self.class.scopes.map do |scope| 
-  		      [I18n.t(scope, :scope => :'has_filter.scopes', :default => scope.to_s.gsub('_', ' ')), scope]
-		      end
-  		    options = view.options_for_select(options, selected[:scope].try(:to_sym))
-  		    view.select_tag(form_field_name(attribute, :scope), options, :id => form_field_id(attribute, :scope))
-		    end
-  		
-  		  def query_input_tag
-  		    view.text_field_tag(form_field_name(attribute, :query), selected[:query], :id => form_field_id(attribute, :query))
-		    end
+      def scopes_select_tag
+        options = self.class.scopes.map do |scope| 
+          [I18n.t(scope, :scope => :'has_filter.scopes', :default => scope.to_s.gsub('_', ' ')), scope]
+        end
+        options = view.options_for_select(options, selected[:scope].try(:to_sym))
+        view.select_tag(form_field_name(attribute, :scope), options, :id => form_field_id(attribute, :scope))
+      end
+    
+      def query_input_tag
+        view.text_field_tag(form_field_name(attribute, :query), selected[:query], :id => form_field_id(attribute, :query))
+      end
   	end
 	end
 end
