@@ -1,3 +1,5 @@
+//= require adva_fckeditor/fckeditor/fckeditor.js
+
 applyOrRemoveFCKeditors = function() {
   $('textarea.wysiwyg').each(function() {
     id = $(this).attr('id');
