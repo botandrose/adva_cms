@@ -19,6 +19,10 @@ module AdvaActivity
   end
 
   class Engine < Rails::Engine
+    initializer "add assets to precompilation list" do |app|
+      app.config.assets.precompile += %w(adva_cms/admin/activities.css)
+    end
+
     config.to_prepare do
       Site.send :include, SiteExtensions
       Content.send :include, HasManyActivities
