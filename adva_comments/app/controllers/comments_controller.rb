@@ -97,8 +97,7 @@ class CommentsController < BaseController
 
       params[:comment].delete(:approved)  # TODO use attr_protected api?
       params[:comment].merge!(:site_id => @commentable.site_id,
-                              :section_id => @commentable.section_id,
-                              :author => current_user)
+                              :section_id => @commentable.section_id)
     end
 
     def current_resource
