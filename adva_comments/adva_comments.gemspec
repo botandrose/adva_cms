@@ -14,4 +14,6 @@ Gem::Specification.new do |gem|
   gem.name          = "adva_comments"
   gem.require_paths = ["lib"]
   gem.version       = AdvaComments::VERSION
+
+  gem.add_dependency "validates_email_format_of"
 end

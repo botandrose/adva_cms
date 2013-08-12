@@ -42,6 +42,7 @@ class Comment < ActiveRecord::Base
   composed_of :author, :class_name => "User", :mapping => [ %w(author_name name), %w(author_email email) ]
 
   validates_presence_of :body, :commentable, :author_name, :author_email
+  validates_email_format_of :author_email
 
   before_validation :set_owners
   before_create :authorize_commenting
