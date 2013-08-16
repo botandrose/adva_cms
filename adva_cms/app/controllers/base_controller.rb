@@ -43,7 +43,11 @@ class BaseController < ApplicationController
     end
 
     def current_page
-      @page ||= params[:page].present? ? params[:page].to_i : 1
+      @page ||= begin
+        page = params[:page].to_i
+        page = 1 if page == 0
+        page
+      end
     end
 
     def set_commentable
