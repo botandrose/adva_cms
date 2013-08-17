@@ -1,6 +1,4 @@
 class Admin::UsersController < Admin::BaseController
-  include Admin::UsersHelper
-
   before_filter :set_users, :only => [:index]
   before_filter :set_user,  :only => [:show, :edit, :update, :destroy]
   before_filter :authorize_access

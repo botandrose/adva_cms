@@ -1,5 +1,5 @@
-<% @users.each do |user| %>
-	<ul id="users">
+<ul id="users">
+  <% @users.each do |user| %>
 		<li>
 		  <%= gravatar_img(user) %>
 		  <h4><%= link_to user.name, admin_user_path(@site, user) %></h4>
@@ -9,5 +9,5 @@
         <%= link_to t(:'adva.links.delete'), admin_user_path(@site, user), :class => 'delete', :data => { :confirm => t(:'adva.users.confirm_delete') }, :method => :delete %>
 		  </p>
 		</li> 
-	</ul>	
-<% end %>
+	<% end %>
+</ul>	
