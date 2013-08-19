@@ -12,8 +12,8 @@ module Menus
           activates object.parent.find(:users)
           item :new, :action => :new, :resource => [@site, :user]
           if @user && !@user.new_record?
-            item :show,   :url => admin_user_path(@site, @user)
-            item :edit,   :url => edit_admin_user_path(@site, @user)
+            item :show,   :url => admin_site_user_path(@site, @user)
+            item :edit,   :url => edit_admin_site_user_path(@site, @user)
             # item :show,   :action  => :show, :resource => @user
             # item :edit,   :action  => :edit, :resource => @user
             item :delete, :content => link_to_delete(@user)
