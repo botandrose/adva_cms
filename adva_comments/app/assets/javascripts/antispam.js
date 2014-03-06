@@ -6,6 +6,6 @@
   $(function() {
     window.setTimeout(function() {
       $(".antispam").append('<input type="hidden" name="are_you_a_human_or_not" value="if you prick me, do i not bleed?">');
-    }, 1000);
+    }, 5000);
   });
 })(jQuery);
