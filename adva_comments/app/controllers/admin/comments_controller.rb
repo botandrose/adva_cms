@@ -16,6 +16,9 @@ class Admin::CommentsController < Admin::BaseController
       paginate(:page => current_page, :per_page => 25)
   end
 
+  def edit
+  end
+
   def update
     if @comment.update_attributes params[:comment]
       trigger_events @comment
@@ -52,8 +55,7 @@ class Admin::CommentsController < Admin::BaseController
     end
 
     def set_comment
-      source = @section || @site
-      @comment = source.comments.find(params[:id])
+      @comment = Comment.find(params[:id])
     end
     
     def filter_options options
