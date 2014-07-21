@@ -186,21 +186,14 @@ module ActionController
           return nil unless token =~ /\;/
 
           uid, token = token.split ';'
-          if object = klass.find_by_id(uid) # , authentication_find_options[klass] || {}
+          if object = klass.find_by_id(uid)
             return object if object.authenticate(token)
           end
           nil
         end
 
         def find_current_user
-          User.find_by_id(session[:uid], authentication_find_options[User])
-        end
-
-        # Override this in the controller if you want to pass in
-        # additional options when loading the current user (for example
-        # eager loading of relationships)
-        def authentication_find_options
-          {}
+          User.find_by_id(session[:uid])
         end
 
     end

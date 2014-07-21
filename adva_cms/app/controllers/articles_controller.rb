@@ -18,7 +18,7 @@ class ArticlesController < BaseController
 
   def show
     if params[:permalink]
-      @article = @section.articles.find_by_permalink!(params[:permalink], :include => :author)
+      @article = @section.articles.includes(:author).find_by_permalink!(params[:permalink])
     elsif @section.try(:single_article_mode)
       @article = @section.articles.first
     end
