@@ -21,9 +21,8 @@ class Activity < ActiveRecord::Base
 
   class << self
     def find_coinciding_grouped_by_dates(*dates)
-      options = dates.extract_options!
       groups = (1..dates.size).collect{[]}
-      activities = find_coinciding({:order => 'activities.created_at DESC', :limit => 50}.update(options)) #, :include => :user
+      activities = find_coinciding #, :include => :user
 
       # collect activities for the given dates
       activities.each do |activity|
@@ -39,9 +38,9 @@ class Activity < ActiveRecord::Base
     end
 
     def find_coinciding(options = {})
-      delta = options.delete(:delta)
-      activities = find(:all, options).group_by{|r| "#{r.object_type}#{r.object_id}"}.values
-      activities = group_coinciding(activities, delta)
+      activities = order(created_at: :desc).limit(50)
+      activities = activities.group_by{|r| "#{r.object_type}#{r.object_id}"}.values
+      activities = group_coinciding(activities)
       activities.sort{|a, b| b.created_at <=> a.created_at }
     end
 

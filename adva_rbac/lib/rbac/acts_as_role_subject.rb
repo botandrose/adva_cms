@@ -36,7 +36,7 @@ module Rbac
       end
 
       def has_global_role?(type, site = nil)
-        return self.roles.all.any? do |role|
+        return self.roles.any? do |role|
           (role.name == "superuser" && type == :superuser ||
           role.name == type.to_s && role.context_type == "Site" && role.context_id == site.id)
         end
@@ -44,7 +44,7 @@ module Rbac
 
       def has_permission_for_admin_area?(site)
         permitted_roles = [:superuser, :admin, :moderator, :author, :designer]
-        return self.roles.all.any? do |role|
+        return self.roles.any? do |role|
           permitted_roles.any? do |permitted_role|
             self.has_global_role?(permitted_role, site)
           end

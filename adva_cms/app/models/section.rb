@@ -1,5 +1,5 @@
 class Section < ActiveRecord::Base
-  default_scope order(:lft)
+  default_scope -> { order(:lft) }
 
   @@types = ['Page']
   cattr_reader :types
@@ -13,7 +13,7 @@ class Section < ActiveRecord::Base
   instantiates_with_sti
 
   belongs_to :site, :touch => true
-  has_many :categories, :dependent => :destroy, :order => 'lft' do
+  has_many :categories, -> { order(:lft) }, dependent: :destroy do
     def update_paths!
       paths = Hash[*roots.map { |r|
         r.self_and_descendants.map { |n| [n.id, { 'path' => n.send(:build_path) }] } }.flatten]

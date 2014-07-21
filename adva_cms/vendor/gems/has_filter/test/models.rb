@@ -9,8 +9,8 @@ class HasFilterArticle < ActiveRecord::Base
   has_many :categories, :through => :categorizations, :class_name => 'HasFilterCategory'
   has_many :categorizations, :class_name => 'HasFilterCategorization', :dependent => :destroy
 
-  named_scope :published, :conditions => 'published = 1'
-  named_scope :approved, :conditions => 'approved = 1'
+  scope :published, -> { where(published: true) }
+  scope :approved, -> { where(approved: true) }
 end
 
 class HasFilterCategorization < ActiveRecord::Base

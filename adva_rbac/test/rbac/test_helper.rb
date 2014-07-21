@@ -39,11 +39,11 @@ class Test::Unit::TestCase
     end
     
     def user_names
-      @user_names ||= User.all.map(&:name)
+      @user_names ||= User.scoped.map(&:name)
     end
     
     def group_names
-      @group_names ||= Group.all.map(&:name)
+      @group_names ||= Group.scoped.map(&:name)
     end
 
     def blog

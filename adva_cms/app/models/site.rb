@@ -17,7 +17,7 @@ class Site < ActiveRecord::Base
 
   has_many :users, :through => :memberships, :dependent => :destroy
   has_many :memberships, :dependent => :delete_all
-  has_many :cached_pages, :dependent => :destroy, :order => 'cached_pages.updated_at desc'
+  has_many :cached_pages, -> { order(updated_at: :desc) }, dependent: :destroy
 
   before_validation :downcase_host, :replace_host_spaces # c'mon, can't this be normalize_host or something?
   before_validation :populate_title
@@ -36,9 +36,9 @@ class Site < ActiveRecord::Base
     # FIXME clemens thinks this doesn't belong here. he's probably right.
     # TODO how to make this an association or assoc extension so we can use it
     # in admin/users_controller?
-    def find_users_and_superusers(id, options = {})
-      condition = ["memberships.site_id = ? OR (memberships.site_id IS NULL AND roles.name = ?)", id, 'superuser']
-      User.find :all, options.merge(:include => [:roles, :memberships], :conditions => condition)
+    def find_users_and_superusers(id)
+      User.where(["memberships.site_id = ? OR (memberships.site_id IS NULL AND roles.name = ?)", id, 'superuser'])
+        .includes([:roles, :memberships]).references(:roles, :memberships)
     end
   end
 
@@ -54,8 +54,8 @@ class Site < ActiveRecord::Base
     nil
   end
 
-  def users_and_superusers(options = {})
-    self.class.find_users_and_superusers id, options
+  def users_and_superusers
+    self.class.find_users_and_superusers(id)
   end
 
   def section_ids

@@ -5,7 +5,7 @@ class User < ActiveRecord::Base
   #  acts_as_authenticated_user :token_with => 'Authentication::SingleToken',
   #                             :authenticate_with => nil
 
-  scope :verified,      :conditions => "users.verified_at IS NOT NULL"
+  scope :verified, -> { where.not(verified_at: nil) }
 
   belongs_to :account
   has_many :sites, :through => :memberships

@@ -28,6 +28,6 @@ class ContentCellTest < ActiveSupport::TestCase
   # FIXME test the has_state option
   
   def recent_content(order = "created_at DESC", limit = 5)
-    Content.published(:order => order, :limit => limit)
+    Content.published.order(order).limit(limit)
   end
 end

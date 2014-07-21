@@ -4,7 +4,7 @@ class ArticleTest < ActiveSupport::TestCase
   def setup
     super
     @page = Page.first
-    @article = @page.articles.published(:limit => 1).first
+    @article = @page.articles.published.first
   end
 
   test "sanitizes the attributes excerpt, excerpt_html, body and body_html" do

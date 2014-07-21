@@ -9,7 +9,7 @@ class ContentHelperTest < ActionView::TestCase
     super
     @page = Page.find_by_title 'a page'
     @site = @page.site
-    @article = @page.articles.published(:limit => 1).first
+    @article = @page.articles.published.first
     @controller = Class.new { def controller_path; 'articles' end }.new
   end
 

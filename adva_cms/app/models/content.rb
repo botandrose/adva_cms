@@ -25,7 +25,7 @@ class Content < ActiveRecord::Base
   has_many :assets, :through => :asset_assignments
   has_many :asset_assignments # TODO :dependent => :delete_all?
   has_many :categories, :through => :categorizations
-  has_many :categorizations, :as => :categorizable, :dependent => :destroy, :include => :category
+  has_many :categorizations, -> { includes(:category) }, as: :categorizable, dependent: :destroy
 
   after_save do
     categories.each(&:touch)
@@ -33,43 +33,30 @@ class Content < ActiveRecord::Base
 
   before_validation :set_site
 
-  scope :published, Proc.new { |*args|
-    options = args.extract_options!
-    conditions = ['contents.published_at IS NOT NULL AND contents.published_at <= ?', Time.zone.now]
-    add_time_delta_condition!(conditions, args) unless args.compact.empty?
-    options.merge(:conditions => conditions)
+  scope :published, -> {
+    where(['contents.published_at IS NOT NULL AND contents.published_at <= ?', Time.zone.now])
   }
 
-  scope :drafts, Proc.new { |*args|
-    options = args.extract_options!
-    conditions = ['contents.published_at IS NULL']
-    add_time_delta_condition!(conditions, args) unless args.compact.empty?
-    options.merge(:conditions => conditions)
+  scope :drafts, -> {
+    where(published_at: nil)
   }
 
-  scope :unpublished, Proc.new { |*args|
-    drafts(*args)
+  scope :unpublished, -> {
+    drafts
   }
 
-  scope :by_category, lambda { |category|
+  scope :by_category, -> (category) {
     section_type = category.section.class
-    {
-      :include => [:categories, :section],
-      :conditions => [
+    includes([:categories, :section])
+      .where([
         "categories.lft >= ? AND categories.rgt <= ? AND sections.type = ?",
         category.lft, category.rgt, section_type.to_s
-      ]
-    }
+      ])
   }
 
   class << self
-    def add_time_delta_condition!(conditions, args)
-      conditions.first << " AND contents.published_at BETWEEN ? AND ?"
-      conditions.concat Time.delta(*args)
-    end
-
     def primary
-      published(:limit => 1).first
+      published.first
     end
   end
 

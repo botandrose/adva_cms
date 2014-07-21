@@ -24,7 +24,7 @@ class SectionCellTest < ActiveSupport::TestCase
   
   def recent_articles(order = "published_at DESC", limit = 5)
     @cell.send(:with_sections_scope, Article) do
-      Article.all(:order => order, :limit => limit)
+      Article.order(order).limit(limit)
     end
   end
 end

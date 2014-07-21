@@ -6,7 +6,7 @@ class BlogHelperTest < ActionView::TestCase
   def setup
     super
     @blog = Blog.first
-    @article = @blog.articles.published(:limit => 1)
+    @article = @blog.articles.published.first
     @category = @blog.categories.first
     @tags = ['foo', 'bar']
     @month = Time.local(2008, 1)

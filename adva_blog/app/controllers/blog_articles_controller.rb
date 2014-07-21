@@ -12,7 +12,7 @@ class BlogArticlesController < ArticlesController
     def set_articles
       scope = @category ? @category.all_contents : @section.articles
       scope = scope.tagged(@tags) if @tags.present?
-      scope = scope.published(params[:year], params[:month])
+      scope = scope.published # (params[:year], params[:month])
       @articles = scope.paginate(:page  => current_page, :order => "contents.published_at DESC")
     end
 

@@ -18,14 +18,13 @@ ActionDispatch::Callbacks.to_prepare do
         sql = "name = 'superuser' OR
                context_id = ? AND context_type = 'Site' OR
                context_id IN (?) AND context_type = 'Section'"
-        find :all, :conditions => [sql, site.id, site.section_ids]
+        where([sql, site.id, site.section_ids])
       end
     end
     
     class << self
-      # ?
       def admins_and_superusers
-        find :all, :include => :roles, :conditions => ['roles.name IN (?)', ['superuser', 'admin']]
+        includes(:roles).where(['roles.name IN (?)', ['superuser', 'admin']])
       end
 
       def create_superuser(params)
@@ -49,7 +48,7 @@ ActionDispatch::Callbacks.to_prepare do
         else
           ["roles.name = ?", type.name]
         end
-        find(:all, :include => :roles, :conditions => conditions)
+        includes(:roles).where(conditions)
       end
     
       def role_matches_attributes?(attrs, role)

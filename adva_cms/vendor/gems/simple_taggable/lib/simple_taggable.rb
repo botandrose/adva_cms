@@ -17,7 +17,7 @@ module ActiveRecord
           include ActiveRecord::Acts::Taggable::InstanceMethods
           extend ActiveRecord::Acts::Taggable::ClassMethods
 
-          has_many :taggings, :as => :taggable, :dependent => :destroy, :include => :tag
+          has_many :taggings, -> { includes(:tag) }, as: :taggable, dependent: :destroy
           has_many :tags, :through => :taggings
 
           scope :tagged, tagged_scope

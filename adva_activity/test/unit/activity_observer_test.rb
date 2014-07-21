@@ -35,7 +35,7 @@ class ActivityTest < ActiveSupport::TestCase
   
   test "#find_subscribers returns only subscribed users" do
     activity    = Activity.new(:site => @site)
-    subscribers = @site.users.find(:all, :include => :roles, :conditions => ['roles.name IN (?)', ['superuser', 'admin']])
+    subscribers = @site.users.includes(:roles).where(['roles.name IN (?)', ['superuser', 'admin']])
     assert_equal subscribers.count, Activities::ActivityObserver.send(:find_subscribers, activity).count
   end
 

@@ -22,6 +22,6 @@ class UserCellTest < ActiveSupport::TestCase
   # FIXME test the has_state option
   
   def recent_users(order = "id DESC", limit = 5)
-    User.all(:order => order, :limit => limit)
+    User.order(order).limit(limit)
   end
 end

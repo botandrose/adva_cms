@@ -32,7 +32,7 @@ module Authentication
       password_hash = hash_string password, user.password_salt
       conditions = ['id = ? AND password_hash = ?', user.id, password_hash]
       conditions[0] << ' AND verified_at IS NOT NULL' if user.respond_to? :verified_at
-      0 < user.class.count(:conditions => conditions)
+      0 < user.class.where(conditions).count
     end
 
     # Will assign a new password for the given user.
