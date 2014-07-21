@@ -12,15 +12,7 @@ class Content < ActiveRecord::Base
              :text  => { :attributes => [:title, :body, :excerpt] },
              :state => { :states => [:published, :unpublished] }
 
-
-  translates :title, :body, :excerpt, :body_html, :excerpt_html,
-    :versioned  => [ :title, :body, :excerpt, :body_html, :excerpt_html ],
-    :if_changed => [ :title, :body, :excerpt ], :limit => 5
   acts_as_taggable
-
-  def translations *args
-    super.order("content_translations.updated_at DESC")
-  end
 
   instantiates_with_sti
   has_permalink :title, :url_attribute => :permalink, :sync_url => true, :only_when_blank => true, :scope => :section_id

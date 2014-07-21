@@ -15,7 +15,6 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
   gem.version       = AdvaCms::VERSION
 
-  gem.add_dependency "globalize3"
   gem.add_dependency "will_paginate"
   gem.add_dependency "awesome_nested_set"
   gem.add_dependency "friendly_id"
