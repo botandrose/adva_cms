@@ -6,7 +6,7 @@ class Admin::SitesController < Admin::BaseController
   guards_permissions :site
 
   def index
-    @sites = Site.paginate(:page => params[:page], :per_page => params[:per_page], :order => 'id')
+    @sites = Site.paginate(:page => params[:page], :per_page => params[:per_page]).order(:id)
   end
 
   def show

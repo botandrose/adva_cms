@@ -26,8 +26,8 @@ module ActionController
       #
       # Options given are passed directly to the before_filter method
       # so feel free to provide :only and :except options.
-      def authentication_required(*options)
-        before_filter :require_authentication, options
+      def authentication_required
+        before_filter :require_authentication
       end
 
       # Will remove authentication from certain actions. Options given
@@ -38,8 +38,8 @@ module ActionController
       # entire application by putting authentication_required in your
       # ApplicationController but then want to open an action back up
       # in a specific controller.
-      def no_authentication_required(*options)
-        skip_before_filter :require_authentication, options
+      def no_authentication_required
+        skip_before_filter :require_authentication
       end
     end
 
@@ -106,7 +106,6 @@ module ActionController
 
         # Will actually test to see if the user is authorized
         def require_authentication
-
           # No matter what the app does a user can always login, forgot
           # password and register. The controllers provided by this
           # plugin alreaddy have these controllers/actions on an

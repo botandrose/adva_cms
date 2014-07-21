@@ -2,7 +2,7 @@ module TableBuilder
   class Body < Rows
     self.tag_name = :tbody
 
-    include ActionController::RecordIdentifier
+    include ActionView::RecordIdentifier
     
     def row(options = {}, &block)
       table.collection.each_with_index do |record, ix|
