@@ -5,7 +5,7 @@ ActiveRecord::Base.class_eval do
     extend FriendlyId
 
     friendly_id column do |config|
-      config.use :slugged
+      config.use :slugged, :finders
       if options[:scope]
         config.use :scoped
         config.scope = options[:scope]

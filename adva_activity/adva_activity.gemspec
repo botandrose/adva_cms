@@ -14,4 +14,6 @@ Gem::Specification.new do |gem|
   gem.name          = "adva_activity"
   gem.require_paths = ["lib"]
   gem.version       = AdvaActivity::VERSION
+
+  gem.add_dependency "rails-observers"
 end

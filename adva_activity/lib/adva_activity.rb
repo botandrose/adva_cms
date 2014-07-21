@@ -1,5 +1,6 @@
 # require "adva_activity/version"
 require "rails"
+require "rails-observers"
 
 module AdvaActivity
   module SiteExtensions

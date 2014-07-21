@@ -7,7 +7,6 @@ require 'rails_ext/action_controller/responds_to_parent'
 require 'rails_ext/action_controller/render_with_error_proc'
 require 'rails_ext/action_controller/url_for_returning'
 
-require 'rails_ext/active_record/sqlite_tainted'
 require 'rails_ext/active_record/sti_instantiation'
 require 'rails_ext/active_record/sticky_changes'
 
