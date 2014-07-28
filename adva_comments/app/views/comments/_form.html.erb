@@ -34,6 +34,7 @@
       <p id="preview"></p>
 
       <p>
+        <input type="text" name="comment[url]" style="background-color: transparent; border: 0px" />
         <%= submit_tag (@comment.new_record? ? t(:'adva.comments.titles.submit_comment') : t(:'adva.comments.titles.save_comment')) %>
         <%= link_to_remote_comment_preview %>
       </p>
