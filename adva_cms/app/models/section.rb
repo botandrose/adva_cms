@@ -21,6 +21,8 @@ class Section < ActiveRecord::Base
     end
   end
 
+  has_many :contents, -> { order(:lft) }, foreign_key: :section_id
+
   before_save  :update_path
   before_create :set_as_published
   after_create :update_paths

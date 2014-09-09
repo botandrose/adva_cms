@@ -2,7 +2,6 @@ class Page < Section
   has_option :single_article_mode, :default => true, :type => :boolean
 
   # avoid double destroy hook
-  has_many :contents, -> { order(:lft) }, foreign_key: :section_id
   has_many :articles, -> { order(:lft) }, dependent: :destroy, foreign_key: :section_id
   has_many :links, -> { order(:lft) }, dependent: :destroy, foreign_key: :section_id
 

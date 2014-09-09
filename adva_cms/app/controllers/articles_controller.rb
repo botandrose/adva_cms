@@ -7,6 +7,7 @@ class ArticlesController < BaseController
   before_filter :set_category, :only => :index
   before_filter :set_tags,     :only => :index
   before_filter :set_articles, :only => :index
+  before_filter :set_article,  :only => :show
   before_filter :guard_view_permissions, :only => [:index, :show]
 
   authenticates_anonymous_user
@@ -17,12 +18,6 @@ class ArticlesController < BaseController
   end
 
   def show
-    if params[:permalink]
-      @article = @section.articles.includes(:author).find_by_permalink!(params[:permalink])
-    elsif @section.try(:single_article_mode)
-      @article = @section.articles.first
-    end
-
     if skip_caching? or stale?(:etag => @article, :last_modified => [@article, @section, @site].collect(&:updated_at).compact.max.utc, :public => true)
       render :template => "#{@section.type.tableize}/articles/show"
     end
@@ -44,6 +39,14 @@ class ArticlesController < BaseController
       end
     end
 
+    def set_article
+      @article = if params[:permalink]
+        @section.articles.includes(:author).find_by_permalink!(params[:permalink])
+      elsif @section.try(:single_article_mode)
+        @section.articles.first
+      end
+    end
+
     def set_articles
       scope = @category ? @category.all_contents : @section.articles
       scope = scope.tagged(@tags) if @tags.present?
@@ -53,7 +56,7 @@ class ArticlesController < BaseController
 
     def set_category
       if params[:category_id]
-        @category = @section.categories.find params[:category_id]
+        @category = @section.categories.find(params[:category_id])
         raise ActiveRecord::RecordNotFound unless @category
       end
     end
@@ -61,7 +64,7 @@ class ArticlesController < BaseController
     def set_tags
       if params[:tags]
         names = params[:tags].split('+')
-        @tags = Tag.find(:all, :conditions => ['name IN(?)', names]).map(&:name)
+        @tags = Tag.where(name: names).pluck(:name)
         raise ActiveRecord::RecordNotFound unless @tags.size == names.size
       end
     end

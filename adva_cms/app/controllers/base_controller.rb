@@ -15,17 +15,19 @@ class BaseController < ApplicationController
 
   protected
     def set_site
-      @site ||= Site.find_by_host!(request.host_with_port) # or raise "can not set site from host #{request.host_with_port}"
+      @site ||= Site.includes(:sections).find_by_host!(request.host_with_port) # or raise "can not set site from host #{request.host_with_port}"
     end
     alias :site :set_site
 
-    def set_section
-      if @site
-        @section ||= @site.sections.find_by_permalink(params[:section_permalink]) || @site.sections.root
-      end
+    def sections
+      @sections ||= site.sections.includes(:contents)
+    end
 
-      unless @section.published?(true)
-        raise ActiveRecord::RecordNotFound unless has_permission?('update', 'section')
+    def set_section
+      @section ||= begin
+        section = sections.find { |section| section.permalink == params[:section_permalink] } || sections.first
+        raise ActiveRecord::RecordNotFound unless section.published?(true) || has_permission?('update', 'section')
+        section
       end
     end
     alias :section :set_section
