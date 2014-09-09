@@ -22,6 +22,7 @@ class BaseController < ApplicationController
     def sections
       @sections ||= site.sections.includes(:contents)
     end
+    helper_method :sections
 
     def set_section
       @section ||= begin
