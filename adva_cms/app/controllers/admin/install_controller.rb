@@ -45,10 +45,6 @@ class Admin::InstallController < ApplicationController
       params[:site].merge!(:host => request.host_with_port)
     end
 
-    def perma_host
-      @site.try(:perma_host) || 'admin'
-    end
-
     def protect_install
       if Site.find(:first) || User.find(:first)
         flash[:error] = t(:'adva.sites.flash.install.error_already_complete')

@@ -8,7 +8,7 @@ class BaseController < ApplicationController
   include ContentHelper
   include ResourceHelper
 
-  before_filter :set_site, :set_locale, :set_timezone, :set_cache_root
+  before_filter :set_site, :set_timezone
   attr_accessor :site, :section
 
   layout 'default'
@@ -29,14 +29,6 @@ class BaseController < ApplicationController
       end
     end
     alias :section :set_section
-
-    def set_locale
-      # FIXME: really? what about "en-US", "sms" etc.?
-      params[:locale] =~ /^[\w]{2}$/ or raise 'invalid locale' if params[:locale]
-      I18n.locale = params[:locale] || I18n.default_locale
-      # TODO raise something more meaningful
-      I18n.locale.untaint
-    end
 
     def set_timezone
       Time.zone = @site.timezone if @site
@@ -73,24 +65,6 @@ class BaseController < ApplicationController
     
     def current_resource
       @section || @site
-    end
-
-    def perma_host
-      @site ? @site.perma_host : ''
-    end
-
-    def page_cache_directory
-      Rails.root + if Rails.env == 'test'
-         Site.multi_sites_enabled ? '/tmp/cache/' + perma_host : '/tmp/cache'
-       else
-         # FIXME change this to
-         # Site.multi_sites_enabled ? '/public/sites/' + perma_host : '/cache' ?
-         Site.multi_sites_enabled ? '/public/cache/' + perma_host : '/public'
-       end
-    end
-    
-    def set_cache_root
-      self.class.page_cache_directory = page_cache_directory.to_s
     end
 
     def skip_caching?
