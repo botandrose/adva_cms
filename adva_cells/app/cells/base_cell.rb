@@ -13,22 +13,23 @@ class BaseCell < Cell::Base
       cell_node.id   cell_name
       cell_node.name cell_name.humanize
       cell_node.states do |states_node|
-        self.action_methods.uniq.each do |state|
+        self.action_methods.each do |state|
           states_node.state do |state_node|
             state = state.to_s
 
             # FIXME: this implementation is brittle at best and needs to be refactored/corrected ASAP!!!
-            cells_paths = Rails::Engine.subclasses.collect(&:paths).collect do |root|
-              root.collect { |key, value| value.expanded }
-            end
-            cells_paths = cells_paths.flatten.select { |p| p.include?("app/cells") }
-            template_path = "app/cells/#{cell_name}/#{state}_form.html.erb"
-            possible_templates = cells_paths.inject(Dir[Rails.root.join(template_path)]) do |memo, path|
-              memo += Dir[File.join(path, template_path)]
-              memo
-            end
-            template = possible_templates.first
-            form = template ? ERB.new(File.read(template)).result : ''
+            # cells_paths = Rails::Engine.subclasses.collect(&:paths).collect do |root|
+            #   root.collect { |key, value| value.expanded }
+            # end
+            # cells_paths = cells_paths.flatten.select { |p| p.include?("app/cells") }
+            # template_path = "app/cells/#{cell_name}/#{state}_form.html.erb"
+            # possible_templates = cells_paths.inject(Dir[Rails.root.join(template_path)]) do |memo, path|
+            #   memo += Dir[File.join(path, template_path)]
+            #   memo
+            # end
+            # template = possible_templates.first
+            # form = template ? ERB.new(File.read(template)).result : ''
+            form = ''
 
             state_node.id          state
             state_node.name        state.humanize
