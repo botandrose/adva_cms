@@ -8,7 +8,6 @@ require 'extensible_forms'
 require 'time_hacks'
 require 'core_ext'
 require 'rails_ext'
-require 'cells_ext'
 
 # require 'menu'
 # require 'event'    # need to force these to be loaded now, so Rails won't
