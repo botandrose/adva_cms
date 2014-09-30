@@ -8,6 +8,7 @@ module Cell
     end
 
     private
+
     def require_all_cells
       # TODO pull in cells from engines, too
       cell_files = Dir[::Rails.root.join('app/cells/*.rb')]
