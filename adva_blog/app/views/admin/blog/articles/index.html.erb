@@ -20,7 +20,7 @@
       raw params[:filters] ?
         t(:'adva.content.no_filtered_contents') :
         t(:'adva.contents.no_contents', :section => @section.title) + "\n" +
-        link_to(t(:'adva.contents.links.create_now'), [:new, :admin, @site, @section, :content])
+        link_to(t(:'adva.contents.links.create_now'), [:new, :admin, @site, @section, :article])
     end
   end
 %>

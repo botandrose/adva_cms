@@ -1,9 +1,10 @@
 class Blog < Section  
-  has_many :articles, :order => "contents.published_at DESC", :foreign_key => 'section_id', :dependent => :destroy do
+  has_many :articles, -> { order("contents.published_at DESC") }, :foreign_key => 'section_id', :dependent => :destroy do
     def permalinks
       published.map(&:permalink)
     end
   end
+  alias_method :contents, :articles
 
   class << self
     def content_types

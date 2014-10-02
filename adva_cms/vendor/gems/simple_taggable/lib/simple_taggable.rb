@@ -143,7 +143,7 @@ module ActiveRecord
 
             self.class.transaction do
               unless old_tags.empty?
-                taggings.find(:all, :conditions => ["tag_id IN (?)", old_tags]).each(&:destroy)
+                taggings.where(tag_id: old_tags).each(&:destroy)
                 taggings.reset
               end
               new_tag_names.each { |name| tags << Tag.find_or_create_by_name(name) }

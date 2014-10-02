@@ -51,7 +51,7 @@ class Content < ActiveRecord::Base
       .where([
         "categories.lft >= ? AND categories.rgt <= ? AND sections.type = ?",
         category.lft, category.rgt, section_type.to_s
-      ])
+      ]).references(:categories, :section)
   }
 
   class << self

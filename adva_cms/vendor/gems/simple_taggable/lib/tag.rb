@@ -9,7 +9,7 @@ class Tag < ActiveRecord::Base
   
   class << self
     def find_or_create_by_name(name)
-      find(:first, :conditions => ["name LIKE ?", name]) || create(:name => name)
+      where(["name LIKE ?", name]).first || create(name: name)
     end
   end
 

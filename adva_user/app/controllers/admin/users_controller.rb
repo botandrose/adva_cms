@@ -74,11 +74,7 @@ class Admin::UsersController < Admin::BaseController
     end
 
     def set_user
-      options = @site ? {:include => [:roles, :memberships], :conditions => ['memberships.site_id = ? OR roles.name = ?', @site.id, 'superuser']} : {}
-      @user = User.find(params[:id], options)
-    rescue
-      flash[:error] = t(:'adva.users.flash.not_member_of_this_site')
-      redirect_to admin_users_url(@site)
+      @user = User.find(params[:id])
     end
 
     # FIXME extract this and use Rbac contexts instead
