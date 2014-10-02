@@ -16,4 +16,5 @@ Gem::Specification.new do |gem|
   gem.version       = AdvaCells::VERSION
 
   gem.add_dependency "cells"
+  gem.add_dependency "tilt"
 end

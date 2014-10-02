@@ -1,5 +1,6 @@
 require "cells"
 require "cell/base"
+require "tilt"
 
 class BaseCell < Cell::Base
   def self.to_xml(options={})
@@ -20,7 +21,7 @@ class BaseCell < Cell::Base
             template_path = "#{view_paths.first}/#{cell_name}/#{state}_form.html*"
             possible_templates = Dir.glob(template_path)
             template = possible_templates.first
-            form = template ? ERB.new(File.read(template)).result : ''
+            form = template ? Tilt.new(template).render : ''
 
             state_node.id          state
             state_node.name        state.humanize
