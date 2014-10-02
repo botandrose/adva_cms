@@ -195,12 +195,20 @@
   var Ok = function() {
     // serialize form
     attributes = {};
+
     (function($) {
       values = $("#cellForm").serializeArray();
       $.each(values, function() {
-        attributes[this.name] = this.value;
+        var arrayName = this.name.replace(/\[\]$/, '');
+        if(arrayName != this.name) {
+          attributes[arrayName] = attributes[arrayName] || [];
+          attributes[arrayName].push(this.value);
+        } else {
+          attributes[this.name] = this.value;
+        }
       });
     })(jQuery);
+
     // apply only if a state has been selected
     if(attributes.name) {
       cell = new Element('cell', attributes);
