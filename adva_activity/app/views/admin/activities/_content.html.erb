@@ -9,7 +9,7 @@
   <p>
     <%= t(:'adva.activity.actions', :type => t(:"adva.activity.types.#{activity.object_attributes['type'].tableize.singularize}"),
       :actions => activity.all_actions.collect { |a| t(:"adva.activity.action_names.#{a.downcase}") }.to_sentence,
-      :activity => (activity.section ? link_to(activity.section.title, [:admin, activity.section.site, activity.section]) : "Deleted Section")).html_safe %>
+      :activity => (activity.section ? link_to(activity.section.title, [:admin, activity.section.site, activity.section, :contents]) : "Deleted Section")).html_safe %>
   </p>
   <%= link_to_if activity.section, activity.title, [:edit, :admin, activity.section.try(:site), activity.section, activity.object] %>
 </li>
