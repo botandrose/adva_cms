@@ -112,19 +112,18 @@
   };
   
   // fetch the currently selected cell (if any) from the editor
-  var selectedCell = dialog.Selection.GetSelectedElement();
+  var selectedCell = dialog.InnerDialogLoaded().FCKSelection.MoveToAncestorNode('CELL');
   
   LoadSelection = function() {
     // nothing selected -> new cell
     if(!selectedCell) return;
     
     // fetch the actual cell from the TempBin
-    var cellElement = oEditor.FCKTempBin.Elements[selectedCell.getAttribute('_fckrealelement')];
-    var state = CellState.getById(cellElement.getAttribute('name'));
+    var state = CellState.getById(selectedCell.getAttribute('name'));
     
     // only do this if we actually know this cell
     if(state) {
-      var cell = Cell.getById(cellElement.getAttribute('name'));
+      var cell = Cell.getById(selectedCell.getAttribute('name'));
       
       // select cell
       $('option_' + (cell.id + '_' + state.id)).selected = 'selected';
@@ -136,9 +135,11 @@
       
       // set form values
       $('cellForm').getElements().each(function(element) {
-        value = cellElement.getAttribute(element.name);
+        value = selectedCell.getAttribute(element.name);
         if(element.type == "radio" && element.value != value) {
           return false;
+        } else if (element.nodeName == "SELECT" && element.multiple) {
+          value = selectedCell.getAttribute(element.name.replace('[]','')).split(",")
         }
         element.setValue(value);
       });
@@ -211,6 +212,7 @@
 
     // apply only if a state has been selected
     if(attributes.name) {
+      selectedCell.parentNode.removeChild(selectedCell);
       cell = new Element('cell', attributes);
       oEditor.FCK.InsertElement(cell);
     }
