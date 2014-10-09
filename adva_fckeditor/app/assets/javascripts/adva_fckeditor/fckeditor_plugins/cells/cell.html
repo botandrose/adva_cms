@@ -212,7 +212,9 @@
 
     // apply only if a state has been selected
     if(attributes.name) {
-      selectedCell.parentNode.removeChild(selectedCell);
+      if(selectedCell) {
+        selectedCell.parentNode.removeChild(selectedCell);
+      }
       cell = new Element('cell', attributes);
       oEditor.FCK.InsertElement(cell);
     }
