@@ -5,7 +5,7 @@ module ActiveRecord
         base.extend ActMacro
       end
     end
-    
+
     module ActMacro
       def has_counter(*names)
         options = names.extract_options!
@@ -13,7 +13,7 @@ module ActiveRecord
 
         class_attribute :"update_counters"
         self.update_counters ||= {}
-        
+
         names.each do |name|
           counter_name = :"#{name}_counter"
           owner_name = options[:as] || self.name.demodulize.underscore
@@ -22,15 +22,15 @@ module ActiveRecord
           define_method :"#{name}_count" do
             send(counter_name).count
           end
-        
-          has_one counter_name, :as => :owner, 
-                                :class_name => 'Counter', 
-                                :conditions => "name = '#{name}'",
-                                :dependent => :delete
-        
+
+          has_one counter_name, -> { where(name: name) },
+                                as: :owner,
+                                class_name: "Counter",
+                                dependent: :delete
+
           # create the counter lazily upon first access
           class_eval <<-code, __FILE__, __LINE__
-            def #{counter_name}_with_lazy_creation(force_reload = false) 
+            def #{counter_name}_with_lazy_creation(force_reload = false)
               result = #{counter_name}_without_lazy_creation(force_reload)
               if result.nil?
                 Counter.create!(:owner => self, :name => #{name.to_s.inspect})

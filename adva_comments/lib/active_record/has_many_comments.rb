@@ -8,7 +8,7 @@ module ActiveRecord
       def has_many_comments(options = {})
         return if has_many_comments?
 
-        options[:order] = [:created_at, :id]
+        order_options = options.delete(:order) || [:created_at, :id]
         options[:class_name] ||= 'Comment'
 
         has_counter :comments,
@@ -25,13 +25,13 @@ module ActiveRecord
 
         options.delete(:as) unless options[:as] == :commentable
         with_options options do |c|
-          c.has_many :comments, :dependent => :delete_all do
+          c.has_many :comments, -> { order(order_options) }, dependent: :delete_all do
             def by_author(author)
               find_all_by_author_id_and_author_type(author.id, author.class.name)
             end
           end
-          c.has_many :approved_comments,   :conditions => ["comments.approved = ?", 1] 
-          c.has_many :unapproved_comments, :conditions => ["comments.approved = ?", 0]
+          c.has_many :approved_comments,   -> { where(["comments.approved = ?", 1]).order(order_options) }
+          c.has_many :unapproved_comments, -> { where(["comments.approved = ?", 0]).order(order_options) }
         end
 
         include InstanceMethods
