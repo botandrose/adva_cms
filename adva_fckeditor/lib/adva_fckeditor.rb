@@ -3,7 +3,10 @@
 module AdvaFckeditor
   class Engine < Rails::Engine
     initializer "add assets to precompilation list" do |app|
-      app.config.assets.precompile += %w(adva_fckeditor/setup_fckeditor.js)
+      require "non-stupid-digest-assets"
+      app.config.assets.precompile += [/adva_fckeditor/]
+      NonStupidDigestAssets.whitelist = [/adva_fckeditor/]
     end
   end
 end
+

@@ -14,4 +14,6 @@ Gem::Specification.new do |gem|
   gem.name          = "adva_fckeditor"
   gem.require_paths = ["lib"]
   gem.version       = AdvaFckeditor::VERSION
+
+  gem.add_dependency "non-stupid-digest-assets"
 end
