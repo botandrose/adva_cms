@@ -15,18 +15,18 @@ class BaseController < ApplicationController
 
   protected
     def set_site
-      @site ||= Site.includes(:sections).find_by_host!(request.host_with_port) # or raise "can not set site from host #{request.host_with_port}"
+      @site ||= Site.find_by_host!(request.host_with_port)
     end
     alias :site :set_site
 
     def sections
-      @sections ||= site.sections.includes(:contents)
+      @sections ||= site.sections
     end
     helper_method :sections
 
     def set_section
       @section ||= begin
-        sections.find { |section| section.permalink == params[:section_permalink] } || sections.first
+        sections.find_by_permalink(params[:section_permalink]) || sections.first
       end
       raise ActiveRecord::RecordNotFound unless @section.published?(true) || has_permission?('update', 'section')
       @section
@@ -58,8 +58,7 @@ class BaseController < ApplicationController
     end
 
     def redirect_to_login(notice = nil)
-      flash[:notice] = notice
-      redirect_to login_url(:return_to => request.url)
+      redirect_to login_url(return_to: request.url), notice: notice
     end
 
     def return_from(action, options = {})
