@@ -27,4 +27,8 @@ class Blog < Section
   def articles_by_month
     @articles_by_month ||= articles.published.group_by(&:published_month)
   end
+
+  def nav_children
+    categories.roots
+  end
 end

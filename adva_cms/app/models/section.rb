@@ -89,6 +89,10 @@ class Section < ActiveRecord::Base
   end
   alias published published?
 
+  def nav_children
+    contents.roots.published
+  end
+
   protected
   
     def set_as_published
