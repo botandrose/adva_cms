@@ -16,7 +16,11 @@ module ActionView
       alias_method_chain :fields_for, :resource_form_builders
 
       def field_set(object_name, name, content = nil, options = {}, &block)
-        InstanceTag.new(object_name, name, self, options.delete(:object)).to_field_set_tag(content, options, &block).html_safe
+        options.delete(:object)
+        options[:name] ||= name
+        options[:id] ||= name
+        content ||= self.capture(&block) if block_given?
+        content_tag("fieldset", raw(content), options).html_safe
       end
 
       protected
@@ -30,18 +34,6 @@ module ActionView
         rescue NameError
           Object.const_set(name, Class.new(ActionView::Base.default_form_builder)) rescue ActionView::Base.default_form_builder
         end
-    end
-
-    class InstanceTag
-      def to_field_set_tag(content = nil, options = {}, &block)
-        options = options.stringify_keys
-        name_and_id = options.dup
-        add_default_name_and_id(name_and_id)
-        options.delete("index")
-        options["id"] ||= name_and_id["id"]
-        content ||= @template_object.capture(&block) if block_given?
-        content_tag("fieldset", content, options)
-      end
     end
   end
 end
