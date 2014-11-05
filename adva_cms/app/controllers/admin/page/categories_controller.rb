@@ -3,6 +3,9 @@ class Admin::Page::CategoriesController < Admin::BaseController
 
   guards_permissions :category, :update => :update_all
 
+  def index
+  end
+
   def new
     @category = @section.categories.build
   end

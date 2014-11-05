@@ -1,18 +1,19 @@
 <h2><%= t(:'adva.categories.titles.new') %></h2>
   
-<%= form_for :category, @category, :url => admin_categories_path do |f| %>
+<%= form_for [:admin, @site, @section, @category] do |f| %>
   <% f.field_set do %>
-		<% column do %>
+    <div class="col">
     	<%= f.text_field :title, :label => true, :hint => :'adva.hints.categories' %>
-		<% end %>
+		</col>
 		
 		<% unless @section.categories.size < 2 %>
-			<% column do %>
+      <div class="col">
 	    	<%= f.select :parent_id, @section.categories.collect {|p| [p.title, p.id] unless p == @category }.compact, { :include_blank => true, :label => true } %>
 				<span class="hint" for="category_parent_id"><%= t :'adva.categories.hints.parent_setting' %></span>
-			<% end %>
+      </col>
 		<% end %>
 	<% end %>
 
   <% save_or_cancel_links(f, :cancel_url => admin_categories_path) %>
 <% end %>
+

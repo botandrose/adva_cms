@@ -154,7 +154,7 @@ module Menus
             item :edit,   :action  => :edit,   :resource => @category
             item :delete, :content  => link_to("Delete", [:admin, @site, @section, @category], :method => :delete)
           elsif !@category and @section.categories.size > 1
-            item :reorder, :content => link_to_index(:'adva.links.reorder', [@section, :category], :id => 'reorder_categories', :class => 'reorder')
+            item :reorder, :content => link_to("Reorder", [:admin, @site, @section, :categories], :id => 'reorder_categories', :class => 'reorder')
           end
         end
       end
