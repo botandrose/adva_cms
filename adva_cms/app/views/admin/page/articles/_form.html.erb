@@ -3,7 +3,9 @@
   <div class="col">
 	  <%= hidden_field_tag 'cl', Article.locale %>
 		
-	  <%= f.text_field :title, :class => 'big', :label => "Title"  %>
+    <p>
+      <%= f.text_field :title, :class => 'big', :label => "Title", style: "float: none" %>
+    </p>
 
 	  <p id="article_excerpt_wrapper" style="<%= @article.has_excerpt? ? "" : "display:none" %>">
 	    <label for="article_excerpt">
@@ -13,10 +15,10 @@
 	    <%= f.text_area :excerpt, :class => 'wysiwyg' %>
 	  </p>
 
-	  <label for="article_body">
-      Body
-	    <span class="inline" id="add_excerpt_hint">(<%= link_to t(:'adva.articles.excerpt_add'), '#', :id => 'add_excerpt' %>)</span>
-	  </label>
+    <p>
+      <label for="article_body" style="display: inline">Body</label>
+      <span id="add_excerpt_hint">(<%= link_to t(:'adva.articles.excerpt_add'), '#', :id => 'add_excerpt' %>)</span>
+    </p>
 
     <%= f.text_area :body, :class => editor_class_for(@article) %>
   </div>
