@@ -20,6 +20,7 @@ class Admin::Page::ContentsController < Admin::BaseController
         content.move_to_child_with_index parent, 0
       else
         content.move_to_root
+        content.move_to_left_of content.siblings.first
       end
       content.move_to_right_of left if left
     end
