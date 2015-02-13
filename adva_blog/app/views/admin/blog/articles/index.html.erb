@@ -1,16 +1,15 @@
 <%=
   table_for @contents do |t|
-    if @section.categories.any?
-      t.column :content, :category, :comments, :published, :actions
-    else
-      t.column :content, :comments, :published, :actions
-    end
+    columns = [:content]
+    columns.push :categories if @section.categories.any?
+    columns.push :comments if defined?(Comment)
+    columns += [:published, :actions]
 
     t.row do |r, content|
       r.add_class "level_#{content.level}"
       r.cell content_status(content) + link_to(content.title, [:edit, :admin, @site, @section, content], :class => content.state)
       r.cell content.category_titles.join(", ") if @section.categories.any?
-      r.cell content.accept_comments? && content.comments.present? ? link_to(content.comments.size, admin_comments_path) : t(:"adva.common.none")
+      r.cell content.accept_comments? && content.comments.present? ? link_to(content.comments.size, admin_comments_path) : t(:"adva.common.none") if defined?(Comment)
       r.cell published_at_formatted(content)
       r.cell link_to("Edit", [:edit, :admin, @site, @section, content], :class => "edit content") +
         link_to("Delete", [:admin, @site, @section, content], :method => :delete, :class => "delete content")
