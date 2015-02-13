@@ -50,7 +50,7 @@ module XssTerminate
     def xss_terminate(options = {})
       before_save :sanitize_attributes!
 
-      superclass_delegating_accessor :xss_terminate_options
+      class_attribute :xss_terminate_options
       self.xss_terminate_options = {}
       
       keys = [:except, *XssTerminate.sanitize_filters]
