@@ -28,10 +28,7 @@ module HasOptions
 
             def #{name}=(value)
               options_will_change!
-              case self.class.option_definition(:#{name}, :type)
-              when :boolean
-                value = ActiveRecord::ConnectionAdapters::Column.value_to_boolean(value)
-              end
+              value = !!value if self.class.option_definition(:#{name}, :type) == :boolean
               self.options ||= {}
               options[:#{name}] = value
             end
