@@ -5,6 +5,8 @@
     columns.push :comments if defined?(Comment)
     columns += [:published, :actions]
 
+    t.column *columns
+
     t.row do |r, content|
       r.add_class "level_#{content.level}"
       r.cell content_status(content) + link_to(content.title, [:edit, :admin, @site, @section, content], :class => content.state)
