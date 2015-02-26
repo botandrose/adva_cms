@@ -66,13 +66,13 @@ module ContentHelper
     section = args.pop
     route_name = :"#{section.class.name.downcase}_tag_path"
     text = args.pop || tag.name
-    link_to(text, send(route_name, :section_id => section.id, :tags => tag))
+    link_to(text, send(route_name, section_permalink: section.permalink, tags: tag))
   end
 
   def links_to_content_tags(content, key = nil)
     return if content.tags.empty?
     links = content.tags.map { |tag| link_to_tag content.section, tag }
-    key ? t(key, :links => links.join(', ')) : links
+    key ? t(key, links: links.join(', ')).html_safe : links
   end
 
   def content_category_checkbox(content, category)

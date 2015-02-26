@@ -4,6 +4,7 @@ Rails.application.routes.draw do
     get "/:section_permalink/categories/:category_id" => "blog_articles#index", :as => :blog_category
     get "/:section_permalink/:year/:month/:day/:permalink" => "blog_articles#show", :constraints => { :year => /\d{4}/, :month => /\d{1,2}/, :day => /\d{1,2}/ }, :as => :blog_article
     get "/:section_permalink/articles/:permalink" => "blog_articles#show", :as => :unpublished_blog_article
+    get "/:section_permalink/tags/:tags" => "blog_articles#index", :as => :blog_tag
   end
 
   namespace :admin do
