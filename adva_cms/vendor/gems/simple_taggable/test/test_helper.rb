@@ -1,8 +1,8 @@
 require 'test/unit'
 
-require 'rubygems'
-require 'activesupport'
+require 'active_support'
 require 'active_support/test_case'
+require 'active_support/testing/autorun'
 require 'active_record'
 require 'active_record/fixtures'
 
@@ -11,15 +11,11 @@ $: << File.expand_path(dir + '/../lib')
 $: << File.expand_path(dir + '/fixtures')
 ENV['RAILS_ENV'] = 'test'
 
-require dir + '/../init.rb'
+ActiveRecord::Base.establish_connection adapter: "sqlite3", database: ":memory:"
 
-config = { 'test' => { 'adapter' => 'sqlite3', 'dbfile' => dir + '/db/simple_taggable.sqlite3.db' } }
+load File.expand_path(dir + '/db/schema.rb')
 
-ActiveRecord::Base.logger = Logger.new(dir + '/log/simple_taggable.log')
-ActiveRecord::Base.configurations = config
-ActiveRecord::Base.establish_connection(config['test'])
-
-class ActiveSupport::TestCase #:nodoc:
+class ActiveSupport::TestCase
   include ActiveRecord::TestFixtures
 
   self.use_transactional_fixtures = true
@@ -63,6 +59,22 @@ class ActiveSupport::TestCase #:nodoc:
       assert false, "The following tag counts were not present: #{expected_values.inspect}"
     end
   end
+
+  def assert_difference(expression, difference = 1, message = nil, &block)
+    expressions = Array(expression)
+
+    exps = expressions.map { |e|
+      e.respond_to?(:call) ? e : lambda { eval(e, block.binding) }
+    }
+    before = exps.map { |e| e.call }
+
+    yield
+
+    expressions.zip(exps).each_with_index do |(code, e), i|
+      error  = "#{code.inspect} didn't change by #{difference}"
+      error  = "#{message}.\n#{error}" if message
+      assert_equal(before[i] + difference, e.call, error)
+    end
+  end
 end
 
-require dir + '/db/schema.rb' unless ActiveRecord::Base.connection.table_exists?('users')

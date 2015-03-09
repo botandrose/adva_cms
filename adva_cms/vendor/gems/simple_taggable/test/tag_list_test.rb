@@ -1,4 +1,5 @@
-require File.dirname(__FILE__) + '/test_helper'
+require_relative './test_helper'
+require 'tag_list'
 
 class TagListTest < ActiveSupport::TestCase
   teardown do
@@ -101,3 +102,4 @@ class TagListTest < ActiveSupport::TestCase
     assert_equal %w(Four), tag_list.remove("Three Five", :parse => true)
   end
 end
+
