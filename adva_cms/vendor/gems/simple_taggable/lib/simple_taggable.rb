@@ -103,7 +103,7 @@ module ActiveRecord
 
       module InstanceMethods
         def tag_list
-          @tag_list ||= cached_tag_list.nil? ? TagList.new(*tags.map(&:name)) : TagList.from(cached_tag_list)
+          @tag_list ||= (cached_tag_list.nil? ? TagList.new(*tags.map(&:name)) : TagList.from(cached_tag_list)).to_s
         end
 
         def tag_list=(value)
