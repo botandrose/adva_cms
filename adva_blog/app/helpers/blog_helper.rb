@@ -11,7 +11,7 @@ module BlogHelper
     
     if title.present?
       title = t(:'adva.blog.titles.articles', :articles => title.join(', ')) 
-      options[:format] ? options[:format] % title : title
+      options[:format] ? raw(options[:format]) % title : title
     end
   end
 
