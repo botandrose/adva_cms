@@ -61,12 +61,17 @@ module ContentHelper
     key ? t(key, :links => links.join(', ')) : links
   end
 
-  def link_to_tag(*args)
+  def link_to_tag(*args, &block)
     tag = args.pop
     section = args.pop
     route_name = :"#{section.class.name.downcase}_tag_path"
-    text = args.pop || tag.name
-    link_to(text, send(route_name, section_permalink: section.permalink, tags: tag))
+
+    if block_given?
+      link_to(send(route_name, section_permalink: section.permalink, tags: tag), &block)
+    else
+      text = args.pop || tag.name
+      link_to(text, send(route_name, section_permalink: section.permalink, tags: tag))
+    end
   end
 
   def links_to_content_tags(content, key = nil)
