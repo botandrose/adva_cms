@@ -17,12 +17,12 @@ class Article < Content
   end
 
   def previous
-    section.articles.published.where(["#{self.class.table_name}.published_at < ?", published_at]).first
+    section.articles.published.where(["#{self.class.table_name}.published_at < ?", published_at]).reorder(published_at: :desc).first
   end
   alias_method :previous_article, :previous
 
   def next
-    section.articles.published.where(["#{self.class.table_name}.published_at > ?", published_at]).first
+    section.articles.published.where(["#{self.class.table_name}.published_at > ?", published_at]).reorder(published_at: :asc).first
   end
   alias_method :next_article, :next
 
