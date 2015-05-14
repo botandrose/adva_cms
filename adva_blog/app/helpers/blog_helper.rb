@@ -44,6 +44,6 @@ module BlogHelper
   end
 
   def absolutize_links html
-    html.gsub /href="\//, %(href="http://#{@site.host}/)
+    html.gsub /(href|src)="\//, %(\\1="http://#{@site.host}/)
   end
 end
