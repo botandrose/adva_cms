@@ -13,6 +13,7 @@ class BlogArticlesController < ArticlesController
       scope = @category ? @category.all_contents : @section.articles
       scope = scope.tagged("'#{@tags}'") if @tags.present?
       scope = scope.published # (params[:year], params[:month])
+      scope = scope.includes(:approved_comments_counter) if defined?(Comment)
       @articles = scope.paginate(page: current_page, per_page: @section.contents_per_page).order(published_at: :desc)
     end
 
