@@ -65,9 +65,10 @@ class Admin::BaseController < ApplicationController
       @page ||= params[:page].present? ? params[:page].to_i : 1
     end
 
-    def set_menu
-      @menu = Menus::Admin::Sites.new
+    def menu
+      @menu ||= Menus::Admin::Sites.new
     end
+    alias_method :set_menu, :menu
 
     def set_locale
       params[:locale] =~ /^[\w]{2}$/ or raise 'invalid locale' if params[:locale]
