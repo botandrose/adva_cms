@@ -14,7 +14,11 @@ class ArticlesController < BaseController
 
   def index
     @article = @articles.first
-    show
+    if @article.is_a?(Link)
+      redirect_to @article.body
+    else
+      show
+    end
   end
 
   def show
@@ -33,7 +37,7 @@ class ArticlesController < BaseController
     def adjust_action
       if params[:action] == 'index' and @section.try(:single_article_mode)
         # ... but only if there is one published article
-        unless @section.articles.blank? || (@section.articles.first.draft? && !has_permission?('update', 'section'))
+        unless @section.contents.blank? || (@section.contents.first.draft? && !has_permission?('update', 'section'))
           @action_name = @_params[:action] = request.parameters['action'] = 'show'
         end
       end
@@ -41,14 +45,14 @@ class ArticlesController < BaseController
 
     def set_article
       @article = if params[:permalink]
-        @section.articles.includes(:author).find_by_permalink!(params[:permalink])
+        @section.contents.includes(:author).find_by_permalink!(params[:permalink])
       elsif @section.try(:single_article_mode)
-        @section.articles.first
+        @section.contents.first
       end
     end
 
     def set_articles
-      scope = @category ? @category.all_contents : @section.articles
+      scope = @category ? @category.all_contents : @section.contents
       scope = scope.tagged(@tags) if @tags.present?
       scope = scope.published
       @articles = scope.paginate(page: current_page).limit(@section.contents_per_page)

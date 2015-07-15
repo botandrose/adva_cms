@@ -12,13 +12,13 @@ class Page < Section
   end
 
   def published_at
-    return articles.first.published_at if single_article_mode && articles.first
+    return contents.first.published_at if single_article_mode && contents.first
     super
   end
 
   def published_at=(published_at)
-    if single_article_mode && articles.first
-      articles.first.update_attribute(:published_at, published_at)
+    if single_article_mode && contents.first
+      contents.first.update_attribute(:published_at, published_at)
     else
       super
     end
@@ -29,7 +29,7 @@ class Page < Section
       # FIXME: duplication with Section class
       return true if self == site.sections.root
       return false if parents && !ancestors.reject(&:published?).empty?
-      return articles.first ? articles.first.published? : false
+      return contents.first ? contents.first.published? : false
     end
     super
   end
