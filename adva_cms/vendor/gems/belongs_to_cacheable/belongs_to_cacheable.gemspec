@@ -14,4 +14,9 @@ Gem::Specification.new do |gem|
   gem.name          = "belongs_to_cacheable"
   gem.require_paths = ["lib"]
   gem.version       = BelongsToCacheable::VERSION
+
+  gem.add_dependency "activerecord"
+
+  gem.add_development_dependency "rspec", "~>3.0"
+  gem.add_development_dependency "sqlite3"
 end

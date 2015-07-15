@@ -46,7 +46,7 @@ describe "belongs_to_cacheable:" do
   
   it "when the attributes are not cached yet they are fetched from the association object" do
     @article.author = @author
-    values = [:author_name, :author_email].map{|attribute| @article.send attribute }
+    values = [@article.author_name, @article.author_email]
     values.should == ['the author name', 'author@email.org']
   end
 end

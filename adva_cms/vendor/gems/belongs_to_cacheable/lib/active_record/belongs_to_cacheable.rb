@@ -19,63 +19,60 @@ module ActiveRecord
           end
           before_save :"cache_#{name}_attributes!"
 
-          class_eval <<-code, __FILE__, __LINE__
-            def cache_#{name}_attributes!
-              return unless #{name}
-              cached_attributes_for(#{name.inspect}).each do |attribute|
-                self[:"#{name}_\#{attribute}"] = #{name}.send attribute
+          define_method :"cache_#{name}_attributes!" do
+            if association = send(name)
+              cached_attributes_for(name).each do |attribute|
+                self[:"#{name}_#{attribute}"] = association.send(attribute)
               end
             end
+          end
 
-            def #{name}_with_default_instance
-              send :"#{name}_without_default_instance" ||
-              instantiate_from_cached_attributes(#{name.inspect})
-            end
-            alias_method_chain :#{name}, :default_instance
+          define_method :"#{name}_with_default_instance" do
+            send :"#{name}_without_default_instance" ||
+              instantiate_from_cached_attributes(name)
+          end
+          alias_method_chain name, :default_instance
 
-            def is_#{name}?(object)
-              self.#{name} == object
-            end
+          define_method :"is_#{name}?" do |object|
+            send(name) == object
+          end
 
-            class << self
-              def define_attribute_methods_with_cached_#{name}
-                define_attribute_methods_without_cached_#{name}
-                cached_attributes_for(#{name.inspect}).each do |attribute|
-                 define_method :"#{name}_\#{attribute}" do
-                   read_attribute(:"#{name}_\#{attribute}") || (#{name} ? #{name}.send(attribute) : nil)
-                 end
+          @@cached_associations ||= []
+          @@cached_associations << name
+
+          define_singleton_method :define_attribute_methods do
+            super()
+            @@cached_associations.each do |name|
+              cached_attributes_for(name).each do |attribute|
+                define_method :"#{name}_#{attribute}" do
+                  read_attribute(:"#{name}_#{attribute}") || send(name).try(attribute)
                 end
               end
-              alias_method_chain :define_attribute_methods, :cached_#{name}
             end
-          code
+          end
         end
 
-        (class << self; self; end).class_eval <<-code, __FILE__, __LINE__
-          def cached_attributes_for(name)
-            column_names.map do |attribute|
-              attribute.to_s =~ /^\#{name}_(.*)/ && !['id', 'type'].include?($1) ? $1 : nil
-            end.compact
-          end
-        code
+        define_singleton_method :cached_attributes_for do |name|
+          column_names.map do |attribute|
+            attribute.to_s =~ /^#{name}_(.*)/ && !['id', 'type'].include?($1) ? $1 : nil
+          end.compact
+        end
 
-        class_eval <<-code, __FILE__, __LINE__
-          def cached_attributes_for(name)
-            attributes.keys.map do |attribute|
-              attribute.to_s =~ /^\#{name}_(.*)/ && !['id', 'type'].include?($1) ? $1 : nil
-            end.compact
-          end
+        define_method :cached_attributes_for do |name|
+          attributes.keys.map do |attribute|
+            attribute.to_s =~ /^#{name}_(.*)/ && !['id', 'type'].include?($1) ? $1 : nil
+          end.compact
+        end
 
-          def instantiate_from_cached_attributes(name, attributes)
-            if type = respond_to?(:"\#{name}_type") ? send(:"\#{name}_type") : name.classify
-              type.constantize.new.tap do |object|
-                attributes.each do |attribute|
-                  object.send :"\#{attribute}=", send(:"\#{name}_\#{attribute}")
-                end
+        define_method :instantiate_from_cached_attributes do |name, attributes|
+          if type = respond_to?(:"#{name}_type") ? send(:"#{name}_type") : name.classify
+            type.constantize.new.tap do |object|
+              attributes.each do |attribute|
+                object.send :"#{attribute}=", send(:"#{name}_#{attribute}")
               end
             end
           end
-        code
+        end
       end
     end
   end

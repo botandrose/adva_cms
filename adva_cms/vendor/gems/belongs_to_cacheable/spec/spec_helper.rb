@@ -1,13 +1,15 @@
-require 'rubygems'
 require 'active_record'
-require 'spec'
+
+RSpec.configure do |config|
+  config.expect_with(:rspec) { |c| c.syntax = :should }
+end
 
 require File.dirname(__FILE__) + '/../lib/active_record/belongs_to_cacheable.rb'
 require File.dirname(__FILE__) + '/../init.rb'
 
 name = "belongs_to_cacheable"
 ActiveRecord::Base.logger = Logger.new(File.dirname(__FILE__) + "/#{name}.spec.log")
-ActiveRecord::Base.establish_connection 'adapter' => 'sqlite3', 'dbfile' => File.dirname(__FILE__) + "/#{name}.sqlite3.db"
+ActiveRecord::Base.establish_connection adapter: "sqlite3", database: ":memory:"
 
 module SpecHelper
   class Article < ActiveRecord::Base
