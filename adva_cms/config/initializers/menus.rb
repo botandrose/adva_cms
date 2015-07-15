@@ -53,7 +53,7 @@ module Menus
           type = "Menus::Admin::Sections::#{@section.type}".constantize rescue Content
           menu :left, :class => 'left', :type => type
           menu :actions, :class => 'actions' do
-            item :delete, :content  => link_to_delete(@section)
+            item :delete, :content => link_to("Delete", [:admin, @site, @section], method: "delete")
           end
         else
           menu :left, :class => 'left' do
@@ -84,6 +84,7 @@ module Menus
         id :main
         parent Sites.new.build(scope).find(:sections)
 
+        type = "Menus::Admin::Sections::#{@section.type}".constantize rescue Content
         menu :left, :class => 'left', :type => Sections::Content
         menu :actions, :class => 'actions' do
           activates object.parent.find(:contents)
@@ -106,7 +107,8 @@ module Menus
         id :main
         parent Sites.new.build(scope).find(:sections)
 
-        menu :left, :class => 'left', :type => Sections::Content
+        type = "Menus::Admin::Sections::#{@section.type}".constantize rescue Content
+        menu :left, :class => 'left', :type => type
         menu :actions, :class => 'actions' do
           activates object.parent.find(:contents)
           @section.class.content_types.each do |content_type|
@@ -174,7 +176,7 @@ module Menus
     class Settings < SettingsBase
       define do
         menu :actions, :class => 'actions' do
-          item :delete,   :content => link_to_delete(@site)
+          item :delete, :content => link_to("Delete", [:admin, @site], method: "delete")
         end
       end
     end
