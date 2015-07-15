@@ -102,6 +102,11 @@ module ActiveRecord
       end
 
       module InstanceMethods
+        def tag_list_add *args
+          tag_list
+          @tag_list.add *args
+        end
+
         def tag_list
           @tag_list ||= cached_tag_list.nil? ? TagList.new(*tags.map(&:name)) : TagList.from(cached_tag_list)
           @tag_list.to_s
