@@ -10,7 +10,7 @@ class Admin::BaseController < ApplicationController
   helper :base, :resource, :content
   helper HasFilter::Helper
 
-  helper_method :content_locale, :has_permission?
+  helper_method :menu, :content_locale, :has_permission?
 
   before_filter :set_menu, :set_site, :set_section, :set_locale, :set_timezone
 
