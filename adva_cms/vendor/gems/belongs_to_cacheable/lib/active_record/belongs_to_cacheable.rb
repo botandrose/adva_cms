@@ -27,11 +27,9 @@ module ActiveRecord
             end
           end
 
-          define_method :"#{name}_with_default_instance" do
-            send :"#{name}_without_default_instance" ||
-              instantiate_from_cached_attributes(name)
+          define_method name do
+            super() || instantiate_from_cached_attributes(name)
           end
-          alias_method_chain name, :default_instance
 
           define_method :"is_#{name}?" do |object|
             send(name) == object
