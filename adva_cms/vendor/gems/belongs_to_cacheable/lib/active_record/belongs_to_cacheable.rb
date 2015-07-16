@@ -28,7 +28,7 @@ module ActiveRecord
           end
 
           define_method name do
-            super() || instantiate_from_cached_attributes(name)
+            super() || instantiate_from_cached_attributes(name, [])
           end
 
           define_method :"is_#{name}?" do |object|
