@@ -1,17 +1,23 @@
 (function($) {
-  window.Flash = {
+  var Flash = function(root) {
+    return $.extend({}, Flash, { $root: $(root) });
+  };
+
+  Flash = $.extend(Flash, {
+    $root: $("body"),
+
     transferFromCookies: function() {
       var data = JSON.parse(unescape(Cookie.get('flash')).replace(/\+/g, ' '));
       if(!data) data = {};
-      Flash.data = data;
+      this.data = data;
       Cookie.erase('flash');
     },
     show: function(type, message) {
-      if(!Flash.data || Flash.data == {}) Flash.transferFromCookies();
+      if(!this.data || this.data == {}) this.transferFromCookies();
 
-      var flash = $('#flash_' + type);
+      var flash = this.$root.find('#flash_' + type);
       // if no message is given, look it up in the hash
-      if(!message) var message = Flash.data[type];
+      if(!message) var message = this.data[type];
 
       if(!message) return;
       
@@ -22,9 +28,8 @@
     },
     
     showAll: function() {
-      $.each(['notice', 'error'], function() {
-        Flash.show(this.toString());
-      })
+      this.show('error');
+      this.show('notice');
     },
     
     error: function(message) {
@@ -36,17 +41,18 @@
     },
 
     hide: function(type) {
-      $('#flash_' + type).empty().hide();
+      this.$root.find('#flash_' + type).empty().hide();
     },
 
     hideAll: function() {
-      $.each(['notice', 'error'], function() {
-        Flash.hide(this.toString());
-      });
+      this.hide('error');
+      this.hide('notice');
     }
-  }
+  });
 
   $(document).ready(function() {
     Flash.showAll();
   });
+
+  window.Flash = Flash;
 })(jQuery);
