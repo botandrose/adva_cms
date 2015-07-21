@@ -4,8 +4,6 @@
   };
 
   Flash = $.extend(Flash, {
-    $root: $("body"),
-
     transferFromCookies: function() {
       var data = JSON.parse(unescape(Cookie.get('flash')).replace(/\+/g, ' '));
       if(!data) data = {};
@@ -51,6 +49,7 @@
   });
 
   $(document).ready(function() {
+    Flash.$root = $("body");
     Flash.showAll();
   });
 
