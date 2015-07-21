@@ -50,7 +50,7 @@ module Menus
         parent Sites.new.build(scope).find(:sections)
 
         if @section and !@section.new_record?
-          type = "Menus::Admin::Sections::#{@section.type}".constantize rescue Content
+          type = "Menus::Admin::Sections::#{@section.type}".constantize rescue Sections::Content
           menu :left, :class => 'left', :type => type
           menu :actions, :class => 'actions' do
             item :delete, :content => link_to("Delete", [:admin, @site, @section], method: "delete")
@@ -84,8 +84,8 @@ module Menus
         id :main
         parent Sites.new.build(scope).find(:sections)
 
-        type = "Menus::Admin::Sections::#{@section.type}".constantize rescue Content
-        menu :left, :class => 'left', :type => Sections::Content
+        type = "Menus::Admin::Sections::#{@section.type}".constantize rescue Sections::Content
+        menu :left, :class => 'left', :type => type
         menu :actions, :class => 'actions' do
           activates object.parent.find(:contents)
           @section.class.content_types.each do |content_type|
@@ -107,7 +107,7 @@ module Menus
         id :main
         parent Sites.new.build(scope).find(:sections)
 
-        type = "Menus::Admin::Sections::#{@section.type}".constantize rescue Content
+        type = "Menus::Admin::Sections::#{@section.type}".constantize rescue Sections::Content
         menu :left, :class => 'left', :type => type
         menu :actions, :class => 'actions' do
           activates object.parent.find(:contents)
