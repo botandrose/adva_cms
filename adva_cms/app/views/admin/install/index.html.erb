@@ -3,35 +3,32 @@
 <p><%= t(:'adva.sites.install.welcome_to_installation') %></p>
 <p><%= t(:'adva.sites.install.can_always_change_settings') %></p>
 
-<%= form_for :site, Site.new, install_path do |f| %>
+<%= form_for Site.new, url: admin_install_path do |f| %>
   <h3><%= t(:'adva.titles.website') %></h3>
   <% f.field_set :site do %>
     <%= fields_for @site do |site| %>
-   		<%= site.text_field :name, :label => true, :tabindex => 1 %>
+      <%= site.text_field :name, label: true %>
     <% end %>
   <% end %>
 
   <h3><%= t(:'adva.titles.home_section') %></h3>
 	<% f.field_set :home_section do %>
-    <%= fields_for :section, @section do |s| %>
-      <% column do %>
-      	<%= s.collection_select :type, Section.types, :to_s, :to_s, {}, :label => true, :style => "width:100%;", :tabindex => 2 %>
-      <% end %>
-      <% column do %>
-      	<%= s.text_field :title, :label => true, :tabindex => :section_type %>
-      <% end %>
+    <%= fields_for :section, @section do |section| %>
+      <p>
+      	<%= section.text_field :title, label: true %>
+      </p>
     <% end %>
   <% end %>
   
   <h3><%= t(:'adva.titles.admin_account') %></h3>
 	<% f.field_set :admin_account do %>
     <%= fields_for @user do |user| %>
-      <% column do %>
-   		<%= user.text_field :email, :label => true, :tabindex => 3 %>
-   		<% end %>
-   		<% column do %>
-   		<%= user.password_field :password, :label => true, :tabindex => 4 %>
-   		<% end %>
+      <p>
+        <%= user.text_field :email, label: true %>
+      </p>
+      <p>
+        <%= user.password_field :password, label: true %>
+      </p>
     <% end %>
   <% end %>
   

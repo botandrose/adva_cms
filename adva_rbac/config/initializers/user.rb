@@ -36,7 +36,7 @@ ActionDispatch::Callbacks.to_prepare do
         user.first_name  = user.first_name_from_email
       
         user.send(:assign_password) # necessary because we bypass the validation hook
-        user.save(false)
+        user.save(validate: false)
         user.roles.create!(:name => 'superuser') # FIXME?
         user
       end
