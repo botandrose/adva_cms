@@ -40,6 +40,10 @@ class Site < ActiveRecord::Base
       User.where(["memberships.site_id = ? OR (memberships.site_id IS NULL AND roles.name = ?)", id, 'superuser'])
         .includes([:roles, :memberships]).references(:roles, :memberships)
     end
+
+    def bust_cache!
+      all.each(&:touch)
+    end
   end
 
   def multi_sites_enabled?
