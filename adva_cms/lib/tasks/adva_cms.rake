@@ -1,7 +1,7 @@
 namespace :adva do
   task :remove_translations => :environment do
     Content.all.each do |content|
-      title, body, excerpt = content.class.connection.select_one("SELECT title, body_html, excerpt_html FROM content_translations WHERE content_id=#{content.id} ORDER BY updated_at DESC LIMIT 1").values
+      title, body, excerpt = content.class.connection.select_one("SELECT title, body_html, excerpt_html FROM content_translations WHERE content_id=#{content.id} ORDER BY id DESC LIMIT 1").values
       puts content.id
       content.update! title: title, body: body, excerpt: excerpt
     end
