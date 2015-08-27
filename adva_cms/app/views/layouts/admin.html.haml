@@ -20,6 +20,7 @@
     = yield :before_javascript_include
 
     = javascript_include_tag "adva_cms/application"
+    = javascript_include_tag "admin"
 
     -# FIXME extract to subprojects
     - unless Rails.env.test? # fckeditor screws up tests
