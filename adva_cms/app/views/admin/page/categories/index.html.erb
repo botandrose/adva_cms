@@ -10,14 +10,14 @@
 
 		t.row do |r, category|
 			r.add_class "level_#{category.level}"
-			r.cell link_to_edit(category.title, category, :class => 'category')
-			r.cell link_to_edit(category) + "\n" +
-			       link_to_delete(category)
+			r.cell link_to(category.title, [:edit, :admin, @site, @section, category], class: 'category')
+			r.cell link_to("Edit category", [:edit, :admin, @site, @section, category]) + "\n" +
+			       link_to("Delete category", [:admin, @site, @section, category], method: :delete)
 		end
 
 		t.empty :p, :class => 'empty' do
 	    t(:'adva.categories.no_categories_in_section', :section => @section.title) + "\n" +
-			link_to_new(:'adva.categories.links.create_now', [@section, :category])
+			link_to(t(:'adva.categories.links.create_now'), [:new, :admin, @site, @section, :category])
 		end
 	end
 %>
