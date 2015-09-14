@@ -11,8 +11,8 @@
 		t.row do |r, category|
 			r.add_class "level_#{category.level}"
 			r.cell link_to(category.title, [:edit, :admin, @site, @section, category], class: 'category')
-			r.cell link_to("Edit category", [:edit, :admin, @site, @section, category]) + "\n" +
-			       link_to("Delete category", [:admin, @site, @section, category], method: :delete)
+			r.cell link_to("Edit category", [:edit, :admin, @site, @section, category], class: 'edit') + "\n" +
+			       link_to("Delete category", [:admin, @site, @section, category], method: :delete, class: 'delete')
 		end
 
 		t.empty :p, :class => 'empty' do
