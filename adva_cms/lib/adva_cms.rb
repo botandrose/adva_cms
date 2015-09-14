@@ -40,7 +40,7 @@ module AdvaCms
     initializer "add assets to precompilation list" do |app|
       app.config.assets.precompile += %w(adva_cms/application.js)
       app.config.assets.precompile += %w(adva_cms/admin.css)
-      app.config.assets.precompile += %w(adva_cms/admin.js)
+      app.config.assets.precompile += %w(admin.css admin.js)
     end
 
     initializer "setup xss_terminate" do
