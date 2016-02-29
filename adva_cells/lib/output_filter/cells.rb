@@ -27,6 +27,7 @@ module OutputFilter
         args = [state]
         attrs.delete "class" # ignore styling class
         args << attrs unless attrs.empty?
+
         begin
           cell.render_state *args
         rescue AbstractController::ActionNotFound
