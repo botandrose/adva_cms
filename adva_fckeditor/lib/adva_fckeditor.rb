@@ -1,4 +1,5 @@
 # require "adva_fckeditor/version"
+require "non-stupid-digest-assets"
 
 module AdvaFckeditor
   class Engine < Rails::Engine
@@ -6,7 +7,7 @@ module AdvaFckeditor
       require "non-stupid-digest-assets"
       assets = [/adva_fckeditor/, "fck_config.js", "fck_editor.css"]
       app.config.assets.precompile += assets
-      NonStupidDigestAssets.whitelist = assets
+      NonStupidDigestAssets.whitelist += assets
     end
   end
 end
