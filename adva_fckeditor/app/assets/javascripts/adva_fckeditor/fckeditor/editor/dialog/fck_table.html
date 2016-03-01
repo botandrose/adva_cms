@@ -81,6 +81,7 @@ window.onload = function()
 		document.getElementById('selAlignment').value	= GetAttribute( table, 'align', '' ) ;
 		document.getElementById('txtCellPadding').value	= GetAttribute( table, 'cellPadding', '' ) ;
 		document.getElementById('txtCellSpacing').value	= GetAttribute( table, 'cellSpacing', '' ) ;
+		document.getElementById('txtClass').value     = GetAttribute( table, 'class', '' ) ;
 		document.getElementById('txtSummary').value     = GetAttribute( table, 'summary', '' ) ;
 //		document.getElementById('cmbFontStyle').value	= table.className ;
 
@@ -153,6 +154,7 @@ function Ok()
 	SetAttribute( table, 'align'		, GetE('selAlignment').value ) ;
 	SetAttribute( table, 'cellPadding'	, GetE('txtCellPadding').value ) ;
 	SetAttribute( table, 'cellSpacing'	, GetE('txtCellSpacing').value ) ;
+	SetAttribute( table, 'class'		, GetE('txtClass').value ) ;
 	SetAttribute( table, 'summary'		, GetE('txtSummary').value ) ;
 
 	var eCaption = oEditor.FCKDomTools.GetFirstChild( table, 'CAPTION' ) ;
@@ -415,6 +417,14 @@ function Ok()
 					</tr>
 				</table>
 				<table cellspacing="0" cellpadding="0" width="100%" border="0">
+					<tr>
+						<td nowrap="nowrap">
+							<span fcklang="DlgTableClass">Class</span>:&nbsp;</td>
+						<td>
+							&nbsp;</td>
+						<td width="100%" nowrap="nowrap">
+							<input id="txtClass" type="text" style="width: 100%" /></td>
+					</tr>
 					<tr>
 						<td nowrap="nowrap">
 							<span fcklang="DlgTableCaption">Caption</span>:&nbsp;</td>
