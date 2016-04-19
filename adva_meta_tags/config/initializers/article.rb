@@ -4,7 +4,7 @@ ActionDispatch::Callbacks.to_prepare do
     self.meta_fields = %w(keywords description author copyright geourl)
 
     def default_meta_description
-      sanitizer = defined?(Rails::Html::WhiteListSanitizer) ? Rails::Html::WhiteListSanitizer.new : HTML::FullSanitizer.new
+      sanitizer = defined?(Rails::Html::FullSanitizer) ? Rails::Html::FullSanitizer.new : HTML::FullSanitizer.new
       sanitizer.sanitize(body).gsub(/\s+/, " ").strip.truncate(160)
     end
   end
