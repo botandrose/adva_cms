@@ -3,7 +3,7 @@
   <div class="col">
     <%= f.text_field :name, :label => :'adva.sites.label.name' %>
   	<%= f.text_field :title, :label => :'adva.sites.label.title' %>
-  	<%= f.text_field :email, :label => :'adva.sites.label.admin_email', :value => site.email %>
+  	<%= f.email_field :email, :label => :'adva.sites.label.admin_email', :value => site.email %>
   </div>
 
   <div class="col">

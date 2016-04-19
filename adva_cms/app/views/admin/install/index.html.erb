@@ -24,7 +24,7 @@
 	<% f.field_set :admin_account do %>
     <%= fields_for @user do |user| %>
       <p>
-        <%= user.text_field :email, label: true %>
+        <%= user.email_field :email, label: true %>
       </p>
       <p>
         <%= user.password_field :password, label: true %>

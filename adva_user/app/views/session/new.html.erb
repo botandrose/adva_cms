@@ -3,7 +3,7 @@
     <%= hidden_field_tag :return_to, params[:return_to] if params[:return_to] %>
 
   	<fieldset>
-  		<%= f.text_field :email, :class => 'big', :label => "Email" %>
+  		<%= f.email_field :email, :class => 'big', :label => "Email" %>
   		<%= f.password_field :password, :class => 'big', :label => "Password" %>
   		<%= check_box_tag 'user[remember_me]', 1, @remember_me, :id => 'user_remember_me' %>
 			<%= label_tag :user_remember_me, t(:'adva.session.labels.remember_me'), :class => 'inline light' %>
