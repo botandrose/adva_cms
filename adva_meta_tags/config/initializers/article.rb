@@ -5,8 +5,8 @@ ActionDispatch::Callbacks.to_prepare do
 
     def default_meta_description
       sanitizer = defined?(Rails::Html::FullSanitizer) ? Rails::Html::FullSanitizer.new : HTML::FullSanitizer.new
-      sanitized_excerpt = sanitizer.sanitize(excerpt).gsub(/\s+/, " ").strip.truncate(160)
-      sanitized_body = sanitizer.sanitize(body).gsub(/\s+/, " ").strip.truncate(160)
+      sanitized_excerpt = sanitizer.sanitize(excerpt || "").gsub(/\s+/, " ").strip.truncate(160)
+      sanitized_body = sanitizer.sanitize(body || "").gsub(/\s+/, " ").strip.truncate(160)
       sanitized_excerpt.present? ? sanitized_excerpt : sanitized_body
     end
   end
