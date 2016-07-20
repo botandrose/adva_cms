@@ -87,6 +87,7 @@ class Admin::BaseController < ApplicationController
     def set_section
       params[:section_id] = params.delete(:page_id) if params[:page_id]
       params[:section_id] = params.delete(:blog_id) if params[:blog_id]
+      params[:section_id] = params.delete(:album_id) if params[:album_id]
       @section = @site.sections.find_by_permalink!(params[:section_id]) if params[:section_id]
     end
 
