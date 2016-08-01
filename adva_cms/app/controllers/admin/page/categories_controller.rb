@@ -32,11 +32,18 @@ class Admin::Page::CategoriesController < Admin::BaseController
   end
 
   def update_all
-    # FIXME we currently use :update_all to update the position for a single object
-    # instead we should either use :update_all to batch update all objects on this
-    # resource or use :update. applies to articles, sections, categories etc.
-    @section.categories.update(params[:categories].keys, params[:categories].values)
-    @section.categories.update_paths!
+    params[:categories].each do |id, attrs|
+      content = @section.categories.find id
+      parent = @section.categories.find_by_id attrs[:parent_id]
+      left = @section.categories.find_by_id attrs[:left_id]
+      if parent
+        content.move_to_child_with_index parent, 0
+      else
+        content.move_to_root
+        content.move_to_left_of content.siblings.first
+      end
+      content.move_to_right_of left if left
+    end
     render :text => 'OK'
   end
 
