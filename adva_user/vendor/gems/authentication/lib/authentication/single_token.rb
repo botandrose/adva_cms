@@ -31,7 +31,7 @@ module Authentication
         'id = ? AND token_key = ? AND (token_expiration >= ? OR token_expiration IS NULL)',
         user.id, hash_string(key), Time.zone.now
       ]
-      0 < user.class.count(:conditions => conditions)
+      0 < user.class.where(conditions).count
     end
 
     # Will create a new token for the given user with the given expiration
@@ -51,3 +51,4 @@ module Authentication
     end
   end
 end
+

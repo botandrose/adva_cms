@@ -28,7 +28,7 @@ module Authentication
 
       conditions = ['id = ? AND remember_me = ?', user.id, hash_string(key)]
       conditions[0] << ' AND verified_at IS NOT NULL' if user.respond_to? :verified_at
-      0 < user.class.count(:conditions => conditions)
+      0 < user.class.where(conditions).count
     end
 
     # Will create a new remember me token. We will ignore the expiration
