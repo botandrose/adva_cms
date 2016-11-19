@@ -1,6 +1,9 @@
+require "active_record/belongs_to_cacheable"
+
 module ActiveRecord
   module BelongsToAuthor
     def self.included(base)
+      base.include BelongsToCacheable
       base.extend ActMacro
     end
 
