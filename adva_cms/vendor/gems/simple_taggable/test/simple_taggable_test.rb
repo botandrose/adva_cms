@@ -201,6 +201,18 @@ class SimpleTaggableTest < ActiveSupport::TestCase
   
     assert_equal Photo.tagged("baz").to_a, Photo.tagged("BAZ").to_a
   end
+
+  test 'more case insensitivity' do
+    photo = Photo.create!(tag_list: 'foo Foo')
+    assert_equal 1, photo.tags.count
+  end
+
+  test 'even more case insensitivity' do
+    photo = Photo.create!(tag_list: 'foo Foo')
+    assert_difference "photo.tags.count", 0 do
+      photo.save
+    end
+  end
   
   test "tagged scope works with sti" do
     photo = SpecialPhoto.create!(:title => "Foo", :tag_list => "STI")

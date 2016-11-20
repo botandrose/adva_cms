@@ -53,7 +53,7 @@ class TagList < Array
   def clean!
     reject!(&:blank?)
     map!(&:strip)
-    uniq!
+    uniq!(&:downcase)
   end
   
   def extract_and_apply_options!(args)
