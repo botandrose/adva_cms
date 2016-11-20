@@ -59,7 +59,7 @@ class SimpleTaggableTest < ActiveSupport::TestCase
   end
   
   test '#tag_list' do
-    assert_equal %w(Animal Nature Great), @small_dog.tag_list
+    assert_equal %w(Animal Nature Great), TagList.from(@small_dog.tag_list)
   end
   
   test '#tagged finds records tagged with the given tags' do
@@ -113,21 +113,21 @@ class SimpleTaggableTest < ActiveSupport::TestCase
   end
   
   test '#save_tags saves new tags' do
-    @small_dog.tag_list.add('New')
+    @small_dog.tag_list_add('New')
     @small_dog.save
     assert Tag.find_by_name('New')
-    assert_equal %w(Animal Nature Great New), @small_dog.reload.tag_list
+    assert_equal %w(Animal Nature Great New), TagList.from(@small_dog.reload.tag_list)
   end
   
   test '#save_tags removes old tags' do
-    @small_dog.tag_list.remove('Great')
+    @small_dog.tag_list_remove('Great')
     @small_dog.save
-    assert_equal %w(Animal Nature), @small_dog.reload.tag_list
+    assert_equal %w(Animal Nature), TagList.from(@small_dog.reload.tag_list)
   end
   
   test 'unused tags are deleted by default' do
     assert_difference('Tag.count', -1) do 
-      @bad_cat.tag_list.remove('Crazy Animal')
+      @bad_cat.tag_list_remove('Crazy Animal')
       @bad_cat.save!
     end
   end
@@ -135,25 +135,25 @@ class SimpleTaggableTest < ActiveSupport::TestCase
   test 'unused tags are not deleted when Tag.destroy_unused is set to false' do
     Tag.destroy_unused = false
     assert_difference('Tag.count', 0) do 
-      @big_dog.tag_list.remove('Animal')
+      @big_dog.tag_list_remove('Animal')
       @big_dog.save!
     end
   end
   
   test '#tag_list reader returns a tag list' do
-    assert_equivalent ['Sucks', 'Crazy Animal', 'Animal'], @bad_cat.tag_list
+    assert_equivalent ['Sucks', 'Crazy Animal', 'Animal'], TagList.from(@bad_cat.tag_list)
   end
   
   test 'adding new tags via #tag_list writer' do
-    assert_equivalent %w(Nature), @sky.tag_list
+    assert_equivalent %w(Nature), TagList.from(@sky.tag_list)
     @sky.update_attributes!(:tag_list => "#{@sky.tag_list} One Two")
-    assert_equivalent %w(Nature One Two), @sky.tag_list
+    assert_equivalent %w(Nature One Two), TagList.from(@sky.tag_list)
   end
   
   test 'removing tags via #tag_list writer' do
-    assert_equivalent %w(Nature), @sky.tag_list
+    assert_equivalent %w(Nature), TagList.from(@sky.tag_list)
     @sky.update_attributes!(:tag_list => "")
-    assert_equivalent [], @sky.tag_list
+    assert_equivalent [], TagList.from(@sky.tag_list)
   end
   
   test 'tag_list reader on a new record' do
@@ -221,6 +221,8 @@ class SimpleTaggableTest < ActiveSupport::TestCase
   test 'cached_tag_list used' do
     @small_dog.save!
     @small_dog.reload
-    assert_no_queries { assert_equal %w(Animal Nature Great), @small_dog.tag_list }
+    assert_no_queries do
+      assert_equal %w(Animal Nature Great), TagList.from(@small_dog.tag_list)
+    end
   end
 end

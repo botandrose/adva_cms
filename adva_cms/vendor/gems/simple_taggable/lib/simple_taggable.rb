@@ -107,6 +107,11 @@ module ActiveRecord
           @tag_list.add *args
         end
 
+        def tag_list_remove *args
+          tag_list
+          @tag_list.remove *args
+        end
+
         def tag_list
           @tag_list ||= cached_tag_list.nil? ? TagList.new(*tags.map(&:name)) : TagList.from(cached_tag_list)
           @tag_list.to_s
@@ -117,7 +122,8 @@ module ActiveRecord
         end
 
         def tag_counts(options = {})
-          self.class.tag_counts(options).where(self.class.send(:tags_condition, tag_list))
+          tag_list
+          self.class.tag_counts(options).where(self.class.send(:tags_condition, @tag_list))
         end
 
         protected

@@ -4,8 +4,8 @@ require File.expand_path('../lib/simple_taggable/version', __FILE__)
 Gem::Specification.new do |gem|
   gem.authors       = ["Micah Geisel"]
   gem.email         = ["micah@botandrose.com"]
-  gem.description   = %q{TODO: Write a gem description}
-  gem.summary       = %q{TODO: Write a gem summary}
+  gem.description   = %q{simple implementation of acts_as_taggable}
+  gem.summary       = %q{simple implementation of acts_as_taggable}
   gem.homepage      = ""
 
   gem.files         = `git ls-files`.split($\)
@@ -14,4 +14,6 @@ Gem::Specification.new do |gem|
   gem.name          = "simple_taggable"
   gem.require_paths = ["lib"]
   gem.version       = SimpleTaggable::VERSION
+
+  gem.add_dependency "activerecord"
 end
