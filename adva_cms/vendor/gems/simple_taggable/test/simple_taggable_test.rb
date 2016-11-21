@@ -124,6 +124,13 @@ class SimpleTaggableTest < ActiveSupport::TestCase
     @small_dog.save
     assert_equal %w(Animal Nature), TagList.from(@small_dog.reload.tag_list)
   end
+
+  test '#save_tags deduplicates tags' do
+    tag = Tag.create!(name: "OMG")
+    assert_difference "Tagging.count", 1 do
+      Photo.create! tags: [tag, tag]
+    end
+  end
   
   test 'unused tags are deleted by default' do
     assert_difference('Tag.count', -1) do 

@@ -149,6 +149,9 @@ module ActiveRecord
               taggings.reset
             end
             new_tag_names.each { |name| tags << Tag.find_or_create_by_name(name) }
+
+            duplicate_taggings = taggings.group_by(&:tag_id).values.map { |tags| tags[1..-1] }.flatten
+            duplicate_taggings.each(&:destroy)
           end
         end
       end
