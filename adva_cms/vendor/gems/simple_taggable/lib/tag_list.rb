@@ -34,6 +34,21 @@ class TagList < Array
     delete_if { |name| names.include?(name) }
     self
   end
+
+  # Add additional tags to effectively make the tag list plurality-insensitive.
+  #
+  #   tag_list = TagList.new("One", "Twos")
+  #   tag_list.cover_pluralities!
+  #   tag_list.to_s # "One, Ones, Two, Twos"
+  def cover_pluralities!
+    clean!
+    new_tag_list = inject([]) do |tag_list, name|
+      tag_list << name.singularize
+      tag_list << name.pluralize
+      tag_list
+    end
+    replace new_tag_list
+  end
   
   # Transform the tag_list into a tag string suitable for edting in a form.
   # The tags are joined with <tt>TagList.delimiter</tt> and quoted if necessary.

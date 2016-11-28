@@ -67,6 +67,7 @@ module ActiveRecord
         def tagged *tags
           options = tags.extract_options!
           tags = TagList.from(tags)
+          tags.cover_pluralities!
           except = TagList.from(options[:except]) if options[:except]
 
           conditions = Array(options[:conditions])
@@ -90,7 +91,7 @@ module ActiveRecord
         def match_all_condition(tags)
           %((SELECT COUNT(*) FROM taggings INNER JOIN tags ON taggings.tag_id = tags.id
              WHERE taggings.taggable_type = '#{base_class.name}' AND
-                   taggable_id = #{table_name}.id AND #{tags_condition(tags)}) = #{tags.size})
+                   taggable_id = #{table_name}.id AND #{tags_condition(tags)}) >= #{tags.size/2})
         end
 
         def except_condition(tags)

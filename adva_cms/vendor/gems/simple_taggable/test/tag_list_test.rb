@@ -101,5 +101,10 @@ class TagListTest < ActiveSupport::TestCase
     tag_list = TagList.from("Three Four Five")
     assert_equal %w(Four), tag_list.remove("Three Five", :parse => true)
   end
+
+  test "#cover_pluralities!" do
+    tag_list = TagList.from("Ones Two")
+    assert_equal %w(One Ones Two Twos), tag_list.cover_pluralities!
+  end
 end
 
