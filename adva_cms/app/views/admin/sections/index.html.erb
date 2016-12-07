@@ -14,7 +14,7 @@
 
 		t.row(:class => 'section') do |r, section|
 			r.add_class "level_#{section.level}"
-			r.cell content_status(section) + link_to(section.title, [:admin, @site, section, :contents], :class => section.state)
+			r.cell content_status(section) + " " + link_to(section.title, [:admin, @site, section, :contents], :class => section.state)
       r.cell link_to("Edit", [:edit, :admin, @site, section], :class => "edit section") +
         link_to("Delete", [:admin, @site, section], :method => :delete, :class => "delete section")
 		end
