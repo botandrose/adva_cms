@@ -71,7 +71,7 @@ class ExtensibleFormBuilder < ActionView::Helpers::FormBuilder
 
     def tab(name, options = {}, &block)
       self.tabs.reject! { |n, b| name == n }
-      self.tabs << [name, block]
+      self.tabs += [[name, block]]
     end
 
     protected
