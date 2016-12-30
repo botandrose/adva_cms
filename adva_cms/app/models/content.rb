@@ -64,6 +64,29 @@ class Content < ActiveRecord::Base
     permalink
   end
 
+  def cache_key(*timestamp_names)
+    if new_record?
+      "#{model_name.cache_key}/new"
+    else
+      timestamp_names = [:updated_at, :cells_updated_at] if timestamp_names.none?
+      timestamp = timestamp_names.map { |attr| send(attr) }.compact.map(&:to_time).max
+      timestamp = timestamp.utc.to_s(cache_timestamp_format)
+      "#{model_name.cache_key}/#{id}-#{timestamp}"
+    end
+  end
+
+  def cells_updated_at
+    OutputFilter::Cells.new(nil).send(:cells, body_html).values.map do |name, state, attrs|
+      attrs = HashWithIndifferentAccess.new(attrs)
+      cell = "#{name.camelize}Cell".constantize.new
+      args = [state]
+      attrs.delete "class" # ignore styling class
+      attrs[:format] = :timestamp
+      args << attrs unless attrs.empty?
+      cell.render_state *args
+    end.select { |response| response.is_a?(Time) }.max
+  end
+
   def owners
     owner.owners << owner
   end

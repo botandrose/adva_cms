@@ -22,7 +22,7 @@ class ArticlesController < BaseController
   end
 
   def show
-    if skip_caching? || stale?(etag: @article, last_modified: [@article, @section, @site].collect(&:updated_at).compact.max.utc, public: true)
+    if skip_caching? || stale?(etag: @article, last_modified: [@article, @section, @site].map(&:updated_at).compact.max, public: true)
       render template: "#{@section.type.tableize}/articles/show"
     end
   end
