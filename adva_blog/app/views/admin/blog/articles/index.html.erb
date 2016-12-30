@@ -9,7 +9,7 @@
 
     t.row do |r, content|
       r.add_class "level_#{content.level}"
-      r.cell content_status(content) + link_to(content.title, [:edit, :admin, @site, @section, content], :class => content.state)
+      r.cell content_status(content) + " " + link_to(content.title, [:edit, :admin, @site, @section, content], :class => content.state)
       r.cell content.category_titles.join(", ") if @section.categories.any?
       r.cell content.accept_comments? && content.comments.present? ? link_to(content.comments.size, admin_comments_path) : t(:"adva.common.none") if defined?(Comment)
       r.cell published_at_formatted(content)
