@@ -41,17 +41,6 @@ class Category < ActiveRecord::Base
       end
     end
 
-    # FIXME this is not hooked up. same in Section. don't we need to call this anyway?
-    def update_child_paths
-      if @paths_dirty
-        self.all_children.each do |child|
-          child.path = child.build_path
-          child.save
-        end
-        @paths_dirty = false
-      end
-    end
-
     def build_path
       self_and_ancestors.map(&:permalink).join('/')
     end
