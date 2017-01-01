@@ -15,7 +15,9 @@
 
       var flash = this.$root.find('#flash_' + type);
       // if no message is given, look it up in the hash
-      if(!message) var message = this.data[type];
+      if(!message) message = this.data[type];
+
+      if(!message && type == 'error') message = this.data['alert'];
 
       if(!message) return;
       
