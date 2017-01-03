@@ -14,7 +14,7 @@
       r.cell content.accept_comments? && content.comments.present? ? link_to(content.comments.size, admin_comments_path) : t(:"adva.common.none") if defined?(Comment)
       r.cell published_at_formatted(content)
       r.cell link_to("Edit", [:edit, :admin, @site, @section, content], :class => "edit content") +
-        link_to("Delete", [:admin, @site, @section, content], :method => :delete, :class => "delete content")
+        link_to("Delete", [:admin, @site, @section, content], method: :delete, class: "delete content", data: { confirm: "Are you sure you want to delete this content?" })
     end
 
     t.empty :p, :class => 'empty' do
