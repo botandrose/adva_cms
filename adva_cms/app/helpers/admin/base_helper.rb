@@ -63,10 +63,15 @@ module Admin::BaseHelper
     end.html_safe
   end
 
-  def link_to_profile(site = nil, options = {})
+  def link_to_profile(site, options = {})
     name = options[:name].nil? ? t(:'adva.links.profile') : options[:name]
     site = nil if site.try(:new_record?)
-    link_to(name, admin_user_path(site, current_user))
+    path = if site
+      admin_site_user_path(site, current_user)
+    else
+      admin_user_path(site, current_user)
+    end
+    link_to(name, path)
   end
 
   def links_to_content_translations(content, &block)
