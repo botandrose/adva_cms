@@ -14,7 +14,9 @@ class ArticlesController < BaseController
 
   def index
     @article = @articles.first
-    if @article.is_a?(Link)
+    if !@article
+      raise ActiveRecord::RecordNotFound
+    elsif @article.is_a?(Link)
       redirect_to @article.body
     else
       show
