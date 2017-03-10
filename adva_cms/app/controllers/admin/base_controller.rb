@@ -99,4 +99,8 @@ class Admin::BaseController < ApplicationController
       "en"
       # ActiveRecord::Base.locale == I18n.default_locale ? nil : ActiveRecord::Base.locale
     end
+
+    def current_resource_errors
+      current_resource.errors.full_messages.map { |msg| "<li>#{msg}</li>" }.join
+    end
 end

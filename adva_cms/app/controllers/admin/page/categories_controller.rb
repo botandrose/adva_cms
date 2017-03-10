@@ -16,7 +16,7 @@ class Admin::Page::CategoriesController < Admin::BaseController
       flash[:notice] = t(:'adva.categories.flash.create.success')
       redirect_to [:admin, @site, @section, :categories]
     else
-      flash.now[:error] = t(:'adva.categories.flash.create.failure')
+      flash.now[:error] = t(:'adva.categories.flash.create.failure') + current_resource_errors
       render :action => "new"
     end
   end
@@ -26,7 +26,7 @@ class Admin::Page::CategoriesController < Admin::BaseController
       flash[:notice] = t(:'adva.categories.flash.update.success')
       redirect_to [:admin, @site, @section, :categories]
     else
-      flash.now[:error] = t(:'adva.categories.flash.update.failure')
+      flash.now[:error] = t(:'adva.categories.flash.update.failure') + current_resource_errors
       render :action => 'edit'
     end
   end
@@ -45,12 +45,16 @@ class Admin::Page::CategoriesController < Admin::BaseController
       flash[:notice] = t(:'adva.categories.flash.destroy.success')
       redirect_to [:admin, @site, @section, :categories]
     else
-      flash.now[:error] = t(:'adva.categories.flash.destroy.failure')
+      flash.now[:error] = t(:'adva.categories.flash.destroy.failure') + current_resource_errors
       render :action => 'edit'
     end
   end
 
   protected
+
+    def current_resource
+      @category || @section
+    end
 
     def set_menu
       @menu = Menus::Admin::Categories.new

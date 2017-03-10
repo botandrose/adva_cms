@@ -36,7 +36,7 @@ class Admin::Page::ArticlesController < Admin::BaseController
       redirect_to [:edit, :admin, @site, @section, @article]
     else
       set_categories
-      flash.now[:error] = t(:'adva.articles.flash.create.failure')
+      flash.now[:error] = t(:'adva.articles.flash.create.failure') + current_resource_errors
       render :action => 'new'
     end
   end
@@ -54,7 +54,7 @@ class Admin::Page::ArticlesController < Admin::BaseController
       redirect_to [:edit, :admin, @site, @section, @article]
     else
       set_categories
-      flash.now[:error] = t(:'adva.articles.flash.update.failure')
+      flash.now[:error] = t(:'adva.articles.flash.update.failure') + current_resource_errors
       render :action => 'edit'
     end
   end
@@ -78,7 +78,7 @@ class Admin::Page::ArticlesController < Admin::BaseController
       redirect_to [:admin, @site, @section, :contents]
     else
       set_categories
-      flash.now[:error] = t(:'adva.articles.flash.destroy.failure')
+      flash.now[:error] = t(:'adva.articles.flash.destroy.failure') + current_resource_errors
       render :action => 'edit'
     end
   end

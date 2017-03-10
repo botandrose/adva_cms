@@ -19,7 +19,7 @@ class Admin::Page::LinksController < Admin::BaseController
       flash[:notice] = t(:'adva.links.flash.create.success')
       redirect_to [:edit, :admin, @site, @section, @link]
     else
-      flash.now[:error] = t(:'adva.links.flash.create.failure')
+      flash.now[:error] = t(:'adva.links.flash.create.failure') + current_resource_errors
       render :action => 'new'
     end
   end
@@ -32,7 +32,7 @@ class Admin::Page::LinksController < Admin::BaseController
       flash[:notice] = t(:'adva.links.flash.update.success')
       redirect_to [:edit, :admin, @site, @section, @link]
     else
-      flash.now[:error] = t(:'adva.links.flash.update.failure')
+      flash.now[:error] = t(:'adva.links.flash.update.failure') + current_resource_errors
       render :action => 'edit', :cl => content_locale
     end
   end
@@ -43,7 +43,7 @@ class Admin::Page::LinksController < Admin::BaseController
       flash[:notice] = t(:'adva.links.flash.destroy.success')
       redirect_to [:admin, @site, @section, :contents]
     else
-      flash.now[:error] = t(:'adva.links.flash.destroy.failure')
+      flash.now[:error] = t(:'adva.links.flash.destroy.failure') + current_resource_errors
       render :action => 'edit'
     end
   end
