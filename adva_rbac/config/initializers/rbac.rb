@@ -1,6 +1,7 @@
 ActionDispatch::Callbacks.to_prepare do
   Site.acts_as_role_context
   Section.acts_as_role_context :parent => :site
+  Category.acts_as_role_context :parent => :section
   Content.acts_as_role_context :parent => :section
   # Comment.acts_as_role_context :parent => :commentable
 
