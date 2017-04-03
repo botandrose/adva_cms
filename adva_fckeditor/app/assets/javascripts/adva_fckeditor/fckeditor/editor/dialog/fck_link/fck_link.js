@@ -471,7 +471,7 @@ function LoadSelection()
 	GetE('txtAttName').value		= oLink.name ;
 	GetE('cmbAttLangDir').value		= oLink.dir ;
 	GetE('txtAttLangCode').value	= oLink.lang ;
-	GetE('txtAttAccessKey').value	= oLink.accessKey ;
+	GetE('txtAttRel').value	= oLink.rel ;
 	GetE('txtAttTabIndex').value	= oLink.tabIndex <= 0 ? '' : oLink.tabIndex ;
 	GetE('txtAttTitle').value		= oLink.title ;
 	GetE('txtAttContentType').value	= oLink.type ;
@@ -763,7 +763,7 @@ function Ok()
 		SetAttribute( oLink, 'name'		, GetE('txtAttName').value ) ;
 		SetAttribute( oLink, 'dir'		, GetE('cmbAttLangDir').value ) ;
 		SetAttribute( oLink, 'lang'		, GetE('txtAttLangCode').value ) ;
-		SetAttribute( oLink, 'accesskey', GetE('txtAttAccessKey').value ) ;
+		SetAttribute( oLink, 'rel'    , GetE('txtAttRel').value ) ;
 		SetAttribute( oLink, 'tabindex'	, ( GetE('txtAttTabIndex').value > 0 ? GetE('txtAttTabIndex').value : null ) ) ;
 		SetAttribute( oLink, 'title'	, GetE('txtAttTitle').value ) ;
 		SetAttribute( oLink, 'type'		, GetE('txtAttContentType').value ) ;
