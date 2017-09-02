@@ -1,8 +1,8 @@
 class RolesController < BaseController
   layout false
   helper :users, :roles
-  before_filter :set_section # ?!
-  before_filter :set_user, :set_object, :set_roles
+  before_action :set_section # ?!
+  before_action :set_user, :set_object, :set_roles
 
   def index
     respond_to do |format|

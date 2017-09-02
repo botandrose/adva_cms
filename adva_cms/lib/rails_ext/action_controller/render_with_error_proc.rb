@@ -17,13 +17,14 @@ ActionController::Base.class_eval do
     }
   }
   
-  def render_with_error_proc(*args, &block)
-    options = args.last.is_a?(Hash) ? args.last : {}
-    with_error_proc(extract_error_proc_key(options)) do
-      render_without_error_proc(*args, &block)
+  prepend Module.new {
+    def render(*args, &block)
+      options = args.last.is_a?(Hash) ? args.last : {}
+      with_error_proc(extract_error_proc_key(options)) do
+        super(*args, &block)
+      end
     end
-  end
-  alias_method_chain :render, :error_proc unless method_defined? :render_without_error_proc
+  }
 
   def extract_error_proc_key(options)
     error_proc_key = options.delete(:errors) if options.is_a? Hash

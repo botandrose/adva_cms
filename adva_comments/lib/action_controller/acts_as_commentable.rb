@@ -11,8 +11,8 @@ module ActionController
         return if acts_as_commentable?
         include InstanceMethods
 
-        before_filter :set_commentable, :only => :comments
-        before_filter :set_comment, :except => :comments
+        before_action :set_commentable, :only => :comments
+        before_action :set_comment, :except => :comments
         helper :comments
       end
 

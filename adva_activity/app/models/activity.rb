@@ -3,12 +3,13 @@ class Activity < ActiveRecord::Base
   belongs_to :section
   belongs_to :object, :polymorphic => true
 
-  def method_missing_with_object_attributes(name, *args)
-    attrs = self[:object_attributes]
-    return attrs[name.to_s] if attrs && attrs.has_key?(name.to_s)
-    method_missing_without_object_attributes name, *args
-  end
-  alias_method_chain :method_missing, :object_attributes
+  prepend Module.new {
+    def method_missing(name, *args)
+      attrs = self[:object_attributes]
+      return attrs[name.to_s] if attrs && attrs.has_key?(name.to_s)
+      super name, *args
+    end
+  }
 
   belongs_to_author
 

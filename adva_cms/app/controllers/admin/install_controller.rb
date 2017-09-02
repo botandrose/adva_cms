@@ -1,8 +1,8 @@
 class Admin::InstallController < ApplicationController
   helper :base
 
-  before_filter :normalize_install_params, :only => :index
-  before_filter :protect_install, :except => :confirmation
+  before_action :normalize_install_params, :only => :index
+  before_action :protect_install, :except => :confirmation
 
   layout "simple"
   renders_with_error_proc :below_field

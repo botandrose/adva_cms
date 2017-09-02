@@ -125,9 +125,9 @@ apache multisite config http://www.appelsiini.net/2007/6/mephisto-multiple-site-
 
         page caching is turned off globally
         test_1 requires class MyModel caches_page :foo end
-        no after_filter is added
+        no after_action is added
         test_2 turns page caching on and requires class MyModel (which was already loaded, so requiring is skipped)
-        still no after_filter added so page caching does not kick in
+        still no after_action added so page caching does not kick in
 
     Asset Helpers: apparently they need a server restart to rebuild a cached file when it got deleted
 
@@ -139,8 +139,8 @@ apache multisite config http://www.appelsiini.net/2007/6/mephisto-multiple-site-
         class Role belongs_to :object, :polymorphic => true
         class Role::Admin < Role
 
-    force certain after_filters to be run even if the filter chain has been halted:
-        :after_filter => :bla, :force => true
+    force certain after_actions to be run even if the filter chain has been halted:
+        :after_action => :bla, :force => true
 
     section.articles.maximum(:position) returns nil when table is empty. shouldn't that be 0?
 
@@ -166,7 +166,7 @@ apache multisite config http://www.appelsiini.net/2007/6/mephisto-multiple-site-
     rational: controller specs should work and controllers behave correctly
     not matter if the plugin is installed or not
 
-    after_filter won't be called when the filter chain is halted. maybe an around_filter is a better choice?
+    after_action won't be called when the filter chain is halted. maybe an around_action is a better choice?
 
 # rspec
 

@@ -30,15 +30,18 @@ module ActiveRecord
 
           # create the counter lazily upon first access
           class_eval <<-code, __FILE__, __LINE__
-            def #{counter_name}_with_lazy_creation(force_reload = false)
-              result = #{counter_name}_without_lazy_creation(force_reload)
-              if result.nil?
-                Counter.create!(:owner => self, :name => #{name.to_s.inspect})
-                result = #{counter_name}_without_lazy_creation(true)
+            prepend Module.new {
+              def #{counter_name}(force_reload = false)
+                reload_#{counter_name} if force_reload
+                result = super()
+                if result.nil?
+                  Counter.create!(:owner => self, :name => #{name.to_s.inspect})
+                  reload_#{counter_name}
+                  result = super()
+                end
+                result
               end
-              result
-            end
-            alias_method_chain counter_name, :lazy_creation
+            }
           code
 
           # Wire up the counted class so that it updates our counter, basically

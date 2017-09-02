@@ -1,9 +1,9 @@
 class Admin::Page::ContentsController < Admin::BaseController
   default_param :content, :author_id, :only => [:create, :update], &lambda { |*| current_user.id }
 
-  before_filter :protect_single_content_mode
-  before_filter :set_section
-  before_filter :set_categories, :only => [:new, :edit]
+  before_action :protect_single_content_mode
+  before_action :set_section
+  before_action :set_categories, :only => [:new, :edit]
 
   guards_permissions :content, :update => :update_all
 

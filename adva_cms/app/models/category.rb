@@ -8,8 +8,8 @@ class Category < ActiveRecord::Base
   has_permalink :title, :url_attribute => :permalink, :sync_url => true, :only_when_blank => true, :scope => :section_id
 
   belongs_to :section, :foreign_key => 'section_id'
-  has_many :contents, :through => :categorizations, :source => :categorizable, :source_type => 'Content'
   has_many :categorizations, :dependent => :delete_all
+  has_many :contents, :through => :categorizations, :source => :categorizable, :source_type => 'Content'
 
   before_save  :update_path
   after_create :update_paths

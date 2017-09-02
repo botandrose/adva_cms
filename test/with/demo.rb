@@ -33,7 +33,7 @@ end
 
 class ArticlesController < ActionController::Base
   attr_accessor :current_user
-  before_filter :require_admin
+  before_action :require_admin
 
   def create
     @article = Article.new params

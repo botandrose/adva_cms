@@ -1,13 +1,13 @@
 class Admin::Page::ArticlesController < Admin::BaseController
   default_param :article, :author_id, :only => [:create, :update], &lambda { |*| current_user.id }
 
-  before_filter :protect_single_article_mode
-  before_filter :set_section
-  before_filter :set_article,    :only => [:show, :edit, :update, :destroy]
-  before_filter :set_categories, :only => [:new, :edit]
-  before_filter :optimistic_lock, :only => :update
+  before_action :protect_single_article_mode
+  before_action :set_section
+  before_action :set_article,    :only => [:show, :edit, :update, :destroy]
+  before_action :set_categories, :only => [:new, :edit]
+  before_action :optimistic_lock, :only => :update
   
-  after_filter :clear_static_cache, :only => [:create, :update, :update_all, :destroy]
+  after_action :clear_static_cache, :only => [:create, :update, :update_all, :destroy]
 
   guards_permissions :article, :update => :update_all
 

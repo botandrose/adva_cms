@@ -1,4 +1,4 @@
-ActionDispatch::Callbacks.to_prepare do
+ActiveSupport::Reloader.to_prepare do
   Site.acts_as_role_context
   Section.acts_as_role_context :parent => :site
   Category.acts_as_role_context :parent => :section

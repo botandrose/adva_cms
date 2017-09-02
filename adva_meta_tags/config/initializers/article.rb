@@ -1,4 +1,4 @@
-ActionDispatch::Callbacks.to_prepare do
+ActiveSupport::Reloader.to_prepare do
   Article.class_eval do
     cattr_accessor :meta_fields
     self.meta_fields = %w(keywords description author copyright geourl)

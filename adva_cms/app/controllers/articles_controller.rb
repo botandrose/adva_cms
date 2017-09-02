@@ -2,13 +2,13 @@ class ArticlesController < BaseController
   include ActionController::GuardsPermissions::InstanceMethods
   helper :roles
 
-  before_filter :set_section
-  before_filter :adjust_action
-  before_filter :set_category, :only => :index
-  before_filter :set_tags,     :only => :index
-  before_filter :set_articles, :only => :index
-  before_filter :set_article,  :only => :show
-  before_filter :guard_view_permissions, :only => [:index, :show]
+  before_action :set_section
+  before_action :adjust_action
+  before_action :set_category, :only => :index
+  before_action :set_tags,     :only => :index
+  before_action :set_articles, :only => :index
+  before_action :set_article,  :only => :show
+  before_action :guard_view_permissions, :only => [:index, :show]
 
   authenticates_anonymous_user
 

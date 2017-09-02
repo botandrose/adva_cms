@@ -16,12 +16,12 @@ class CommentsController < BaseController
   authenticates_anonymous_user
   layout 'default'
 
-  before_filter :set_section
-  before_filter :set_comment, :only => [:show, :update, :destroy]
-  before_filter :set_commentable, :only => [:show, :preview, :create]
-  before_filter :set_comment_params, :only => [:preview, :create]
+  before_action :set_section
+  before_action :set_comment, :only => [:show, :update, :destroy]
+  before_action :set_commentable, :only => [:show, :preview, :create]
+  before_action :set_comment_params, :only => [:preview, :create]
 
-  before_filter :are_you_a_human_or_not, :only => :create
+  before_action :are_you_a_human_or_not, :only => :create
 
   guards_permissions :comment, :except => :show, :create => :preview
 

@@ -1,8 +1,8 @@
 class Admin::SectionsController < Admin::BaseController
-  before_filter :set_section, :only => [:edit, :update, :destroy]
-  before_filter :normalize_params, :only => :update_all
+  before_action :set_section, :only => [:edit, :update, :destroy]
+  before_action :normalize_params, :only => :update_all
 
-  after_filter :clear_static_cache, :only => [:create, :update, :update_all, :destroy]
+  after_action :clear_static_cache, :only => [:create, :update, :update_all, :destroy]
   guards_permissions :section, :update => :update_all
 
   def index

@@ -1,9 +1,9 @@
 class Admin::Page::LinksController < Admin::BaseController
   default_param :link, :author_id, :only => [:create, :update], &lambda { |*| current_user.id }
 
-  before_filter :set_section
-  before_filter :set_links,   :only => [:index]
-  before_filter :set_link,    :only => [:show, :edit, :update, :destroy]
+  before_action :set_section
+  before_action :set_links,   :only => [:index]
+  before_action :set_link,    :only => [:show, :edit, :update, :destroy]
 
   def new
     @link = @section.links.build params[:link] || {}

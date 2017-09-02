@@ -15,8 +15,8 @@ class Site < ActiveRecord::Base
     end
   end
 
-  has_many :users, :through => :memberships, :dependent => :destroy
   has_many :memberships, :dependent => :delete_all
+  has_many :users, :through => :memberships, :dependent => :destroy
   has_many :cached_pages, -> { order(updated_at: :desc) }, dependent: :destroy
 
   before_validation :downcase_host, :replace_host_spaces # c'mon, can't this be normalize_host or something?

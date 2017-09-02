@@ -16,8 +16,15 @@ module ActionController
       def authenticates_anonymous_user
         return if authenticates_anonymous_user?
         include InstanceMethods
-        alias_method_chain :current_user, :anonymous
-        alias_method_chain :authenticated?, :anonymous
+        prepend Module.new {
+          def current_user
+            @current_user ||= (super || login_or_register_anonymous)
+          end
+
+          def authenticated?
+            !!current_user and !current_user.anonymous?
+          end
+        }
       end
 
       def authenticates_anonymous_user?
@@ -26,14 +33,6 @@ module ActionController
     end
 
     module InstanceMethods
-      def current_user_with_anonymous
-        @current_user ||= (current_user_without_anonymous || login_or_register_anonymous)
-      end
-
-      def authenticated_with_anonymous?
-        !!current_user and !current_user.anonymous?
-      end
-
       def login_or_register_anonymous
         anonymous = try_login_anonymous || User.anonymous
         anonymous = register_or_update_anonymous anonymous if params[:user]

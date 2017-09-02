@@ -66,7 +66,7 @@ module CommentsHelper
     # TODO obviously doesn't work as expected on the SectionsController where the
     # section_id is in params[:id]
     def merge_admin_comments_query_params(options)
-      options.merge! params.slice(:section_id, :content_id).reject{|key, value| value.blank? }
+      options.merge! params.slice(:section_id, :content_id).reject{|key, value| value.blank? }.to_unsafe_hash
       options.symbolize_keys!
       options.delete(:section_id) if options[:content_id]
     end

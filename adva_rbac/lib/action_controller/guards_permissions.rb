@@ -27,7 +27,7 @@ module ActionController
         class_attribute :action_map
         set_action_map options.except(:only, :except)
 
-        before_filter(options.slice(:only, :except)) do |controller|
+        before_action(options.slice(:only, :except)) do |controller|
           controller.guard_permission(type)
         end
       end
