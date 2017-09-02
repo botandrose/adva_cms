@@ -1,4 +1,4 @@
-ActionDispatch::Callbacks.to_prepare do
+ActiveSupport::Reloader.to_prepare do
   BaseController.class_eval do
     helper :comments
 

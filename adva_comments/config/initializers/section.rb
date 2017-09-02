@@ -5,7 +5,7 @@ class SectionFormBuilder < ExtensibleFormBuilder
     end
   end
 
-  ActionDispatch::Callbacks.to_prepare do
+  ActiveSupport::Reloader.to_prepare do
     Section.class_eval do
       def accept_comments?
         true

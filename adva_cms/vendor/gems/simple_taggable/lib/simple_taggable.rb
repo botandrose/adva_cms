@@ -23,7 +23,12 @@ module ActiveRecord
           before_save :cache_tag_list
           after_save :save_tags
 
-          alias_method_chain :reload, :tag_list
+          prepend Module.new {
+            def reload(*)
+              @tag_list = nil
+              super
+            end
+          }
         end
 
         def acts_as_taggable?
@@ -131,11 +136,6 @@ module ActiveRecord
 
         def cache_tag_list
           self.cached_tag_list = tag_list.to_s
-        end
-
-        def reload_with_tag_list(*args)
-          @tag_list = nil
-          reload_without_tag_list(*args)
         end
 
         def save_tags

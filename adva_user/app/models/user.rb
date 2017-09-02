@@ -8,8 +8,8 @@ class User < ActiveRecord::Base
   scope :verified, -> { where.not(verified_at: nil) }
 
   belongs_to :account
-  has_many :sites, :through => :memberships
   has_many :memberships, :dependent => :delete_all
+  has_many :sites, :through => :memberships
 
   validates_presence_of     :first_name, :email
   validates_uniqueness_of   :email # i.e. account attributes are unique per application, not per site

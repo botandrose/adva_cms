@@ -1,7 +1,7 @@
 class Admin::SitesController < Admin::BaseController
-  before_filter :params_site, :only => [:new, :create]
-  before_filter :params_section, :only => [:new, :create]
-  before_filter :protect_single_site_mode, :only => [:index, :new, :create, :destroy]
+  before_action :params_site, :only => [:new, :create]
+  before_action :params_section, :only => [:new, :create]
+  before_action :protect_single_site_mode, :only => [:index, :new, :create, :destroy]
 
   guards_permissions :site
 

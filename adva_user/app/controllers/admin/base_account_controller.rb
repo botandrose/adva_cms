@@ -1,5 +1,5 @@
 class Admin::BaseAccountController < Admin::BaseController
-  before_filter :set_account
+  before_action :set_account
 
   def set_account
     @account = current_user.account

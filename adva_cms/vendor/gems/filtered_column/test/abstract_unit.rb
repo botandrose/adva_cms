@@ -37,11 +37,12 @@ FilteredColumn.macros[:sample_macro] = SampleMacro
 FilteredColumn::Processor.class_eval do
   @@called_filters = []
   cattr_accessor :called_filters
-  def filter_with_audit
-    (called_filters << @filter.filter_key).uniq! if @filter
-    filter_without_audit
-  end
-  alias_method_chain :filter, :audit
+  prepend Module.new {
+    def filter
+      (called_filters << @filter.filter_key).uniq! if @filter
+      super
+    end
+  }
 end
 
 class Article < ActiveRecord::Base

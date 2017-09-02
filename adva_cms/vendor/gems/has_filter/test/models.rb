@@ -6,8 +6,8 @@ class HasFilterArticle < ActiveRecord::Base
              :text  => { :attributes => [:title, :body, :excerpt] },
              :state => { :states => [:published, :unpublished] }
 
-  has_many :categories, :through => :categorizations, :class_name => 'HasFilterCategory'
   has_many :categorizations, :class_name => 'HasFilterCategorization', :dependent => :destroy
+  has_many :categories, :through => :categorizations, :class_name => 'HasFilterCategory'
 
   scope :published, -> { where(published: true) }
   scope :approved, -> { where(approved: true) }

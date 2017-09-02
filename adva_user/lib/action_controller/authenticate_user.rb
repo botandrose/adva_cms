@@ -24,14 +24,14 @@ module ActionController
       # page directly) then they will be directed to profiles/home
       # after login which is a placeholder for the app to override.
       #
-      # Options given are passed directly to the before_filter method
+      # Options given are passed directly to the before_action method
       # so feel free to provide :only and :except options.
       def authentication_required
-        before_filter :require_authentication
+        before_action :require_authentication
       end
 
       # Will remove authentication from certain actions. Options given
-      # are passed directly to skip_before_filter so feel free to use
+      # are passed directly to skip_before_action so feel free to use
       # :only and :except options.
       #
       # This method is useful in cases where you have locked down the
@@ -39,7 +39,7 @@ module ActionController
       # ApplicationController but then want to open an action back up
       # in a specific controller.
       def no_authentication_required
-        skip_before_filter :require_authentication
+        skip_before_action :require_authentication
       end
     end
 

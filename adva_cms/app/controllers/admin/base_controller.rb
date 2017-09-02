@@ -12,7 +12,7 @@ class Admin::BaseController < ApplicationController
 
   helper_method :menu, :content_locale, :has_permission?
 
-  before_filter :set_menu, :set_site, :set_section, :set_locale, :set_timezone
+  before_action :set_menu, :set_site, :set_section, :set_locale, :set_timezone
 
   authentication_required
 

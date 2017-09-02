@@ -22,10 +22,10 @@ class Content < ActiveRecord::Base
   belongs_to :section, :touch => true
   belongs_to_author :validate => true
 
-  has_many :assets, :through => :asset_assignments
   has_many :asset_assignments # TODO :dependent => :delete_all?
-  has_many :categories, :through => :categorizations
+  has_many :assets, :through => :asset_assignments
   has_many :categorizations, -> { includes(:category) }, as: :categorizable, dependent: :destroy
+  has_many :categories, :through => :categorizations
 
   after_save do
     categories.each(&:touch)

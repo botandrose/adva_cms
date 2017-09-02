@@ -4,7 +4,7 @@ require "json"
 
 module CacheableFlash
   def self.included(base)
-    base.prepend_around_filter :write_flash_to_cookie
+    base.prepend_around_action :write_flash_to_cookie
   end
 
   def write_flash_to_cookie

@@ -1,8 +1,11 @@
 class Admin::UsersController < Admin::BaseController
-  before_filter :set_users, :only => [:index]
-  before_filter :set_user,  :only => [:show, :edit, :update, :destroy]
-  before_filter :authorize_access
-  before_filter :authorize_params, :only => :update
+  before_action :set_users, :only => [:index]
+  before_action :set_user,  :only => [:show, :edit, :update, :destroy]
+  before_action :authorize_access
+  before_action :authorize_params, :only => :update
+
+  # yuck! rails' params parsing is broken
+  before_action :fix_roles_attributes_params, only: [:create, :update]
 
   # guards_permissions :user
 
@@ -17,9 +20,6 @@ class Admin::UsersController < Admin::BaseController
   end
 
   def create
-    # yuck! rails' params parsing is broken
-    params[:user][:roles_attributes] = params[:user][:roles_attributes].map { |key, value| value } if params[:user][:roles_attributes]
-
     @user = User.new(params[:user])
     @user.memberships.build(:site => @site) if @site and !@user.has_role?(:superuser)
 
@@ -38,9 +38,6 @@ class Admin::UsersController < Admin::BaseController
   end
 
   def update
-    # yuck! rails' params parsing is broken
-    params[:user][:roles_attributes] = params[:user][:roles_attributes].map { |key, value| value } if params[:user][:roles_attributes]
-    
     if @user.update_attributes(params[:user])
       trigger_events(@user)
       flash[:notice] = t(:'adva.users.flash.update.success')
@@ -63,6 +60,11 @@ class Admin::UsersController < Admin::BaseController
   end
 
   private
+
+  def fix_roles_attributes_params
+    # yuck! rails' params parsing is broken
+    params[:user][:roles_attributes] = params[:user][:roles_attributes].to_unsafe_hash.map { |key, value| value } if params[:user][:roles_attributes]
+  end
 
     def set_menu
       @menu = Menus::Admin::Users.new

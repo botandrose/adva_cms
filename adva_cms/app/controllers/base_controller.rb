@@ -8,7 +8,7 @@ class BaseController < ApplicationController
   include ContentHelper
   include ResourceHelper
 
-  before_filter :set_site, :set_timezone
+  before_action :set_site, :set_timezone
   attr_accessor :site, :section
 
   layout 'default'

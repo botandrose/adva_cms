@@ -26,20 +26,21 @@ module ActionView
 end
 
 ActionView::Renderable.module_eval do
-  def content_assignments_proc_with_content_for_filters(view)
-    Proc.new do |*names|
-      if view.controller.registered_contents
-        contents = view.controller.registered_contents.select { |id, content| content.target == names.first }
-        contents.each do |id, content|
-          # content_for always appends the new content. we might want to have
-          # more finegrained control over that.
-          view.content_for(names.first, content.render(view))
+  prepend Module.new {
+    def content_assignments_proc(view)
+      Proc.new do |*names|
+        if view.controller.registered_contents
+          contents = view.controller.registered_contents.select { |id, content| content.target == names.first }
+          contents.each do |id, content|
+            # content_for always appends the new content. we might want to have
+            # more finegrained control over that.
+            view.content_for(names.first, content.render(view))
+          end
         end
+        super(view).call(*names)
       end
-      content_assignments_proc_without_content_for_filters(view).call(*names)
     end
-  end
-  alias_method_chain :content_assignments_proc, :content_for_filters
+  }
 end
 
 

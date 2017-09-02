@@ -4,7 +4,7 @@ class SiteFormBuilder < ExtensibleFormBuilder
   end
 end
 
-ActionDispatch::Callbacks.to_prepare do
+ActiveSupport::Reloader.to_prepare do
   Site.class_eval do
     has_many_comments
   end

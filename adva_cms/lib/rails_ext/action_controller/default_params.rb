@@ -4,7 +4,7 @@ ActionController::Base.class_eval do
   
   class << self
     def default_param(*args, &block)
-      before_filter(args.extract_options!) do |controller|
+      before_action(args.extract_options!) do |controller|
         controller.default_param(*args, &block)
       end
     end

@@ -1,9 +1,9 @@
 class Admin::CommentsController < Admin::BaseController
   layout "admin"
 
-  before_filter :set_comment, :only => [:edit, :update, :destroy]
-  before_filter :set_commentable, :set_comment_params, :only => :create
-  after_filter :postback_spaminess, :only => [:update]
+  before_action :set_comment, :only => [:edit, :update, :destroy]
+  before_action :set_commentable, :set_comment_params, :only => :create
+  after_action :postback_spaminess, :only => [:update]
 
   guards_permissions :comment
 
