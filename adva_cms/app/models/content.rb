@@ -1,5 +1,3 @@
-require 'html_diff'
-
 class Content < ActiveRecord::Base
   acts_as_nested_set :scope => :section_id
 
@@ -139,12 +137,6 @@ class Content < ActiveRecord::Base
 
   def just_published?
     published? && published_at_changed?
-  end
-
-  def diff_against_version(version)
-    # return '(orginal version)' if version == versions.earliest.version
-    version = versions[version]
-    HtmlDiff.diff(version.excerpt_html + version.body_html, excerpt_html + body_html)
   end
 
   # def to_param(key)
