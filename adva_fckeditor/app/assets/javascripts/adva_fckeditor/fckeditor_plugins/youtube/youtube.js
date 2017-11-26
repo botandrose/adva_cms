@@ -54,7 +54,7 @@ function Ok() {
 
   oEditor.FCKUndo.SaveUndoStep();
   if (!oEmbed) {
-    oEmbed    = FCK.EditorDocument.createElement('EMBED');
+    oEmbed    = FCK.EditorDocument.createElement('IFRAME');
     oFakeImage  = null;
   }
   UpdateEmbed(oEmbed);
@@ -77,14 +77,13 @@ function UpdateEmbed(e) {
     youtubeId = result[1];
   }
 
-  SetAttribute(e, 'type', 'application/x-shockwave-flash');
-  SetAttribute(e, 'pluginspage', 'http://www.macromedia.com/go/getflashplayer');
-  SetAttribute(e, 'allowscriptaccess', 'always');
-
-  SetAttribute(e, 'src', 'http://www.youtube.com/v/'+youtubeId+'?version=3&autoplay=1');
+  SetAttribute(e, 'src', 'https://www.youtube.com/embed/'+youtubeId);
 
   SetAttribute(e, "width", GetE('txtWidth').value == '' ? 640 : GetE('txtWidth').value);
   SetAttribute(e, "height", GetE('txtHeight').value == '' ? 390 : GetE('txtHeight').value);
+
+  SetAttribute(e, 'allowfullscreen', 'allowfullscreen');
+  SetAttribute(e, 'frameborder', '0');
 }
 
 function checkCode(code) {
