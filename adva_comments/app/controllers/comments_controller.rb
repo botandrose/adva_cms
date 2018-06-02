@@ -38,7 +38,7 @@ class CommentsController < BaseController
     @comment = @commentable.comments.build(params[:comment])
     if @comment.save
       trigger_events @comment
-      CommentMailer.comment_notification(@comment).deliver
+      CommentMailer.comment_notification(@comment).deliver_later
       if current_user.anonymous
         flash[:notice] = "Your comment is being reviewed, and will be posted shortly. Thank you for commenting!"
       else
