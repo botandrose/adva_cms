@@ -87,7 +87,7 @@ function UpdateEmbed( e )
 	SetAttribute( e, 'pluginspage'	, 'http://www.macromedia.com/go/getflashplayer' ) ;
 	SetAttribute( e, 'allowscriptaccess'	, 'always' ) ;
 	
-  SetAttribute( e, 'src'		, 'http://www.youtube.com/v/'+youtubeId+'?version=3&autoplay=1') ;
+  SetAttribute( e, 'src'		, 'https://www.youtube.com/v/'+youtubeId+'?version=3&autoplay=1') ;
 	
 	SetAttribute( e, "width" 		, GetE('txtWidth').value == '' ? 640 : GetE('txtWidth').value ) ;
 	SetAttribute( e, "height"		, GetE('txtHeight').value == '' ? 390 : GetE('txtHeight').value ) ;
