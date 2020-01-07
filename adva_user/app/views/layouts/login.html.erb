@@ -6,6 +6,8 @@
     <title>adva-cms: <%= controller.controller_name %></title>
 
     <%= stylesheet_link_tag "adva_cms/admin" %>
+    <%= stylesheet_link_tag "admin" %> <!-- super project can put override styles here -->
+
     <%= javascript_include_tag "adva_cms/application" %>
     <%= yield :head %>
   </head>
