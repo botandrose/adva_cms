@@ -18,21 +18,20 @@ module OutputFilter
     private
 
     def process! body
-      cells = cells body
-
-      body.gsub!(/(#{cells.keys.join('|')})/) do |tag|
-        name, state, attrs = cells[tag]
-        attrs = HashWithIndifferentAccess.new(attrs)
-        cell = "#{name.camelize}Cell".constantize.new
-        args = [state]
-        attrs.delete "class" # ignore styling class
-        args << attrs unless attrs.empty?
-        begin
-          cell.render_state *args
-        rescue AbstractController::ActionNotFound
-          "<strong>Cell “#{name.capitalize} #{state}” not found!</strong>"
+      cells(body).each do |tag, (name, state, attrs)|
+        body.gsub!(tag) do
+          attrs = HashWithIndifferentAccess.new(attrs)
+          cell = "#{name.camelize}Cell".constantize.new
+          args = [state]
+          attrs.delete "class" # ignore styling class
+          args << attrs unless attrs.empty?
+          begin
+            cell.render_state *args
+          rescue AbstractController::ActionNotFound
+            "<strong>Cell “#{name.capitalize} #{state}” not found!</strong>"
+          end
         end
-      end unless cells.empty?
+      end
     end
 
     def cells body
@@ -46,3 +45,4 @@ module OutputFilter
     end
   end
 end
+
