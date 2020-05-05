@@ -13,11 +13,13 @@ class BaseController < ApplicationController
 
   layout 'default'
 
+  def site
+    @site ||= Site.find_by_host!(request.host_with_port)
+  end
+
   protected
-    def set_site
-      @site ||= Site.find_by_host!(request.host_with_port)
-    end
-    alias :site :set_site
+
+    alias :set_site :site
 
     def sections
       @sections ||= site.sections
