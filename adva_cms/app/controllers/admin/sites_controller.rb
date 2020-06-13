@@ -36,7 +36,7 @@ class Admin::SitesController < Admin::BaseController
   end
 
   def update
-    if @site.update_attributes params[:site]
+    if @site.update params[:site]
       flash[:notice] = t(:'adva.sites.flash.update.success')
       redirect_to edit_admin_site_url
     else

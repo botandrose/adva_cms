@@ -38,7 +38,7 @@ class Admin::UsersController < Admin::BaseController
   end
 
   def update
-    if @user.update_attributes(params[:user])
+    if @user.update(params[:user])
       trigger_events(@user)
       flash[:notice] = t(:'adva.users.flash.update.success')
       redirect_to admin_user_url(@site, @user)

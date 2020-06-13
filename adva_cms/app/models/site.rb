@@ -23,7 +23,7 @@ class Site < ActiveRecord::Base
   before_validation :populate_title
 
   validates_presence_of :host, :name, :title
-  validates_uniqueness_of :host
+  validates_uniqueness_of :host, case_sensitive: true
 
   cattr_accessor :multi_sites_enabled, :cache_sweeper_logging
 

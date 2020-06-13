@@ -20,7 +20,7 @@ class Admin::CommentsController < Admin::BaseController
   end
 
   def update
-    if @comment.update_attributes params[:comment]
+    if @comment.update params[:comment]
       trigger_events @comment
       flash[:notice] = t(:'adva.comments.flash.update.success')
       redirect_to params[:return_to] || admin_site_comments_url

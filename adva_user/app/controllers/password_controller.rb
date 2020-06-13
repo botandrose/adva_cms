@@ -22,7 +22,7 @@ class PasswordController < BaseController
   end
 
   def update
-    if current_user && current_user.update_attributes(params[:user].slice(:password))
+    if current_user && current_user.update(params[:user].slice(:password))
       trigger_event current_user, :password_updated
       flash[:notice] = t(:'adva.passwords.flash.update.success')
       authenticate_user(:email => current_user.email, :password => params[:user][:password])

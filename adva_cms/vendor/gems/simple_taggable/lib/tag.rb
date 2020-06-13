@@ -3,7 +3,7 @@ class Tag < ActiveRecord::Base
   has_many :taggables, :through => :taggings, :source_type => "Content"
 
   validates_presence_of :name
-  validates_uniqueness_of :name
+  validates_uniqueness_of :name, case_sensitive: true
 
   cattr_accessor :destroy_unused
   self.destroy_unused = true

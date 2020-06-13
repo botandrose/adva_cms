@@ -2,7 +2,7 @@ class Membership < ActiveRecord::Base
   belongs_to :site
   belongs_to :user
 
-  validates_uniqueness_of :site_id, :scope => :user_id
+  validates_uniqueness_of :site_id, scope: :user_id, case_sensitive: true
 
   # tentacle does this. is it a good idea to keep has_many :roles on the membership?
   # before_create :set_first_user_admin
