@@ -81,7 +81,10 @@ class Content < ActiveRecord::Base
       attrs.delete "class" # ignore styling class
       attrs[:format] = :timestamp
       args << attrs unless attrs.empty?
-      cell.render_state *args
+      begin
+        cell.render_state *args
+      rescue ArgumentError
+      end
     end.select { |response| response.is_a?(Time) }.max
   end
 
