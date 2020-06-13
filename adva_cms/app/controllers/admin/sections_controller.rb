@@ -30,7 +30,7 @@ class Admin::SectionsController < Admin::BaseController
   end
 
   def update
-    if @section.update_attributes params[:section]
+    if @section.update params[:section]
       flash[:notice] = t(:'adva.sections.flash.update.success')
       redirect_to [:edit, :admin, @site, @section]
     else

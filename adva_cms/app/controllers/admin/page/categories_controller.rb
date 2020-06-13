@@ -22,7 +22,7 @@ class Admin::Page::CategoriesController < Admin::BaseController
   end
 
   def update
-    if @category.update_attributes params[:category]
+    if @category.update params[:category]
       flash[:notice] = t(:'adva.categories.flash.update.success')
       redirect_to [:admin, @site, @section, :categories]
     else

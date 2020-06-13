@@ -19,7 +19,7 @@ module BlogHelper
     Time.local(params[:year], params[:month]) if params[:year]
   end
 
-  def blog_article_path section, article
+  def blog_article_path section, article, options={}
     if article.published_at
       super :section_permalink => section.permalink,
         :year => article.published_at.year,
@@ -31,7 +31,7 @@ module BlogHelper
     end
   end
 
-  def blog_article_url section, article
+  def blog_article_url section, article, options={}
     if article.published_at
       super :section_permalink => section.permalink,
         :year => article.published_at.year,

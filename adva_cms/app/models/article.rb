@@ -4,7 +4,7 @@ class Article < Content
   filters_attributes :except => [:excerpt, :excerpt_html, :body, :body_html, :cached_tag_list]
 
   validates_presence_of :title, :body
-  validates_uniqueness_of :permalink, :scope => :section_id
+  validates_uniqueness_of :permalink, scope: :section_id, case_sensitive: true
 
   class << self
     def locale

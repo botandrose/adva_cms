@@ -12,7 +12,7 @@ class User < ActiveRecord::Base
   has_many :sites, :through => :memberships
 
   validates_presence_of     :first_name, :email
-  validates_uniqueness_of   :email # i.e. account attributes are unique per application, not per site
+  validates_uniqueness_of   :email, case_sensitive: true # i.e. account attributes are unique per application, not per site
   validates_length_of       :first_name, :within => 1..40
   validates_length_of       :last_name, :allow_nil => true, :within => 0..40
   validates_format_of       :email, :allow_nil => true,
@@ -61,11 +61,11 @@ class User < ActiveRecord::Base
   end
 
   def verify!
-    update_attributes :verified_at => Time.zone.now if verified_at.nil?
+    update verified_at: Time.zone.now if verified_at.nil?
   end
 
   # def restore!
-  #   update_attributes :deleted_at => nil if deleted_at
+  #   update deleted_at: nil if deleted_at
   # end
 
   def registered?

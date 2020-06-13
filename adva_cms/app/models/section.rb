@@ -36,7 +36,7 @@ class Section < ActiveRecord::Base
   after_create :update_paths
 
   validates_presence_of :title # :site wtf ... this breaks install_controller#index
-  validates_uniqueness_of :permalink, :scope => :site_id
+  validates_uniqueness_of :permalink, scope: :site_id, case_sensitive: true
   validates_numericality_of :contents_per_page, :only_integer => true, :message => :only_integer
 
   # validates_each :template, :layout do |record, attr, value|

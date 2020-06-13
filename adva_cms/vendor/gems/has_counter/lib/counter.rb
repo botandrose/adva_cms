@@ -18,6 +18,6 @@ class Counter < ActiveRecord::Base
   end
   
   def set(value)
-    update_attributes! :count => value
+    update! count: value
   end
 end

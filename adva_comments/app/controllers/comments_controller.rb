@@ -42,7 +42,7 @@ class CommentsController < BaseController
       if current_user.anonymous
         flash[:notice] = "Your comment is being reviewed, and will be posted shortly. Thank you for commenting!"
       else
-        @comment.update_attribute :approved, true
+        @comment.update_column :approved, true
         flash[:notice] = "You're an admin, so your comment is being posted immediately! Refresh the page to see it."
       end
       respond_to do |format|
@@ -59,7 +59,7 @@ class CommentsController < BaseController
   end
 
   def update
-    if @comment.update_attributes(params[:comment])
+    if @comment.update(params[:comment])
       trigger_events(@comment)
       flash[:notice] = t(:'adva.comments.flash.update.success')
       render :json => true

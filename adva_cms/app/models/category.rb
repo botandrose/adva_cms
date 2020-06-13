@@ -15,7 +15,7 @@ class Category < ActiveRecord::Base
   after_create :update_paths
 
   validates_presence_of :section, :title
-  validates_uniqueness_of :permalink, :scope => :section_id
+  validates_uniqueness_of :permalink, scope: :section_id, case_sensitive: true
 
   def owners
     owner.owners << owner
