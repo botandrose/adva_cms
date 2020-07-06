@@ -4,11 +4,14 @@
 
 <%= form_for 'user', :url => password_path, :html => { :method => :put } do |f| %>
   <% f.field_set do %>
-		<%= label_tag(t(:'adva.passwords.attributes.token')) + text_field_tag('token') unless current_user %>
-		<%= f.password_field :password, :label => :"adva.users.attributes.new_password" %>
+    <% if current_user.anonymous? %>
+      <%= label_tag t(:'adva.passwords.attributes.token') %>
+      <%= text_field_tag :token, params[:token] %>
+    <% end %>
+    <%= f.password_field :password, :label => :"adva.users.attributes.new_password" %>
   <% end %>
 
   <% f.buttons do %>
-		<%= submit_tag t(:'adva.common.save') %>
-	<% end %>
+    <%= submit_tag t(:'adva.common.save') %>
+  <% end %>
 <% end %>
