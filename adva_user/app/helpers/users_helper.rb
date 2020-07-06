@@ -1,7 +1,7 @@
 module UsersHelper
   def who(name)
     name = name.name if name.is_a? User
-    return current_user && current_user.name == name ? t(:'adva.common.you') : name
+    return current_user.name == name ? t(:'adva.common.you') : name
   end
 
   def gravatar_img(user, options = {})

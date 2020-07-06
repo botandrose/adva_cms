@@ -6,7 +6,7 @@ class Admin::BaseAccountController < Admin::BaseController
   end
 
   def require_authentication
-    unless current_user and current_user.account
+    unless current_user.account
       return redirect_to_login(t(:'adva.flash.authentication_required'))
     end
   end
