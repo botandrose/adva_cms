@@ -11,7 +11,6 @@ module OutputFilter
       new_body = ""
       body.each { |part| new_body << part }
       process! new_body
-      headers["Content-Length"] = new_body.length.to_s
       [status, headers, [new_body]]
     end
 
