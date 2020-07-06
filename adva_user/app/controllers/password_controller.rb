@@ -26,7 +26,7 @@ class PasswordController < BaseController
       trigger_event current_user, :password_updated
       flash[:notice] = t(:'adva.passwords.flash.update.success')
       authenticate_user(:email => current_user.email, :password => params[:user][:password])
-      redirect_to root_url
+      redirect_to "/"
     else
       params[:token] = nil # ugh
       flash[:error] = t(:'adva.passwords.flash.update.failure')
