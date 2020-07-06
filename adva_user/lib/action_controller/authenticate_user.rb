@@ -82,12 +82,14 @@ module ActionController
             user = find_current_user
             set_user_cookie!(user)
             user
+          else
+            User.anonymous
           end
         end
       end
 
       def authenticated?
-        !!current_user
+        !current_user.anonymous?
       end
       alias :logged_in? :authenticated?
 
@@ -119,7 +121,7 @@ module ActionController
 
           # If we cannot get the current user store the requested page
           # and send them to the login page.
-          if current_user.nil? or current_user.anonymous?
+          if current_user.anonymous?
             redirect_to login_url(:return_to => request.url) and false
           end
         end
@@ -141,7 +143,7 @@ module ActionController
         end
 
         def set_user_cookie!(user = current_user)
-          if user
+          unless user.anonymous?
             cookies[:uid] = user.id.to_s
             cookies[:uname] = user.name
           end

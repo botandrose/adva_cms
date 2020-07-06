@@ -18,7 +18,6 @@ class PasswordController < BaseController
   end
 
   def edit
-    params[:token] = nil unless current_user # TODO: maybe solve this nicer?
   end
 
   def update

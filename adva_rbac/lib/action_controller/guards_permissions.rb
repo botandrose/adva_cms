@@ -65,8 +65,7 @@ module ActionController
 
       def has_permission?(action, type)
         action = :"#{action} #{type}"
-        user = current_user || User.anonymous
-        user.has_permission?(action, current_resource)
+        current_user.has_permission?(action, current_resource)
       end
 
       def map_from_controller_action

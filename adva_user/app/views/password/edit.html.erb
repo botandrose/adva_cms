@@ -6,7 +6,7 @@
   <% f.field_set do %>
     <% if current_user.anonymous? %>
       <%= label_tag t(:'adva.passwords.attributes.token') %>
-      <%= text_field_tag :token, params[:token] %>
+      <%= text_field_tag :token %>
     <% end %>
     <%= f.password_field :password, :label => :"adva.users.attributes.new_password" %>
   <% end %>

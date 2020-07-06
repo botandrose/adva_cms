@@ -26,12 +26,12 @@ class Admin::BaseController < ApplicationController
 
     def require_authentication
       if @site
-        return redirect_to_login(t(:'adva.flash.login_to_access_admin_area_of_site')) unless current_user
+        return redirect_to_login(t(:'adva.flash.login_to_access_admin_area_of_site')) if current_user.anonymous?
         unless current_user.has_permission_for_admin_area?(@site)
           return redirect_to_login(t(:'adva.flash.no_permission_for_admin_area_of_site'))
         end
       else
-        return redirect_to_login(t(:'adva.flash.login_to_access_admin_area_of_account')) unless current_user
+        return redirect_to_login(t(:'adva.flash.login_to_access_admin_area_of_account')) if current_user.anonymous?
         unless current_user.has_global_role?(:superuser)
           return redirect_to_login(t(:'adva.flash.no_permission_for_admin_area_of_account'))
         end
