@@ -19,7 +19,7 @@ Rails.application.routes.draw do
     get "/:permalink" => "articles#show"
   end
 
-  get "/" => "articles#index"
+  get "/" => "articles#index", :as => :root
 
   namespace :admin do
     post "install" => "install#index"
