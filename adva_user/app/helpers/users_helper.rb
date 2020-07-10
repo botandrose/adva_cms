@@ -10,6 +10,7 @@ module UsersHelper
 
   def gravatar_url(email = nil, size = 80)
     default = '/assets/adva_cms/avatar.gif'
+    return default if Rails.env.test?
     return default if email.blank?
     require 'digest/md5'
     digest = Digest::MD5.hexdigest(email)
