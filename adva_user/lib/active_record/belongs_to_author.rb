@@ -26,6 +26,14 @@ module ActiveRecord
             def #{name}_referer
               #{name}.referer if #{name} && #{name}.respond_to?(:referer)
             end
+
+            def #{name}_link include_email: true
+              if include_email
+                %(<a href="mailto:\#{#{name}_email}">\#{#{name}_name}</a>).html_safe
+              else
+                #{name}_name
+              end
+            end
           code
         end
       end
