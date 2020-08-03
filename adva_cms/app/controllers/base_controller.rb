@@ -21,7 +21,8 @@ class BaseController < ApplicationController
 
     alias :set_site :site
 
-    def sections @sections ||= site.sections
+    def sections
+      @sections ||= site.sections
     end
     helper_method :sections
 
