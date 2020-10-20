@@ -20,8 +20,8 @@ module Menu
       super(options)
       @key = key || self.class.name.demodulize.underscore.sub('_menu', '').to_sym
       @breadcrumbs = []
-		  [:id, :content, :text, :url].each { |key| instance_variable_set(:"@#{key}", options.delete(key)) }
-		  @url.sub!(/\?.*/, '') if @url
+      [:id, :content, :text, :url].each { |key| instance_variable_set(:"@#{key}", options.delete(key)) }
+      @url.sub!(/\?.*/, '') if @url
     end
 
     def find(key)
@@ -102,17 +102,17 @@ module Menu
     end
 
     def render
-	    tag = Tags::Li.new(content, :class => 'item')
-	    tag.add_class('active') if active
-	    tag.render
+      tag = Tags::Li.new(content, :class => 'item')
+      tag.add_class('active') if active
+      tag.render
     end
 
     def text
       @text ||= key.is_a?(Symbol) ? I18n.t(key, :scope => :'adva.titles') : key
     end
 
-	  def content
-	    @content ||= url ? Tags::A.new(text, :id => id, :href => url).render : Tags::Span.new(text).render
+    def content
+      @content ||= url ? Tags::A.new(text, :id => id, :href => url).render : Tags::Span.new(text).render
     end
   end
 
@@ -122,7 +122,7 @@ module Menu
 
   class Group < Base
     self.tag_name = 'div'
-    
+
     # attr_accessor :wrap
     # 
     # def initialize(key = nil, options = {})
@@ -133,17 +133,17 @@ module Menu
     # end
   end
 
-	class SectionsMenu < Item
-	  attr_reader :sections
+  class SectionsMenu < Item
+    attr_reader :sections
 
-	  def initialize(*args)
-	    super
-	    @sections = []
+    def initialize(*args)
+      super
+      @sections = []
     end
 
     def populate(scope)
       scope.instance_eval(&@options[:populate]).each do |s|
-	      @sections << Base.new(s.title, :level => s.level, :url => scope.url_for([:admin, s.site, s, :contents])) unless s.new_record?
+        @sections << Base.new(s.title, :level => s.level, :url => scope.url_for([:admin, s.site, s, :contents])) unless s.new_record?
       end
     end
 
