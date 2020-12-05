@@ -131,6 +131,12 @@
       // display description and form
       // TODO: refactor
       $('description').innerHTML = state.description;
+
+      // manually insert script tags, since XSS prevents this
+      state.form.scan(/<script.+<\/script>/i, function(script) {
+        jQuery(document.head).append(script[0]);
+      });
+
       $('form').innerHTML        = state.form;
       
       // set form values
