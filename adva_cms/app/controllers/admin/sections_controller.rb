@@ -51,15 +51,18 @@ class Admin::SectionsController < Admin::BaseController
 
   def update_all
     params[:sections].each do |id, attrs|
-      section = Section.find id
-      if attrs[:parent_id].nil?
-        section.move_to_root
+      section = Section.find(id)
+      parent = Section.find_by(id: attrs[:parent_id])
+      left = Section.find_by_id attrs[:left_id]
+      if parent
+        content.move_to_child_with_index parent, 0
       else
-        section.move_to_child_of attrs[:parent_id]
+        section.move_to_root
+        section.move_to_left_of section.siblings.first
       end
-      section.move_to_right_of attrs[:left_id] if attrs[:left_id]
+      section.move_to_right_of left if left
     end
-    render :text => 'OK'
+    head :ok
   end
 
   protected
