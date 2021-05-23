@@ -26,4 +26,8 @@ if defined?(Comment)
       end
     end
   end
+else # stub constant to make zeitwerk eagerload happy
+  module Activities
+    class CommentObserver; end
+  end
 end
