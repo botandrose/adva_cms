@@ -50,13 +50,13 @@ table.list span.status {
 }
 
 table.list span.published {
-  background: url(/assets/adva_cms/icons/tick.png) no-repeat;
+  background: image_url("adva_cms/icons/tick.png") no-repeat;
 }
 table.list span.draft,
 table.list span.hold,
 table.list span.queued,
 table.list span.pending {
-  background: url(/assets/adva_cms/icons/hourglass.png) no-repeat;
+  background: image_url("adva_cms/icons/hourglass.png") no-repeat;
 }
 
 #content .actions a {
@@ -82,13 +82,13 @@ table.list span.pending {
 }
 #content .actions a.show,
 #content .actions a.preview {
-  background: url(/assets/adva_cms/icons/page_white_magnify.png) no-repeat;
+  background: image_url("adva_cms/icons/page_white_magnify.png") no-repeat;
 }
 #content .actions a.edit {
-  background: url(/assets/adva_cms/icons/pencil.png) no-repeat;
+  background: image_url("adva_cms/icons/pencil.png") no-repeat;
 }
 #content .actions a.delete {
-  background: url(/assets/adva_cms/icons/bin_closed.png) no-repeat -5px top;
+  background: image_url("adva_cms/icons/bin_closed.png") no-repeat -5px top;
 }
 
 table.list .drag {
@@ -105,7 +105,7 @@ table.list img.spinner {
 
 /*#comments_list li {
   padding: 15px 40px;
-  background: url(/assets/adva_cms/icons/comment.png) no-repeat 15px 15px;
+  background: image_url("adva_cms/icons/comment.png") no-repeat 15px 15px;
 }
 #comments_list li.highlight {
   padding: 20px 20px 20px 55px !important;

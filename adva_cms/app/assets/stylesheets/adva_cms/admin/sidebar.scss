@@ -1,33 +1,35 @@
 #sidebar {
-	font-size: 12px;
+  font-size: 12px;
 }
 #sidebar h3 {
-	clear: both;
-	margin-bottom: 1em;
-	font-size: 1.1em;
-	font-weight: bold;
+  clear: both;
+  margin-bottom: 1em;
+  font-size: 1.1em;
+  font-weight: bold;
 }
 #sidebar h3 a {
-	font-weight: normal;
-	font-size: 11px;
+  font-weight: normal;
+  font-size: 11px;
 }
 #sidebar ul {
   list-style-type: none;
 }
-
+#sidebar #filters .set > select:first-child {
+  margin-left: 8px;
+}
 #sidebar input[type=text],
 #sidebar textarea {
-	padding: 3px 6px !important;
-	font-size: 12px;
-	width: 290px;
+  padding: 3px 6px !important;
+  font-size: 12px;
+  width: 270px;
 }
 #sidebar .tabs > ul {
-	overflow: auto;
-	padding: 16px 12px 0px 12px;
-	background-color: #ddd;
+  overflow: auto;
+  padding: 0px 12px 0px 12px;
+  background-color: #ddd;
 }
 #sidebar .tabs > ul li {
-	float: left;
+  float: left;
 }
 #sidebar .tabs > ul li a {
   display: block;
@@ -40,22 +42,22 @@
   -moz-border-top-right-radius: 4px;
 }
 #sidebar .tabs > ul li.active a {
-  background: #f6f6f6 url(/assets/adva_cms/admin/tab_sidebar_active.png) repeat-x;
+  background: #f6f6f6 image_url("adva_cms/admin/tab_sidebar_active.png") repeat-x;
 }
 #sidebar .tabs > ul li a:hover {
-	background-color: #fff;
-	text-decoration: none;
+  background-color: #fff;
+  text-decoration: none;
 }
 #sidebar .tabs > ul li.active a:hover {
   cursor: default;
 }
 #sidebar .tabs .tab {
-	display: none;
-	clear: both;
-	padding: 5px 20px 20px 20px;
+  display: none;
+  clear: both;
+  padding: 5px 20px 20px 20px;
 }
 #sidebar .tabs .tab.active {
-	display: block;
+  display: block;
 }
 .filters .submit {
   float: right;
