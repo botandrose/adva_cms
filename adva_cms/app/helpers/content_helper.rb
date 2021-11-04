@@ -1,10 +1,10 @@
 module ContentHelper
   def published_at_formatted(article)
     unless article && article.published?
-      if article.published_at.future?
+      if article.published_at&.future?
         "Will publish on " + l(article.published_at, :format => (article.published_at.year == Time.now.year ? :short : :long))
       else
-        t(:'adva.contents.not_published')
+        "Draft"
       end
     else
       l(article.published_at, :format => (article.published_at.year == Time.now.year ? :short : :long))
