@@ -12,7 +12,7 @@ class User < ActiveRecord::Base
   has_many :sites, :through => :memberships
 
   validates_presence_of     :first_name, :email
-  validates_uniqueness_of   :email, case_sensitive: true # i.e. account attributes are unique per application, not per site
+  validates_uniqueness_of   :email, case_sensitive: false # i.e. account attributes are unique per application, not per site
   validates_length_of       :first_name, :within => 1..40
   validates_length_of       :last_name, :allow_nil => true, :within => 0..40
   validates_format_of       :email, :allow_nil => true,
