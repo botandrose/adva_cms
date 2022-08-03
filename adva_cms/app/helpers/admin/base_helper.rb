@@ -69,7 +69,7 @@ module Admin::BaseHelper
     path = if site
       admin_site_user_path(site, current_user)
     else
-      admin_user_path(site, current_user)
+      admin_user_path(current_user)
     end
     link_to(name, path)
   end

@@ -38,7 +38,8 @@ module TableBuilder
     end
 
     def render(content = nil)
-      yield(content = '') if content.nil? && block_given?
+      content = '' if content.nil?
+      yield(content) if content.empty? && block_given?
       content = content.html_safe
       content_tag(tag_name, content, options)
     end

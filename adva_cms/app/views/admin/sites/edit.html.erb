@@ -1,4 +1,4 @@
-<%= form_for [:admin, @site] do |f| -%>
-  <%= render :partial => 'form', :locals => {:f => f, :site => @site} %>  
-  <% save_or_cancel_links(f, :cancel_url => admin_site_path) %>
+<%= form_for [:admin, @site] do |form| -%>
+  <%= render 'form', form: form, site: @site %>
+  <% save_or_cancel_links(form, cancel_url: admin_site_path) %>
 <% end %>
