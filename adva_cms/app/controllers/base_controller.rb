@@ -64,7 +64,7 @@ class BaseController < ApplicationController
     end
 
     def return_from(action, options = {})
-      URI.unescape(params[:return_to] || options[:default] || '/')
+      CGI.unescape(params[:return_to] || options[:default] || '/')
     end
     
     def current_resource
