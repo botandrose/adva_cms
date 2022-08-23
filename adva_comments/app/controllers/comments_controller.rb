@@ -20,7 +20,7 @@ class CommentsController < BaseController
   before_action :set_comment, :only => [:show, :update, :destroy]
   before_action :set_commentable, :only => [:show, :preview, :create]
 
-  before_action :are_you_a_human_or_not, :only => :create
+  invisible_captcha only: [:create, :update], honeypot: :subtitle, if: -> { current_user.anonymous? }
 
   guards_permissions :comment, :except => :show, :create => :preview
 

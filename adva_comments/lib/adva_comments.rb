@@ -3,7 +3,7 @@ require "rails"
 
 require "active_record/has_many_comments"
 require "action_controller/acts_as_commentable"
-# require 'format'
+require "invisible_captcha"
 
 module AdvaComments
   class Engine < Rails::Engine

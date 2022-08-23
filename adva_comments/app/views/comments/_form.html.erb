@@ -8,6 +8,7 @@
     <h2><%= @comment.new_record? ? t(:'adva.comments.titles.add_reply') : t(:'adva.comments.titles.edit') %></h2>
 
     <%= form_for :comment, @comment, :url => (@comment.new_record? ? comments_path : comment_path(@comment)), :html => { :id => 'comment_form', :method => (@comment.new_record? ? :post : :put) } do |f| -%>
+      <%= invisible_captcha :homepage, :comment %>
       <%= comment_form_hidden_fields commentable %>
 
       <%= fields_for @comment.author do |author| %>
