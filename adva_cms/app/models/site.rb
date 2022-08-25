@@ -30,7 +30,7 @@ class Site < ActiveRecord::Base
   class << self
     def find_by_host!(host)
       return Site.first if count == 1 && !multi_sites_enabled
-      find_by_host(host) # || raise(ActiveRecord::RecordNotFound, "Could not find site for hostname #{host}.")
+      where("? = ANY (hosts)", host).first
     end
 
     # FIXME clemens thinks this doesn't belong here. he's probably right.
