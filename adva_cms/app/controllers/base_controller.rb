@@ -14,7 +14,7 @@ class BaseController < ApplicationController
   layout 'default'
 
   def site
-    @site ||= Site.find_by_host!(request.host_with_port)
+    @site ||= Site.find_by_host!(request.host)
   end
 
   protected
