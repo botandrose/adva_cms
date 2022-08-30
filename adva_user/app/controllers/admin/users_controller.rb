@@ -27,7 +27,7 @@ class Admin::UsersController < Admin::BaseController
       @user.verify! # TODO hu??
       trigger_events(@user)
       flash[:notice] = t(:'adva.users.flash.create.success')
-      redirect_to admin_user_url(@site, @user)
+      redirect_to admin_user_url(@user)
     else
       flash.now[:error] = t(:'adva.users.flash.create.failure')
       render :action => :new
@@ -41,7 +41,7 @@ class Admin::UsersController < Admin::BaseController
     if @user.update(params[:user])
       trigger_events(@user)
       flash[:notice] = t(:'adva.users.flash.update.success')
-      redirect_to admin_user_url(@site, @user)
+      redirect_to admin_user_url(@user)
     else
       flash.now[:error] = t(:'adva.users.flash.update.failure')
       render :action => :edit
@@ -52,7 +52,7 @@ class Admin::UsersController < Admin::BaseController
     if @user.destroy
       trigger_events(@user)
       flash[:notice] = t(:'adva.users.flash.destroy.success')
-      redirect_to admin_users_url(@site)
+      redirect_to admin_users_url
     else
       flash.now[:error] = t(:'adva.users.flash.destroy.failure')
       render :action => :edit

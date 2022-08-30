@@ -1,6 +1,6 @@
-= form_for @section, :as => :section, :url => [:admin, @site, @section] do |f|
+= form_for @section, :as => :section, :url => [:admin, @section] do |f|
   = render :partial => 'form', :locals => {:f => f}
 
   %p.buttons
     = submit_tag t(:'adva.common.save'), :name => 'save_revision'
-    = link_to t(:'adva.common.cancel'), [:admin, @site, :sections]
+    = link_to t(:'adva.common.cancel'), [:admin, :sections]

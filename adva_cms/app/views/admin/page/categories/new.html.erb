@@ -1,6 +1,6 @@
 <h2><%= t(:'adva.categories.titles.new') %></h2>
   
-<%= form_for [:admin, @site, @section, @category] do |f| %>
+<%= form_for [:admin, @section, @category] do |f| %>
   <% f.field_set do %>
     <div class="col">
     	<%= f.text_field :title, :label => true, :hint => :'adva.hints.categories' %>

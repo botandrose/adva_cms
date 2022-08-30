@@ -17,7 +17,7 @@ class Admin::Page::LinksController < Admin::BaseController
     if @link.save
       trigger_events(@link)
       flash[:notice] = t(:'adva.links.flash.create.success')
-      redirect_to [:edit, :admin, @site, @section, @link]
+      redirect_to [:edit, :admin, @section, @link]
     else
       flash.now[:error] = t(:'adva.links.flash.create.failure') + current_resource_errors
       render :action => 'new'
@@ -30,7 +30,7 @@ class Admin::Page::LinksController < Admin::BaseController
     if @link.save
       trigger_events(@link)
       flash[:notice] = t(:'adva.links.flash.update.success')
-      redirect_to [:edit, :admin, @site, @section, @link]
+      redirect_to [:edit, :admin, @section, @link]
     else
       flash.now[:error] = t(:'adva.links.flash.update.failure') + current_resource_errors
       render :action => 'edit', :cl => content_locale
@@ -41,7 +41,7 @@ class Admin::Page::LinksController < Admin::BaseController
     if @link.destroy
       trigger_events(@link)
       flash[:notice] = t(:'adva.links.flash.destroy.success')
-      redirect_to [:admin, @site, @section, :contents]
+      redirect_to [:admin, @section, :contents]
     else
       flash.now[:error] = t(:'adva.links.flash.destroy.failure') + current_resource_errors
       render :action => 'edit'

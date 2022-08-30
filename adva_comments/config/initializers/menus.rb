@@ -5,7 +5,7 @@ module Menus
       define do
         namespace :admin
         menu :left, :class => 'main' do
-          item :comments, :action => :index, :resource => [@site, :comment]
+          item :comments, :action => :index, :resource => :comment
         end
       end
     end
@@ -16,7 +16,7 @@ module Menus
         parent Sites.new.build(scope).find(:comments)
 
         menu :left, :class => 'left' do
-          item :comments, :action => :index, :resource => [@site, :comment]
+          item :comments, :action => :index, :resource => :comment
         end
       end
     end

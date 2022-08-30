@@ -1,5 +1,5 @@
 <h2><%= t(:'adva.users.titles.new') %></h2>
 
-<%= form_for [:admin, @site, @user] do |f| -%>
+<%= form_for [:admin, @user] do |f| -%>
   <%= render :partial => 'form', :locals => {:f => f} %>  
 <% end -%>

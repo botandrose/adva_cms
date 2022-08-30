@@ -68,10 +68,6 @@ class Admin::SitesController < Admin::BaseController
       end
     end
 
-    def set_site
-      @site = Site.find params[:id] if params[:id]
-    end
-
     def params_site
       params[:site] ||= {}
       params[:site][:timezone]       ||= Time.zone.name

@@ -30,7 +30,7 @@
 <h3><%= t(:'adva.titles.settings') %></h3>
 
 <% if @plugin.option_definitions.present? %>
-  <%= form_for :plugin, @plugin, :url => admin_plugin_path(@site), :html => { :method => :put } do |f| -%>
+  <%= form_for :plugin, @plugin, :url => admin_plugin_path, :html => { :method => :put } do |f| -%>
     <%= render :partial => 'form', :locals => {:f => f} %>
     <% f.buttons do %>
       <%= f.submit :Save %>

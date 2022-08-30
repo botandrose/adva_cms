@@ -37,12 +37,10 @@ module Admin::BaseHelper
       :to => [:edit, to_namespace, resource].join("_")
   end
 
-  define_shallow_resource_helpers :from => [:admin, :section], :to => [:admin, :site, :section]
-
-  define_shallow_resource_helpers :from => [:admin, :category], :to => [:admin, :site, :section, :category]
-  define_shallow_resource_helpers :from => [:admin, :content], :to => [:admin, :site, :section, :content]
-  define_shallow_resource_helpers :from => [:admin, :article], :to => [:admin, :site, :section, :article]
-  define_shallow_resource_helpers :from => [:admin, :link], :to => [:admin, :site, :section, :link]
+  define_shallow_resource_helpers :from => [:admin, :category], :to => [:admin, :section, :category]
+  define_shallow_resource_helpers :from => [:admin, :content], :to => [:admin, :section, :content]
+  define_shallow_resource_helpers :from => [:admin, :article], :to => [:admin, :section, :article]
+  define_shallow_resource_helpers :from => [:admin, :link], :to => [:admin, :section, :link]
 
 
   def save_or_cancel_links(builder, options = {})
@@ -63,14 +61,9 @@ module Admin::BaseHelper
     end.html_safe
   end
 
-  def link_to_profile(site, options = {})
+  def link_to_profile(options = {})
     name = options[:name].nil? ? t(:'adva.links.profile') : options[:name]
-    site = nil if site.try(:new_record?)
-    path = if site
-      admin_site_user_path(site, current_user)
-    else
-      admin_user_path(current_user)
-    end
+    path = admin_user_path(current_user)
     link_to(name, path)
   end
 

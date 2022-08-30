@@ -18,8 +18,8 @@ class Admin::SectionsController < Admin::BaseController
     if @section.save
       flash[:notice] = t(:'adva.sections.flash.create.success')
       redirect_to (params[:commit] == t(:'adva.sections.links.save_and_create_new') ? 
-        [:new, :admin, @site, :section] :
-        [:admin, @site, @section, :articles])
+        [:new, :admin, :section] :
+        [:admin, @section, :articles])
     else
       flash.now[:error] = t(:'adva.sections.flash.update.failure')
       render :action => "new"
@@ -32,7 +32,7 @@ class Admin::SectionsController < Admin::BaseController
   def update
     if @section.update params[:section]
       flash[:notice] = t(:'adva.sections.flash.update.success')
-      redirect_to [:edit, :admin, @site, @section]
+      redirect_to [:edit, :admin, @section]
     else
       flash.now[:error] = t(:'adva.sections.flash.update.failure')
       render :action => 'edit'
@@ -42,7 +42,7 @@ class Admin::SectionsController < Admin::BaseController
   def destroy
     if @section.destroy
       flash[:notice] = t(:'adva.sections.flash.destroy.success')
-      redirect_to [:new, :admin, @site, :section]
+      redirect_to [:new, :admin, :section]
     else
       flash.now[:error] = t(:'adva.sections.flash.destroy.failure')
       render :action => 'edit'

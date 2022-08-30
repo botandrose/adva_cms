@@ -83,9 +83,7 @@ module ResourceHelper
 
     owners = []
     if resource.respond_to?(:section)
-      owners << resource.section.site << resource.section
-    elsif resource.respond_to?(:site)
-      owners << resource.site
+      owners << resource.section
     elsif resource.respond_to?(:owner)
       owners << resource.owner
     end

@@ -12,7 +12,7 @@ class Admin::Page::ArticlesController < Admin::BaseController
   guards_permissions :article, :update => :update_all
 
   def index
-    redirect_to [:admin, @site, @section, :contents]
+    redirect_to [:admin, @section, :contents]
   end
 
   def show
@@ -33,7 +33,7 @@ class Admin::Page::ArticlesController < Admin::BaseController
     if @article.save
       trigger_events(@article)
       flash[:notice] = t(:'adva.articles.flash.create.success')
-      redirect_to [:edit, :admin, @site, @section, @article]
+      redirect_to [:edit, :admin, @section, @article]
     else
       set_categories
       flash.now[:error] = t(:'adva.articles.flash.create.failure') + current_resource_errors
@@ -51,7 +51,7 @@ class Admin::Page::ArticlesController < Admin::BaseController
     if @article.save
       trigger_events(@article)
       flash[:notice] = t(:'adva.articles.flash.update.success')
-      redirect_to [:edit, :admin, @site, @section, @article]
+      redirect_to [:edit, :admin, @section, @article]
     else
       set_categories
       flash.now[:error] = t(:'adva.articles.flash.update.failure') + current_resource_errors
@@ -68,14 +68,14 @@ class Admin::Page::ArticlesController < Admin::BaseController
     else
       flash[:error] = t(:'adva.articles.flash.rollback.failure', :version => version)
     end
-    redirect_to [:edit, :admin, @site, @section, @article]
+    redirect_to [:edit, :admin, @section, @article]
   end
 
   def destroy
     if @article.destroy
       trigger_events(@article)
       flash[:notice] = t(:'adva.articles.flash.destroy.success')
-      redirect_to [:admin, @site, @section, :contents]
+      redirect_to [:admin, @section, :contents]
     else
       set_categories
       flash.now[:error] = t(:'adva.articles.flash.destroy.failure') + current_resource_errors
@@ -122,8 +122,8 @@ class Admin::Page::ArticlesController < Admin::BaseController
     def protect_single_article_mode
       if params[:action] == 'index' and @section.try(:single_article_mode)
         redirect_to @section.articles.empty? ?
-          new_admin_article_url(@site, @section, :article => { :title => @section.title }) :
-          edit_admin_article_url(@site, @section, @section.articles.first)
+          new_admin_article_url(@section, :article => { :title => @section.title }) :
+          edit_admin_article_url(@section, @section.articles.first)
       end
     end
     

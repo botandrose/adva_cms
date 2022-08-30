@@ -1,6 +1,6 @@
 <p>Hello,</p>
 
-<p>A new comment has been posted on <%= @comment.site.name %>. Please <%= link_to "log in", admin_site_comments_url(@comment.site, :host => @comment.site.host) %> and approve or delete it.</p>
+<p>A new comment has been posted on <%= @comment.site.name %>. Please <%= link_to "log in", admin_comments_url(@comment.site, :host => @comment.site.host) %> and approve or delete it.</p>
 
 <p>
 Page: <%= @comment.commentable.title %><br />

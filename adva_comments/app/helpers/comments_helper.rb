@@ -9,11 +9,9 @@ module CommentsHelper
                new_admin_comment_path edit_admin_comment_path)
 
   methods.each do |method|
-    delegate = method.sub('admin', 'admin_site')
     module_eval <<-CODE, __FILE__, __LINE__
       def #{method}(*args)
         options = args.extract_options!
-        args.unshift(@site) unless args.first.is_a?(Site)
         merge_admin_comments_query_params(options)
         #{delegate} *(args << options).compact
       end

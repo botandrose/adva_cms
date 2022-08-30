@@ -16,10 +16,9 @@ module Menus
         breadcrumb :site, :content => link_to(@site.name, [:admin, @site]) if @site && !@site.new_record?
 
         menu :left, :class => 'main' do
-          item :sites, :action => :index, :resource => :site if Site.multi_sites_enabled
           if @site && !@site.new_record?
-            item :overview, :action => :show,  :resource => @site
-            item :sections, :action => :index, :resource => [@site, :section],
+            item :overview, :action => :show,  :url => "/admin/site"
+            item :sections, :action => :index, :resource => :section,
               :type => Menu::SectionsMenu,
               :populate => lambda { |scope| @site.sections }
           end
@@ -29,7 +28,7 @@ module Menus
           if @site && !@site.new_record?
             item :settings, :action => :edit,  :resource => @site
           end
-          item :users, :action => :index, :resource => [@site, :user]
+          item :users, :action => :index, :resource => [:user]
         end
       end
 
@@ -53,17 +52,17 @@ module Menus
           type = "Menus::Admin::Sections::#{@section.type}".constantize rescue Sections::Content
           menu :left, :class => 'left', :type => type
           menu :actions, :class => 'actions' do
-            item :delete, :content => link_to("Delete", [:admin, @site, @section], method: "delete")
+            item :delete, :content => link_to("Delete", [:admin, @section], method: "delete")
           end
         else
           menu :left, :class => 'left' do
-            item :sections, :action => :index, :resource => [@site, :section]
+            item :sections, :action => :index, :resource => :section
           end
           menu :actions, :class => 'actions' do
             activates object.parent.find(:sections)
             item :new, :action => :new, :resource => [@site, :section]
             if !@section and @site.sections.size > 1
-              item :reorder, :content => link_to_index(:'adva.links.reorder', [@site, :section], :id => 'reorder_sections', :class => 'reorder')
+              item :reorder, :content => link_to_index(:'adva.links.reorder', :section, :id => 'reorder_sections', :class => 'reorder')
             end
           end
         end
@@ -72,7 +71,7 @@ module Menus
       class Content < Menu::Menu
         define do
           item :section, :content => content_tag(:h4, "#{@section.title}:")
-          item :contents, :content => link_to("Contents", [:admin, @site, @section, :contents])
+          item :contents, :content => link_to("Contents", [:admin, @section, :contents])
           item :categories, :action => :index, :resource => [@section, :category]
           item :settings,   :action => :edit,  :resource => @section
         end
@@ -89,14 +88,14 @@ module Menus
         menu :actions, :class => 'actions' do
           activates object.parent.find(:contents)
           @section.class.content_types.each do |content_type|
-            item :"new_#{content_type.underscore}", :content => link_to("New #{content_type.underscore.titleize}", [:new, :admin, @site, @section, content_type.underscore.to_sym])
+            item :"new_#{content_type.underscore}", :content => link_to("New #{content_type.underscore.titleize}", [:new, :admin, @section, content_type.underscore.to_sym])
           end
           if @content and !@content.new_record?
             item :show,   :content  => link_to("Show", [@section, @content])
-            item :edit,   :content  => link_to("Edit", [:edit, :admin, @site, @section, @content])
-            item :delete, :content  => link_to("Delete", [:admin, @site, @section, @content], :method => :delete)
+            item :edit,   :content  => link_to("Edit", [:edit, :admin, @section, @content])
+            item :delete, :content  => link_to("Delete", [:admin, @section, @content], :method => :delete)
           elsif @contents and @section.contents.size > 1
-            item :reorder, :content => link_to("Reorder", [:admin, @site, @section, :contents], :id => 'reorder_contents', :class => 'reorder')
+            item :reorder, :content => link_to("Reorder", [:admin, @section, :contents], :id => 'reorder_contents', :class => 'reorder')
           end
         end
       end
@@ -112,12 +111,12 @@ module Menus
         menu :actions, :class => 'actions' do
           activates object.parent.find(:contents)
           @section.class.content_types.each do |content_type|
-            item :"new_#{content_type.underscore}", :content => link_to("New #{content_type.underscore.titleize}", [:new, :admin, @site, @section, content_type.underscore.to_sym])
+            item :"new_#{content_type.underscore}", :content => link_to("New #{content_type.underscore.titleize}", [:new, :admin, @section, content_type.underscore.to_sym])
           end
           if @article and !@article.new_record?
             item :show,   :content  => link_to("Show", [@section, @article])
-            item :edit,   :content  => link_to("Edit", [:edit, :admin, @site, @section, @article])
-            item :delete, :content  => link_to("Delete", [:admin, @site, @section, @article], :method => :delete)
+            item :edit,   :content  => link_to("Edit", [:edit, :admin, @section, @article])
+            item :delete, :content  => link_to("Delete", [:admin, @section, @article], :method => :delete)
           end
         end
       end
@@ -132,12 +131,12 @@ module Menus
         menu :actions, :class => 'actions' do
           activates object.parent.find(:contents)
           @section.class.content_types.each do |content_type|
-            item :"new_#{content_type.underscore}", :content => link_to("New #{content_type.underscore.titleize}", [:new, :admin, @site, @section, content_type.underscore.to_sym])
+            item :"new_#{content_type.underscore}", :content => link_to("New #{content_type.underscore.titleize}", [:new, :admin, @section, content_type.underscore.to_sym])
           end
           if @link and !@link.new_record?
             item :show,   :content  => link_to("Show", [@section, @link])
-            item :edit,   :content  => link_to("Edit", [:edit, :admin, @site, @section, @link])
-            item :delete, :content  => link_to("Delete", [:admin, @site, @section, @link], :method => :delete)
+            item :edit,   :content  => link_to("Edit", [:edit, :admin, @section, @link])
+            item :delete, :content  => link_to("Delete", [:admin, @section, @link], :method => :delete)
           end
         end
       end
@@ -154,30 +153,18 @@ module Menus
           item :new, :action => :new, :resource => [@section, :category]
           if @category && !@category.new_record?
             item :edit,   :action  => :edit,   :resource => @category
-            item :delete, :content  => link_to("Delete", [:admin, @site, @section, @category], :method => :delete)
+            item :delete, :content  => link_to("Delete", [:admin, @section, @category], :method => :delete)
           elsif !@category and @section.categories.size > 1
-            item :reorder, :content => link_to("Reorder", [:admin, @site, @section, :categories], :id => 'reorder_categories', :class => 'reorder')
+            item :reorder, :content => link_to("Reorder", [:admin, @section, :categories], :id => 'reorder_categories', :class => 'reorder')
           end
         end
       end
     end
 
-    class SettingsBase < Menu::Group
+    class Settings < Menu::Group
       define do
         id :main
         parent Sites.new.build(scope).find(:settings)
-        menu :left, :class => 'left' do
-          item :settings, :action => :edit,  :resource => @site
-          item :cache,    :action => :index, :resource => [@site, :cached_page]
-        end
-      end
-    end
-
-    class Settings < SettingsBase
-      define do
-        menu :actions, :class => 'actions' do
-          item :delete, :content => link_to("Delete", [:admin, @site], method: "delete")
-        end
       end
     end
   end

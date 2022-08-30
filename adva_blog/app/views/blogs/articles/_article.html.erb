@@ -6,7 +6,7 @@
         <%= t(:'adva.blog.attribution', :author => article.author_name) %>
         <%= link_to_content_comments article if (defined?(Comment) && (article.accept_comments? || article.comments.present?)) && mode != :single %>
         <% authorized_tag :span, :update, article do -%>
-          <%= link_to t(:'adva.common.edit'), edit_admin_article_path(@site, @section, article) %>
+          <%= link_to t(:'adva.common.edit'), edit_admin_article_path(@section, article) %>
         <% end -%>
       </p>
       <p>

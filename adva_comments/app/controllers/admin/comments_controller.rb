@@ -23,7 +23,7 @@ class Admin::CommentsController < Admin::BaseController
     if @comment.update params[:comment]
       trigger_events @comment
       flash[:notice] = t(:'adva.comments.flash.update.success')
-      redirect_to params[:return_to] || admin_site_comments_url
+      redirect_to params[:return_to] || admin_comments_url
     else
       flash.now[:error] = t(:'adva.comments.flash.update.failure')
       render :action => :edit
@@ -34,7 +34,7 @@ class Admin::CommentsController < Admin::BaseController
     @comment.destroy
     trigger_events @comment
     flash[:notice] = t(:'adva.comments.flash.destroy.success')
-    redirect_to params[:return_to] || admin_site_comments_url
+    redirect_to params[:return_to] || admin_comments_url
   end
 
   private

@@ -4,8 +4,6 @@ Rails.application.routes.draw do
   end
 
   namespace :admin do
-    resources :sites do
-      resources :comments
-    end
+    resources :comments
   end
 end

@@ -13,7 +13,7 @@
 <script type="text/javascript">
   var sections_tree = new SortableTree('sections', {
     onDrop: function(drag, drop, event) {
-      <%= remote_function(:url => admin_sections_path(@site),
+      <%= remote_function(:url => admin_sections_path,
                           :method =>   :put,
                           :with   =>   "drag.to_params()",
                           :loading =>  "$('sections_indicator').show()",

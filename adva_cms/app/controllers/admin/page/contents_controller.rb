@@ -44,8 +44,8 @@ class Admin::Page::ContentsController < Admin::BaseController
     def protect_single_content_mode
       if params[:action] == 'index' and @section.try(:single_article_mode)
         redirect_to @section.contents.empty? ?
-          new_admin_article_url(@site, @section, :content => { :title => @section.title }) :
-          edit_admin_article_url(@site, @section, @section.articles.first)
+          new_admin_article_url(@section, :content => { :title => @section.title }) :
+          edit_admin_article_url(@section, @section.articles.first)
       end
     end
 end

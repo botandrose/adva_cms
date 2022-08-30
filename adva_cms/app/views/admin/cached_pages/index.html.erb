@@ -11,7 +11,7 @@
 		t.row do |r, cached_page|
 		  r.cell cached_page.url
   		r.cell page_cached_at(cached_page)
-			r.cell link_to(t(:'adva.titles.clear'), admin_cached_page_path(@site, cached_page), :class => 'text clear')
+			r.cell link_to(t(:'adva.titles.clear'), admin_cached_page_path(cached_page), :class => 'text clear')
 
 		end
 

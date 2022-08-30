@@ -65,7 +65,7 @@ module ActivitiesHelper
 
   def link_to_activity_user(activity)
     if activity.author.registered?
-      link_to activity.author_name, admin_site_user_path(activity.site, activity.author)
+      link_to activity.author_name, admin_user_path(activity.author)
     else
       activity.author_link(:include_email => true)
     end

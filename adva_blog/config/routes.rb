@@ -8,12 +8,10 @@ Rails.application.routes.draw do
   end
 
   namespace :admin do
-    resources :sites do
-      resources :blogs do
-        scope :module => :blog do
-          resources :contents, :articles, :categories do
-            put "/", :action => "update_all", :on => :collection
-          end
+    resources :blogs do
+      scope :module => :blog do
+        resources :contents, :articles, :categories do
+          put "/", :action => "update_all", :on => :collection
         end
       end
     end

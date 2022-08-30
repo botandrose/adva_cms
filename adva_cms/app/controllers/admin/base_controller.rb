@@ -81,7 +81,7 @@ class Admin::BaseController < ApplicationController
     end
 
     def set_site
-      @site = params[:site_id] ? Site.find(params[:site_id]) : Site.find_by_host!(request.host)
+      @site = Site.find_by_host!(request.host)
     end
 
     def set_section

@@ -6,7 +6,7 @@
 
 <h2><%= t(:'adva.categories.titles.edit') %></h2>
 
-<%= form_for [:admin, @site, @section, @category] do |f| %>
+<%= form_for [:admin, @section, @category] do |f| %>
 	<% f.field_set do %>
     <div class="col">
       <%= f.text_field :title, :label => true, :hint => :'adva.hints.categories' %>
@@ -17,6 +17,6 @@
 		</col>
   <% end %>
 
-  <% save_or_cancel_links f, cancel_url: [:admin, @site, @section, :categories] %>
+  <% save_or_cancel_links f, cancel_url: [:admin, @section, :categories] %>
 <% end %>
 

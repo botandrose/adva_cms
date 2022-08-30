@@ -25,19 +25,20 @@ Rails.application.routes.draw do
     post "install" => "install#index"
     get "install" => "install#index"
 
-    resources :sites do
-      resources :sections do
+    resources :sites
+    resource :site
+
+    resources :sections do
+      put "/", :action => "update_all", :on => :collection
+      resources :contents, :articles, :links, :categories do
         put "/", :action => "update_all", :on => :collection
+      end
+    end
+
+    resources :pages do
+      scope :module => :page do
         resources :contents, :articles, :links, :categories do
           put "/", :action => "update_all", :on => :collection
-        end
-      end
-
-      resources :pages do
-        scope :module => :page do
-          resources :contents, :articles, :links, :categories do
-            put "/", :action => "update_all", :on => :collection
-          end
         end
       end
     end
