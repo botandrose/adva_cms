@@ -70,10 +70,10 @@ module Menus
 
       class Content < Menu::Menu
         define do
-          item :section, :content => content_tag(:h4, "#{@section.title}:")
-          item :contents, :content => link_to("Contents", [:admin, @section, :contents])
-          item :categories, :action => :index, :resource => [@section, :category]
-          item :settings,   :action => :edit,  :resource => @section
+          item :section,    :content => content_tag(:h4, "#{@section.title}:")
+          item :contents,   :content => link_to("Contents", [:admin, @section, :contents])
+          item :categories, :content => link_to("Categories", [:admin, @section, :categories])
+          item :settings,   :content => link_to("Settings", [:edit, :admin, @section])
         end
       end
     end
