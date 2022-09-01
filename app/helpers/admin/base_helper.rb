@@ -1,48 +1,4 @@
 module Admin::BaseHelper
-  def self.define_shallow_resource_helpers options
-    from = options.delete(:from)
-    to = options.delete(:to)
-
-    from_namespace = from[0..-2].collect(&:to_s).join("_")
-    to_namespace = to[0..-2].collect(&:to_s).join("_")
-    resource = from[-1].to_s
-
-    def self.define_path_and_url_methods options
-      from = options.delete(:from)
-      to = options.delete(:to)
-
-      %w(path url).each do |suffix|
-        eval "def #{from}_#{suffix} *args; #{to}_#{suffix} *args; end"
-      end
-    end
-
-    # index
-    define_path_and_url_methods \
-      :from => [from_namespace, resource.pluralize].join("_"),
-      :to => [to_namespace, resource.pluralize].join("_")
-
-    # show
-    define_path_and_url_methods \
-      :from => [from_namespace, resource].join("_"),
-      :to => [to_namespace, resource].join("_")
-
-    # new
-    define_path_and_url_methods \
-      :from => [:new, from_namespace, resource].join("_"),
-      :to => [:new, to_namespace, resource].join("_")
-
-    # edit
-    define_path_and_url_methods \
-      :from => [:edit, from_namespace, resource].join("_"),
-      :to => [:edit, to_namespace, resource].join("_")
-  end
-
-  define_shallow_resource_helpers :from => [:admin, :category], :to => [:admin, :section, :category]
-  define_shallow_resource_helpers :from => [:admin, :content], :to => [:admin, :section, :content]
-  define_shallow_resource_helpers :from => [:admin, :article], :to => [:admin, :section, :article]
-  define_shallow_resource_helpers :from => [:admin, :link], :to => [:admin, :section, :link]
-
-
   def save_or_cancel_links(builder, options = {})
     save_text   = options.delete(:save_text)   || t(:'adva.common.save')
     or_text     = options.delete(:or_text)     || t(:'adva.common.connector.or')
