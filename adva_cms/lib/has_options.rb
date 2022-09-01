@@ -28,7 +28,9 @@ module HasOptions
 
             def #{name}=(value)
               options_will_change!
-              value = !!value if self.class.option_definition(:#{name}, :type) == :boolean
+              if self.class.option_definition(:#{name}, :type) == :boolean
+                value = ActiveRecord::Type::Boolean.new.cast(value)
+              end
               self.options ||= {}
               options[:#{name}] = value
             end
