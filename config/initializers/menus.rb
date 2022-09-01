@@ -150,7 +150,7 @@ module Menus
         menu :left, :class => 'left', :type => Sections::Content
         menu :actions, :class => 'actions' do
           activates object.parent.find(:categories)
-          item :new, :action => :new, :resource => [@section, :category]
+          item :new, content: link_to("New", [:new, :admin, @section, :category])
           if @category && !@category.new_record?
             item :edit,   :action  => :edit,   :resource => @category
             item :delete, :content  => link_to("Delete", [:admin, @section, @category], :method => :delete)

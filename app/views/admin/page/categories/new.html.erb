@@ -1,19 +1,19 @@
 <h2><%= t(:'adva.categories.titles.new') %></h2>
-  
-<%= form_for [:admin, @section, @category] do |f| %>
-  <% f.field_set do %>
-    <div class="col">
-    	<%= f.text_field :title, :label => true, :hint => :'adva.hints.categories' %>
-		</col>
-		
-		<% unless @section.categories.size < 2 %>
-      <div class="col">
-	    	<%= f.select :parent_id, @section.categories.collect {|p| [p.title, p.id] unless p == @category }.compact, { :include_blank => true, :label => true } %>
-				<span class="hint" for="category_parent_id"><%= t :'adva.categories.hints.parent_setting' %></span>
-      </col>
-		<% end %>
-	<% end %>
 
-  <% save_or_cancel_links(f, :cancel_url => admin_categories_path) %>
+<%= form_for [:admin, @section, @category] do |f| %>
+  <fieldset>
+    <div class="col">
+      <%= f.text_field :title, :label => true, :hint => :'adva.hints.categories' %>
+    </div>
+
+    <% unless @section.categories.size < 2 %>
+      <div class="col">
+        <%= f.select :parent_id, @section.categories.collect {|p| [p.title, p.id] unless p == @category }.compact, { :include_blank => true, :label => true } %>
+        <span class="hint" for="category_parent_id"><%= t :'adva.categories.hints.parent_setting' %></span>
+      </div>
+    <% end %>
+  </fieldset>
+
+  <% save_or_cancel_links(f, cancel_url: [:admin, @section, :categories]) %>
 <% end %>
 
