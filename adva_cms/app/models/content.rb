@@ -74,18 +74,20 @@ class Content < ActiveRecord::Base
   end
 
   def cells_updated_at
-    OutputFilter::Cells.new(nil).send(:cells, body_html).values.map do |name, state, attrs|
-      attrs = HashWithIndifferentAccess.new(attrs)
-      cell = "#{name.camelize}Cell".constantize.new
-      args = [state]
-      attrs.delete "class" # ignore styling class
-      attrs[:format] = :timestamp
-      args << attrs unless attrs.empty?
-      begin
-        cell.render_state *args
-      rescue ArgumentError
-      end
-    end.select { |response| response.is_a?(Time) }.max
+    if defined?(OutputFilter::Cells)
+      OutputFilter::Cells.new(nil).send(:cells, body_html).values.map do |name, state, attrs|
+        attrs = HashWithIndifferentAccess.new(attrs)
+        cell = "#{name.camelize}Cell".constantize.new
+        args = [state]
+        attrs.delete "class" # ignore styling class
+        attrs[:format] = :timestamp
+        args << attrs unless attrs.empty?
+        begin
+          cell.render_state *args
+        rescue ArgumentError
+        end
+      end.select { |response| response.is_a?(Time) }.max
+    end
   end
 
   def owners
