@@ -24,6 +24,7 @@ class Content < ActiveRecord::Base
   has_many :assets, :through => :asset_assignments
   has_many :categorizations, -> { includes(:category) }, as: :categorizable, dependent: :destroy
   has_many :categories, :through => :categorizations
+  has_many :activities, :as => :object
 
   after_save do
     categories.each(&:touch)

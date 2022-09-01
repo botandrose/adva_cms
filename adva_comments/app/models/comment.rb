@@ -38,6 +38,7 @@ class Comment < ActiveRecord::Base
   def commentable_type=(sType)
     super(sType.to_s.classify.constantize.base_class.to_s)
   end
+  has_many :activities, :as => :object
 
   composed_of :author, :class_name => "User", :mapping => [ %w(author_name name), %w(author_email email) ]
 

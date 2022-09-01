@@ -8,6 +8,7 @@ require 'extensible_forms'
 require 'time_hacks'
 require 'core_ext'
 require 'rails_ext'
+require "rails-observers"
 
 # require 'menu'
 # require 'event'    # need to force these to be loaded now, so Rails won't
@@ -38,7 +39,7 @@ module Adva
   class Engine < Rails::Engine
     initializer "add assets to precompilation list" do |app|
       app.config.assets.precompile += %w(adva_cms/application.js)
-      app.config.assets.precompile += %w(adva_cms/admin.css)
+      app.config.assets.precompile += %w(adva_cms/admin.css adva_cms/admin/activities.css)
       app.config.assets.precompile += %w(admin.css admin.js)
     end
 
@@ -50,5 +51,4 @@ end
 
 require "adva_user"
 require "adva_rbac"
-require "adva_activity"
 

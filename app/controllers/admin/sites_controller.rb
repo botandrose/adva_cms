@@ -12,7 +12,7 @@ class Admin::SitesController < Admin::BaseController
   def show
     @users = @site.users_and_superusers # TODO wanna show only *recent* users here
     @contents = @site.unapproved_comments.group_by(&:commentable) if @site.respond_to?(:unapproved_comments)
-    @activities = @site.grouped_activities if defined?(AdvaActivity)
+    @activities = @site.grouped_activities
   end
 
   def new

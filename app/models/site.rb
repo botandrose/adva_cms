@@ -18,6 +18,7 @@ class Site < ActiveRecord::Base
   has_many :memberships, :dependent => :delete_all
   has_many :users, :through => :memberships, :dependent => :destroy
   has_many :cached_pages, -> { order(updated_at: :desc) }, dependent: :destroy
+  has_many :activities, :dependent => :destroy
 
   before_validation :downcase_host, :replace_host_spaces # c'mon, can't this be normalize_host or something?
   before_validation :populate_title
@@ -75,6 +76,10 @@ class Site < ActiveRecord::Base
 
   def perma_host
     host.sub(':', '.')  # Needed to create valid directories in ms-win
+  end
+
+  def grouped_activities
+    activities.find_coinciding_grouped_by_dates(Time.zone.now.to_date, 1.day.ago.to_date)
   end
 
   def plugins
