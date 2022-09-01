@@ -1,6 +1,6 @@
 class BaseController < ApplicationController
   class SectionRoutingError < ActionController::RoutingError; end
-  helper :base, :resource, :content
+  helper :base, :resource, :content, :meta_tags
   helper HasFilter::Helper
   helper TableBuilder
 

@@ -23,6 +23,5 @@ Gem::Specification.new do |gem|
   gem.add_dependency "adva_user", "~>0.1.0"
   gem.add_dependency "adva_rbac", "~>0.1.0"
   gem.add_dependency "adva_activity", "~>0.1.0"
-  gem.add_dependency "adva_meta_tags", "~>0.1.0"
 end
 

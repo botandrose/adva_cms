@@ -255,6 +255,10 @@ en:
         subtitle: Website subtitle
         host: Host name
       confirm_delete: Are you sure you want to delete this site?
+    meta_tags:
+      hints:
+        meta_geourl_link: http://geourl.org/
+        meta_geourl: "See %{meta_geourl_link} for details."
     sections:
       hints:
         content_filter: How should your articles be read? The default option is Plain HTML.

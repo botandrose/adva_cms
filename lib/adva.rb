@@ -19,8 +19,7 @@ require 'rails_ext'
 #     :verify       => '/',
 #     :site_deleted => lambda { |c| c.send(:admin_sites_url) }
 #   }
-# end
-
+# end 
 # load vendored gems
 Dir["#{File.expand_path("#{File.dirname(__FILE__)}/../vendor/gems")}/**/lib"].each do |vendored_gem_path|
   $: << vendored_gem_path
@@ -52,5 +51,4 @@ end
 require "adva_user"
 require "adva_rbac"
 require "adva_activity"
-require "adva_meta_tags"
 
