@@ -5,8 +5,6 @@ class Admin::CommentsController < Admin::BaseController
   before_action :set_commentable, :set_comment_params, :only => :create
   after_action :postback_spaminess, :only => [:update]
 
-  guards_permissions :comment
-
   def index
     # FIXME how to remove the Topic dependency here? 
     # maybe make Comment a subclass of Comment::Base or something so that we can use STI to exclude 

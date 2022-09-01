@@ -1,4 +1,9 @@
 namespace :adva do
+  task :migrate_admins_from_rbac => :environment do
+    admin_ids = ActiveRecord::Base.connection.select_values("SELECT user_id FROM roles WHERE name='superuser'")
+    User.where(id: admin_ids).update_all(admin: true)
+  end
+
   task :remove_translations => :environment do
     Content.all.each do |content|
       title, body, excerpt = content.class.connection.select_one("SELECT title, body_html, excerpt_html FROM content_translations WHERE content_id=#{content.id} ORDER BY id DESC LIMIT 1").values

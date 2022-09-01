@@ -3,7 +3,6 @@ class Admin::SectionsController < Admin::BaseController
   before_action :normalize_params, :only => :update_all
 
   after_action :clear_static_cache, :only => [:create, :update, :update_all, :destroy]
-  guards_permissions :section, :update => :update_all
 
   def index
     @sections = @site.sections

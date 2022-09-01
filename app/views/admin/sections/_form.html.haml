@@ -17,4 +17,3 @@
     = f.text_field :permalink, :label => true, :hint => :'adva.sections.hints.permalink'
 
 = render :partial => "admin/sections/settings/#{@section.type.underscore}", :locals => { :f => f }
-= render :partial => "admin/sections/settings/permissions", :locals => { :f => f }

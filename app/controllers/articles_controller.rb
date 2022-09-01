@@ -1,14 +1,10 @@
 class ArticlesController < BaseController
-  include ActionController::GuardsPermissions::InstanceMethods
-  helper :roles
-
   before_action :set_section
   before_action :adjust_action
   before_action :set_category, :only => :index
   before_action :set_tags,     :only => :index
   before_action :set_articles, :only => :index
   before_action :set_article,  :only => :show
-  before_action :guard_view_permissions, :only => [:index, :show]
 
   authenticates_anonymous_user
 
@@ -39,7 +35,7 @@ class ArticlesController < BaseController
     def adjust_action
       if params[:action] == 'index' and @section.try(:single_article_mode)
         # ... but only if there is one published article
-        unless @section.contents.blank? || (@section.contents.first.draft? && !has_permission?('update', 'section'))
+        unless @section.contents.blank? || (@section.contents.first.draft? && current_user.admin?)
           @action_name = @_params[:action] = request.parameters['action'] = 'show'
         end
       end
@@ -77,7 +73,7 @@ class ArticlesController < BaseController
 
     def guard_view_permissions
       if @article && @article.draft?
-        raise ActiveRecord::RecordNotFound unless has_permission?('update', 'article')
+        raise ActiveRecord::RecordNotFound unless current_user.admin?
       end
     end
 end

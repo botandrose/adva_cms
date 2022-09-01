@@ -9,8 +9,6 @@ class Admin::Page::ArticlesController < Admin::BaseController
   
   after_action :clear_static_cache, :only => [:create, :update, :update_all, :destroy]
 
-  guards_permissions :article, :update => :update_all
-
   def index
     redirect_to [:admin, @section, :contents]
   end

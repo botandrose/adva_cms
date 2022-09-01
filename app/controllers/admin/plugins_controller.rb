@@ -2,8 +2,6 @@ class Admin::PluginsController < Admin::BaseController
   before_action :set_plugins, :only => :index
   before_action :set_plugin, :only => [:show, :edit, :update, :destroy]
 
-  guards_permissions :site, :manage => [:index, :show, :update, :destroy]
-
   def index
   end
 

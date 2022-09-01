@@ -22,8 +22,6 @@ class CommentsController < BaseController
 
   invisible_captcha only: [:create, :update], honeypot: :subtitle, if: -> { current_user.anonymous? }
 
-  guards_permissions :comment, :except => :show, :create => :preview
-
   def show
   end
 

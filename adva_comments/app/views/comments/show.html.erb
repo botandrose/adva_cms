@@ -7,6 +7,6 @@
     <%= render :partial => 'comments/comment', :object => @comment %>
   </ol>
 </div>
-<% if !@comment.approved? and has_permission?(:update, :comment) %>
+<% if !@comment.approved? && current_user.admin? %>
   <%= render :partial => 'comments/form', :locals => { :commentable => @comment.commentable }  %>
 <% end %>

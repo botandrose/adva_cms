@@ -54,10 +54,6 @@ class AdminInstallControllerTest < ActionController::TestCase
           assigns(:section).reload.site.should_not be_nil
         end
 
-        it "makes the new User a :superuser" do
-          # Rbac::Role::Superuser.should === assigns(:user).reload.roles.first # FIXME
-        end
-
         it "authenticates the current user as the new User" do
           @controller.current_user.should_not be_nil
         end

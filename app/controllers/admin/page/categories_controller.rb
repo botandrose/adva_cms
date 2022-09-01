@@ -1,8 +1,6 @@
 class Admin::Page::CategoriesController < Admin::BaseController
   before_action :set_category, :only => [:edit, :update, :destroy]
 
-  guards_permissions :category, :update => :update_all
-
   def index
   end
 

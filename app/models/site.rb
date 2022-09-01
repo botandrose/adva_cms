@@ -36,14 +36,6 @@ class Site < ActiveRecord::Base
       where("? = ANY (hosts)", host).first or raise ActiveRecord::RecordNotFound
     end
 
-    # FIXME clemens thinks this doesn't belong here. he's probably right.
-    # TODO how to make this an association or assoc extension so we can use it
-    # in admin/users_controller?
-    def find_users_and_superusers(id)
-      User.where(["memberships.site_id = ? OR (memberships.site_id IS NULL AND roles.name = ?)", id, 'superuser'])
-        .includes([:roles, :memberships]).references(:roles, :memberships)
-    end
-
     def bust_cache!
       all.each(&:touch)
     end
@@ -59,10 +51,6 @@ class Site < ActiveRecord::Base
 
   def owner
     nil
-  end
-
-  def users_and_superusers
-    self.class.find_users_and_superusers(id)
   end
 
   def section_ids

@@ -2,12 +2,6 @@ class Admin::UsersController < Admin::BaseController
   before_action :set_users, :only => [:index]
   before_action :set_user,  :only => [:show, :edit, :update, :destroy]
   before_action :authorize_access
-  before_action :authorize_params, :only => :update
-
-  # yuck! rails' params parsing is broken
-  before_action :fix_roles_attributes_params, only: [:create, :update]
-
-  # guards_permissions :user
 
   def index
   end
@@ -21,7 +15,7 @@ class Admin::UsersController < Admin::BaseController
 
   def create
     @user = User.new(params[:user])
-    @user.memberships.build(:site => @site) if @site and !@user.has_role?(:superuser)
+    @user.memberships.build(:site => @site) if @site and !@user.admin?
 
     if @user.save
       @user.verify! # TODO hu??
@@ -61,18 +55,12 @@ class Admin::UsersController < Admin::BaseController
 
   private
 
-  def fix_roles_attributes_params
-    # yuck! rails' params parsing is broken
-    params[:user][:roles_attributes] = params[:user][:roles_attributes].to_unsafe_hash.map { |key, value| value } if params[:user][:roles_attributes]
-  end
-
     def set_menu
       @menu = Menus::Admin::Users.new
     end
 
     def set_users
-      @users = @site ? @site.users_and_superusers :
-                       User.admins_and_superusers
+      @users = @site.users
     end
 
     def set_user
@@ -81,17 +69,6 @@ class Admin::UsersController < Admin::BaseController
 
     # FIXME extract this and use Rbac contexts instead
     def authorize_access
-      redirect_to admin_sites_url unless @site || current_user.has_role?(:superuser)
-    end
-
-    def authorize_params
-      return
-      return unless params[:user] && params[:user][:roles]
-
-      if params[:user][:roles].has_key?('superuser') && !current_user.has_role?(:superuser) ||
-         params[:user][:roles].has_key?('admin') && !current_user.has_role?(:admin, @site)
-        raise "unauthorized parameter" # TODO raise something more meaningful
-      end
-      # TODO as well check for membership site_id if !user.has_role?(:superuser)
+      redirect_to admin_sites_url unless @site || current_user.admin?
     end
 end

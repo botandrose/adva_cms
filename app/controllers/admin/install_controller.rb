@@ -29,7 +29,7 @@ class Admin::InstallController < ApplicationController
     if request.post?
       if @site.valid? && @section.valid? && @article.valid? && @user.valid?
         @site.save
-        @user.roles << Rbac::Role.new(name: "superuser")
+        @user.admin = true
         authenticate_user(:email => @user.email, :password => @user.password)
 
         # default email for site

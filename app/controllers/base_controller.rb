@@ -30,7 +30,7 @@ class BaseController < ApplicationController
       @section ||= begin
         sections.find_by_permalink(params[:section_permalink]) || sections.first
       end
-      raise ActiveRecord::RecordNotFound unless @section.published?(true) || has_permission?('update', 'section')
+      raise ActiveRecord::RecordNotFound unless @section.published?(true) || current_user.admin?
       @section
     end
     alias :section :set_section

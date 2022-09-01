@@ -64,5 +64,3 @@ require "action_controller/authenticate_anonymous"
 require "active_record/belongs_to_author"
 require "login/helper_integration"
 
-require "adva_rbac"
-

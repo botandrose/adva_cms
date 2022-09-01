@@ -5,8 +5,6 @@ class Admin::Page::ContentsController < Admin::BaseController
   before_action :set_section
   before_action :set_categories, :only => [:new, :edit]
 
-  guards_permissions :content, :update => :update_all
-
   def index
     @contents = @section.contents #.filtered params[:filters]
   end
