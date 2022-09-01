@@ -9,8 +9,10 @@ class Section < ActiveRecord::Base
 
   default_scope -> { order(:lft) }
 
-  @@types = ['Page']
-  cattr_reader :types
+  class_attribute :types, default: ["Page"]
+  def self.register_type(type)
+    types.push(type) unless types.include?(type)
+  end
 
   serialize :permissions
 
@@ -45,13 +47,6 @@ class Section < ActiveRecord::Base
   # end
 
   # TODO validates_inclusion_of :contents_per_page, :in => 1..30, :message => "can only be between 1 and 30."
-
-  class << self
-    def register_type(type)
-      @@types << type
-      @@types.uniq!
-    end
-  end
 
   def to_param
     permalink
