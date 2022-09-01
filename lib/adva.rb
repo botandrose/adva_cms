@@ -34,6 +34,7 @@ require "simple_taggable"
 require "tags"
 require "table_builder"
 require "xss_terminate"
+require "authentication"
 
 module Adva
   class Engine < Rails::Engine
@@ -46,9 +47,22 @@ module Adva
     initializer "setup xss_terminate" do
       XssTerminate.untaint_after_find = true
     end
+
+    initializer "adva_user.init" do
+      ActionController::Base.send :include, ActionController::AuthenticateUser
+      ActionController::Base.send :include, ActionController::AuthenticateAnonymous
+      ActiveRecord::Base.send :include, ActiveRecord::BelongsToAuthor
+      ActionView::Base.send :include, Login::HelperIntegration
+
+      Event.observers << 'PasswordMailer'
+    end
   end
 end
 
-require "adva_user"
+require "action_controller/authenticate_user"
+require "action_controller/authenticate_anonymous"
+require "active_record/belongs_to_author"
+require "login/helper_integration"
+
 require "adva_rbac"
 

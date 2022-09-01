@@ -44,5 +44,13 @@ Rails.application.routes.draw do
     end
 
     resources :cells, :only => :index
+
+    resources :users
   end
+
+  get "login" => "session#new"
+  delete "logout" => "session#destroy"
+
+  resource :session,     :controller => "session"
+  resource :password,    :controller => "password"
 end

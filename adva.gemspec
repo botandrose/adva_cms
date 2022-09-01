@@ -21,7 +21,6 @@ Gem::Specification.new do |gem|
   gem.add_dependency "actionpack-page_caching"
   gem.add_dependency "rails-observers"
 
-  gem.add_dependency "adva_user", "~>0.1.0"
   gem.add_dependency "adva_rbac", "~>0.1.0"
 end
 
