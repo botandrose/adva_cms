@@ -11,14 +11,12 @@ Dir["#{File.expand_path("#{__dir__}/../vendor/gems")}/**/lib"].each do |vendored
   $: << vendored_gem_path
 end
 
-require "has_counter"
 require "belongs_to_cacheable"
 require "filtered_column"
 require "has_filter"
 require "simple_taggable"
 require "tags"
 require "table_builder"
-require "xss_terminate"
 require "authentication"
 require "adva/event"
 require "adva/extensible_forms"
@@ -29,10 +27,6 @@ module Adva
       app.config.assets.precompile += %w(adva_cms/application.js)
       app.config.assets.precompile += %w(adva_cms/admin.css)
       app.config.assets.precompile += %w(admin.css admin.js)
-    end
-
-    initializer "setup xss_terminate" do
-      XssTerminate.untaint_after_find = true
     end
 
     initializer "adva_user.init" do

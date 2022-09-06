@@ -4,11 +4,6 @@ require "adva/belongs_to_author"
 class Content < ActiveRecord::Base
   acts_as_nested_set :scope => :section_id
 
-  # TODO is this needed?
-  class Version < ActiveRecord::Base
-    filters_attributes :none => true
-  end
-
   has_filter :tagged, :categorized,
              :text  => { :attributes => [:title, :body, :excerpt] },
              :state => { :states => [:published, :unpublished] }

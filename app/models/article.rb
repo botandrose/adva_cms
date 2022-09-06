@@ -1,8 +1,6 @@
 class Article < Content
   # default_scope :order => "#{self.table_name}.published_at DESC"
 
-  filters_attributes :except => [:excerpt, :excerpt_html, :body, :body_html, :cached_tag_list]
-
   validates_presence_of :title, :body
   validates_uniqueness_of :permalink, scope: :section_id, case_sensitive: true
 
