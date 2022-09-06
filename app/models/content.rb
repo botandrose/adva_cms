@@ -1,4 +1,5 @@
 require "adva/has_permalink"
+require "adva/belongs_to_author"
 
 class Content < ActiveRecord::Base
   acts_as_nested_set :scope => :section_id
@@ -14,8 +15,6 @@ class Content < ActiveRecord::Base
 
   acts_as_taggable
 
-  instantiates_with_sti
-
   include Adva::HasPermalink
   has_permalink :title, :url_attribute => :permalink, :sync_url => true, :only_when_blank => true, :scope => :section_id
 
@@ -23,6 +22,8 @@ class Content < ActiveRecord::Base
 
   belongs_to :site
   belongs_to :section, :touch => true
+
+  include Adva::BelongsToAuthor
   belongs_to_author :validate => true
 
   has_many :asset_assignments # TODO :dependent => :delete_all?

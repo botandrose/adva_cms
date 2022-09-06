@@ -2,7 +2,7 @@ module Adva
   module AuthenticateUser
     def self.included(target)
       target.extend(ClassMethods)
-      target.helper_method(:logged_in?, :authenticated?)
+      target.helper_method(:current_user, :logged_in?, :authenticated?)
     end
 
     # Methods available as macro-style methods on any controller

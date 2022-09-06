@@ -1,3 +1,5 @@
+require "adva/authenticate_user"
+
 class BaseController < ApplicationController
   class SectionRoutingError < ActionController::RoutingError; end
   helper :base, :resource, :content, :meta_tags
@@ -7,6 +9,8 @@ class BaseController < ApplicationController
   include CacheableFlash
   include ContentHelper
   include ResourceHelper
+
+  include Adva::AuthenticateUser
 
   before_action :set_site, :set_timezone
   attr_accessor :site, :section

@@ -1,19 +1,19 @@
 <!-- HACK: empty line must be here for split_form_for to work properly -->
 <fieldset>
   <div class="col">
-	  <%= hidden_field_tag 'cl', Article.locale %>
-		
+    <%= hidden_field_tag 'cl', Article.locale %>
+
     <p>
       <%= f.text_field :title, :class => 'big', :label => "Title", style: "float: none" %>
     </p>
 
-	  <p id="article_excerpt_wrapper" style="<%= @article.has_excerpt? ? "" : "display:none" %>">
-	    <label for="article_excerpt">
-	      <%= t(:'adva.articles.attributes.excerpt') %>
-	      <span class="inline" id="hide_excerpt_hint">(<%= link_to t(:'adva.common.hide'), '#', :id => 'hide_excerpt' %>)</span>
-	    </label>
-	    <%= f.text_area :excerpt, :class => 'wysiwyg' %>
-	  </p>
+    <p id="article_excerpt_wrapper" style="<%= @article.has_excerpt? ? "" : "display:none" %>">
+      <label for="article_excerpt">
+        <%= t(:'adva.articles.attributes.excerpt') %>
+        <span class="inline" id="hide_excerpt_hint">(<%= link_to t(:'adva.common.hide'), '#', :id => 'hide_excerpt' %>)</span>
+      </label>
+      <%= f.text_area :excerpt, :class => 'wysiwyg' %>
+    </p>
 
     <p>
       <label for="article_body" style="display: inline">Body</label>
@@ -31,10 +31,10 @@
   <%= f.check_box :draft?, :id => 'toggle_draft', :label => :'adva.articles.confirm_save_as_draft' %>
 
   <p id="publish_date_wrapper" style="<%= @article.draft? ? "display:none" : "" %>">
-    <%= f.label :published_at, t(:'adva.articles.publish_on_date') %>
-    <%= f.datetime_select :published_at,
-                          :start_year => (@article.published_at || Time.zone.now).year-1,
-                          :end_year => (Time.zone.now.year + 5),
-                          :order => [:month, :day, :year] %>
+  <%= f.label :published_at, t(:'adva.articles.publish_on_date') %>
+  <%= f.datetime_select :published_at,
+    :start_year => (@article.published_at || Time.zone.now).year-1,
+    :end_year => (Time.zone.now.year + 5),
+    :order => [:month, :day, :year] %>
   </p>
 <% end %>

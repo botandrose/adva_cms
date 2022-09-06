@@ -1,7 +1,6 @@
 require "adva/has_options"
 require "adva/has_permalink"
 require "awesome_nested_set"
-require "rails_ext/active_record/sti_instantiation"
 
 class Section < ActiveRecord::Base
   default_scope -> { order(:lft) }
@@ -21,7 +20,6 @@ class Section < ActiveRecord::Base
     :only_when_blank => true, :scope => [ :site_id, :parent_id ]
 
   acts_as_nested_set :scope => :site_id
-  instantiates_with_sti
 
   belongs_to :site, :touch => true
   has_many :categories, -> { order(:lft) }, dependent: :destroy do

@@ -1,4 +1,4 @@
-class ArticleFormBuilder < ExtensibleFormBuilder
+class ArticleFormBuilder < Adva::ExtensibleFormBuilder
   after :article, :tab_options do |f|
     tab :meta_tags do |f|
       render :partial => 'admin/articles/meta_tags', :locals => { :f => f }

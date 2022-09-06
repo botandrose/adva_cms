@@ -1,3 +1,5 @@
+require "adva/belongs_to_author"
+
 class Activity < ActiveRecord::Base
   belongs_to :site
   belongs_to :section
@@ -11,6 +13,7 @@ class Activity < ActiveRecord::Base
     end
   }
 
+  include Adva::BelongsToAuthor
   belongs_to_author
 
   serialize :actions

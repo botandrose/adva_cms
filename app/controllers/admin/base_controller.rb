@@ -1,3 +1,5 @@
+require "adva/authenticate_user"
+
 class Admin::BaseController < ApplicationController
   layout "admin"
 
@@ -9,6 +11,8 @@ class Admin::BaseController < ApplicationController
 
   helper :base, :resource, :content, :meta_tags
   helper HasFilter::Helper
+
+  include Adva::AuthenticateUser
 
   helper_method :menu, :content_locale, :has_permission?
 

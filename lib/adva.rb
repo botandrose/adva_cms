@@ -4,7 +4,6 @@ require "awesome_nested_set"
 require "actionpack/page_caching"
 require "rails-observers"
 
-require "extensible_forms"
 require "rails_ext"
 
 # load vendored gems
@@ -22,9 +21,7 @@ require "table_builder"
 require "xss_terminate"
 require "authentication"
 require "adva/event"
-require "adva/authenticate_user"
-require "adva/belongs_to_author"
-require "adva/current_user"
+require "adva/extensible_forms"
 
 module Adva
   class Engine < Rails::Engine
@@ -39,10 +36,6 @@ module Adva
     end
 
     initializer "adva_user.init" do
-      ActionController::Base.send :include, Adva::AuthenticateUser
-      ActiveRecord::Base.send :include, Adva::BelongsToAuthor
-      ActionView::Base.send :include, Adva::CurrentUser
-
       Adva::Event.observers << 'PasswordMailer'
     end
   end
