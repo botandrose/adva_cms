@@ -1,8 +1,4 @@
-require "login/mail_config"
-
 class PasswordMailer < ActionMailer::Base
-  include Login::MailConfig
-
   class << self
     def handle_user_password_reset_requested!(event)
       reset_password_email(
@@ -22,9 +18,9 @@ class PasswordMailer < ActionMailer::Base
 
     private
 
-      def password_reset_link(controller, token)
-        controller.send(:url_for, :action => 'edit', :token => token)
-      end
+    def password_reset_link(controller, token)
+      controller.send(:url_for, :action => 'edit', :token => token)
+    end
   end
   
   def reset_password_email(attributes = {})
@@ -47,3 +43,4 @@ class PasswordMailer < ActionMailer::Base
     })
   end
 end
+

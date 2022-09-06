@@ -1,12 +1,9 @@
-# TODO allow a :type option and typecast the value
-
-module HasOptions
-  class << self
-    def included(base)
+module Adva
+  module HasOptions
+    def self.included(base)
       base.class_eval do
         extend ClassMethods
-        class_attribute :option_definitions
-        self.option_definitions = {}
+        class_attribute :option_definitions, default: {}
         serialize :options
       end
     end
@@ -46,3 +43,4 @@ module HasOptions
     end
   end
 end
+

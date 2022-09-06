@@ -1,10 +1,10 @@
-require "has_options"
+require "adva/has_options"
 require "has_permalink"
 require "awesome_nested_set"
 require "rails_ext/active_record/sti_instantiation"
 
 class Section < ActiveRecord::Base
-  include HasOptions
+  include Adva::HasOptions
   include HasPermalink
 
   default_scope -> { order(:lft) }

@@ -1,13 +1,13 @@
-require "active_record/belongs_to_cacheable"
+require "belongs_to_cacheable"
 
-module ActiveRecord
+module Adva
   module BelongsToAuthor
     def self.included(base)
       base.include BelongsToCacheable
-      base.extend ActMacro
+      base.extend ClassMethods
     end
 
-    module ActMacro
+    module ClassMethods
       def belongs_to_user(*args)
         options = args.extract_options!
         args = (args.empty? ? [:user] : args)
