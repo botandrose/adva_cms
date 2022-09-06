@@ -6,8 +6,6 @@ class ArticlesController < BaseController
   before_action :set_articles, :only => :index
   before_action :set_article,  :only => :show
 
-  authenticates_anonymous_user
-
   def index
     @article = @articles.first
     if !@article
