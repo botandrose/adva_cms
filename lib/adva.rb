@@ -35,6 +35,7 @@ require "tags"
 require "table_builder"
 require "xss_terminate"
 require "authentication"
+require "adva/event"
 
 module Adva
   class Engine < Rails::Engine
@@ -54,7 +55,7 @@ module Adva
       ActiveRecord::Base.send :include, ActiveRecord::BelongsToAuthor
       ActionView::Base.send :include, Login::HelperIntegration
 
-      Event.observers << 'PasswordMailer'
+      Adva::Event.observers << 'PasswordMailer'
     end
   end
 end

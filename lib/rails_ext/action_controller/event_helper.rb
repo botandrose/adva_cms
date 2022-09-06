@@ -10,7 +10,7 @@ module ActionController
     
     def trigger_event(object, change = nil, options = {})
       type = :"#{object.class.name.underscore}_#{change}"
-      Event.trigger type, object, self, options
+      Adva::Event.trigger type, object, self, options
     end
   end
 end
