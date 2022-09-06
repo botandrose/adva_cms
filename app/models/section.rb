@@ -1,12 +1,9 @@
 require "adva/has_options"
-require "has_permalink"
+require "adva/has_permalink"
 require "awesome_nested_set"
 require "rails_ext/active_record/sti_instantiation"
 
 class Section < ActiveRecord::Base
-  include Adva::HasOptions
-  include HasPermalink
-
   default_scope -> { order(:lft) }
 
   class_attribute :types, default: ["Page"]
@@ -16,9 +13,13 @@ class Section < ActiveRecord::Base
 
   serialize :permissions
 
+  include Adva::HasOptions
   has_option :contents_per_page, :default => 15
+
+  include Adva::HasPermalink
   has_permalink :title, :url_attribute => :permalink, :sync_url => true,
     :only_when_blank => true, :scope => [ :site_id, :parent_id ]
+
   acts_as_nested_set :scope => :site_id
   instantiates_with_sti
 

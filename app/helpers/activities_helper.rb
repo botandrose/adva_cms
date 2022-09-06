@@ -19,33 +19,21 @@ module ActivitiesHelper
 
   def activity_datetime(activity, short = false)
     if activity.from and short
-      from = activity.from.to_s(:time_only)
-      to = activity.to.to_s(:time_only)
+      from = activity.from.to_fs(:time_only)
+      to = activity.to.to_fs(:time_only)
       "#{from} - #{to}"
     elsif activity.from and activity.from.to_date != activity.to.to_date
-      from = activity.from.to_ordinalized_s(:plain)
-      to = activity.to.to_ordinalized_s(:plain)
+      from = activity.from.to_fs(:long_ordinalized)
+      to = activity.to.to_fs(:long_ordinal)
       "#{from} - #{to}"
     elsif activity.from
-      from = activity.from.to_ordinalized_s(:plain)
-      to = activity.to.to_ordinalized_s(:time_only)
+      from = activity.from.to_fs(:long_ordinal)
+      to = activity.to.to_fs(:time_only)
       "#{from} - #{to}"
     else
-      activity.created_at.send *(short ? [:to_s, :time_only] :  [:to_ordinalized_s, :plain])
+      activity.created_at.to_fs(short ? :time_only :  :long_ordinal)
     end
   end
-
-  # def activity_datetime(activity, short = false)
-  #   from, to = if activity.from && short
-  #     [l(activity.from, :format => :time), l(activity.to, :format => :time)]
-  #   elsif activity.from && activity.from.to_date != activity.to.to_date
-  #     [l(activity.from, :format => :short), l(activity.to, :format => :short)]
-  #   elsif activity.from
-  #     [l(activity.from, :format => :short), l(activity.to, :format => :time)]
-  #   end
-
-  #   t(:'adva.activity.from_to', :from => from, :to => to)
-  # end
 
   def activity_object_edit_url(activity)
     type = activity.object_attributes['type'] || activity.object_type
@@ -71,3 +59,4 @@ module ActivitiesHelper
     end
   end
 end
+

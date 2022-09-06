@@ -1,14 +1,11 @@
-# require "adva_cms/version"
 require "rails"
 require "will_paginate"
 require "awesome_nested_set"
 require "actionpack/page_caching"
+require "rails-observers"
 
 require "extensible_forms"
-require "time_hacks"
-require "core_ext"
 require "rails_ext"
-require "rails-observers"
 
 # load vendored gems
 Dir["#{File.expand_path("#{__dir__}/../vendor/gems")}/**/lib"].each do |vendored_gem_path|

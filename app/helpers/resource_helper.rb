@@ -73,7 +73,7 @@ module ResourceHelper
 
   def resource_link_id(action, type, resource)
     id = [action, type]
-    id << resource.id if resource.is_a?(ActiveRecord::Base) && !action.in?(:index, :new)
+    id << resource.id if resource.is_a?(ActiveRecord::Base) && !%i[index name].include?(action)
     id.join('_')
   end
 

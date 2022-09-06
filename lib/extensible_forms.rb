@@ -7,7 +7,7 @@ module ActionView
     module FormHelper
       prepend Module.new {
         def fields_for(*args, &block)
-          name = singular_class_name(name) unless name.class.in?(String, Symbol)
+          name = singular_class_name(name) unless [String, Symbol].include?(name.class)
 
           options = args.last.is_a?(Hash) ? args.last : {}
           options[:builder] ||= pick_form_builder(name)

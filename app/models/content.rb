@@ -1,3 +1,5 @@
+require "adva/has_permalink"
+
 class Content < ActiveRecord::Base
   acts_as_nested_set :scope => :section_id
 
@@ -13,7 +15,10 @@ class Content < ActiveRecord::Base
   acts_as_taggable
 
   instantiates_with_sti
+
+  include Adva::HasPermalink
   has_permalink :title, :url_attribute => :permalink, :sync_url => true, :only_when_blank => true, :scope => :section_id
+
   filtered_column :body, :excerpt
 
   belongs_to :site

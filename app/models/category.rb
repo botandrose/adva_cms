@@ -1,10 +1,10 @@
 require "awesome_nested_set"
-require "has_permalink"
+require "adva/has_permalink"
 
 class Category < ActiveRecord::Base
   acts_as_nested_set :scope => :section_id
 
-  include HasPermalink
+  include Adva::HasPermalink
   has_permalink :title, :url_attribute => :permalink, :sync_url => true, :only_when_blank => true, :scope => :section_id
 
   belongs_to :section, :foreign_key => 'section_id'
