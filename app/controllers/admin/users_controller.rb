@@ -1,9 +1,9 @@
 class Admin::UsersController < Admin::BaseController
-  before_action :set_users, :only => [:index]
   before_action :set_user,  :only => [:show, :edit, :update, :destroy]
   before_action :authorize_access
 
   def index
+    @users = User.where(admin: true).to_a + @site.users.to_a
   end
 
   def show
@@ -57,10 +57,6 @@ class Admin::UsersController < Admin::BaseController
 
     def set_menu
       @menu = Menus::Admin::Users.new
-    end
-
-    def set_users
-      @users = @site.users
     end
 
     def set_user
