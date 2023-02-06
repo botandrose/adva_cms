@@ -28,7 +28,11 @@ class BaseController < ApplicationController
 
     def set_section
       @section ||= begin
-        sections.find_by_permalink(params[:section_permalink]) || sections.first
+        if params.key?(:section_permalink)
+          sections.find_by_permalink!(params[:section_permalink])
+        else
+          sections.first
+        end
       end
       raise ActiveRecord::RecordNotFound unless @section.published?(true) || current_user.admin?
       @section
