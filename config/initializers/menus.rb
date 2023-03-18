@@ -152,7 +152,7 @@ module Menus
           activates object.parent.find(:categories)
           item :new, content: link_to("New", [:new, :admin, @section, :category])
           if @category && !@category.new_record?
-            item :edit,   :action  => :edit,   :resource => @category
+            item :edit,   :content  => link_to("Edit", [:edit, :admin, @section, @category])
             item :delete, :content  => link_to("Delete", [:admin, @section, @category], :method => :delete)
           elsif !@category and @section.categories.size > 1
             item :reorder, :content => link_to("Reorder", [:admin, @section, :categories], :id => 'reorder_categories', :class => 'reorder')
