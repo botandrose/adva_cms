@@ -5,17 +5,6 @@ require 'action_view/helpers/form_helper'
 module ActionView
   module Helpers
     module FormHelper
-      prepend Module.new {
-        def fields_for(*args, &block)
-          name = singular_class_name(name) unless [String, Symbol].include?(name.class)
-
-          options = args.last.is_a?(Hash) ? args.last : {}
-          options[:builder] ||= pick_form_builder(name)
-
-          super(name, *args, &block)
-        end
-      }
-
       def field_set(object_name, name, content = nil, options = {}, &block)
         options.delete(:object)
         options[:name] ||= name
