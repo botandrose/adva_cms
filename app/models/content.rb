@@ -70,7 +70,7 @@ class Content < ActiveRecord::Base
     else
       timestamp_names = [:updated_at, :cells_updated_at] if timestamp_names.none?
       timestamp = timestamp_names.map { |attr| send(attr) }.compact.map(&:to_time).max
-      timestamp = timestamp.utc.to_s(cache_timestamp_format)
+      timestamp = timestamp.utc.to_fs(cache_timestamp_format)
       "#{model_name.cache_key}/#{id}-#{timestamp}"
     end
   end
