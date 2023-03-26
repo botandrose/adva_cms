@@ -27,6 +27,8 @@ module Adva
       app.config.assets.precompile += %w(adva_cms/application.js)
       app.config.assets.precompile += %w(adva_cms/admin.css)
       app.config.assets.precompile += %w(admin.css admin.js)
+
+      app.config.assets.precompile += %w(adva_cms/icons/tick.png adva_cms/icons/cross.png)
     end
 
     initializer "adva_user.init" do
