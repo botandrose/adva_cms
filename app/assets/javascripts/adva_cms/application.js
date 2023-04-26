@@ -11,3 +11,4 @@
 //= require adva_cms/admin/jquery.article
 //= require adva_cms/admin/jquery.cached_pages
 //= require has_filter/jquery.filter
+//= require ckeditor

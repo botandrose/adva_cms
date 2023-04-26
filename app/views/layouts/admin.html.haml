@@ -21,9 +21,8 @@
     = javascript_include_tag "adva_cms/application"
     = javascript_include_tag "admin"
 
-    -# FIXME extract to subprojects
-    - unless Rails.env.test? # fckeditor screws up tests
-      = javascript_include_tag "adva_fckeditor/setup_fckeditor.js"
+    - unless Rails.env.test? # ckeditor screws up tests
+      = javascript_include_tag Ckeditor.cdn_url unless Rails.env.test?
 
     = javascript_tag "window._auth_token = #{form_authenticity_token.inspect}"
     = csrf_meta_tags

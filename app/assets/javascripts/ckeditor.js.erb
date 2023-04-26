@@ -1,0 +1,13 @@
+$(() => {
+  if("<%= Rails.env %>" == "test") return
+
+  $(".wysiwyg").each(function() {
+    CKEDITOR.timestamp = new Date().valueOf()
+    this.ckeditor = CKEDITOR.replace(this.id, {
+      width: $(this).width(),
+      height: $(this).height(),
+      customConfig: '<%= asset_path "ckeditor/config.js" %>',
+    })
+  })
+})
+
