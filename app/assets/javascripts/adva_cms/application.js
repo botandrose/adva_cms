@@ -10,5 +10,5 @@
 //= require adva_cms/admin/jquery.table_tree
 //= require adva_cms/admin/jquery.article
 //= require adva_cms/admin/jquery.cached_pages
+//= require adva_cms/admin/ckeditor
 //= require has_filter/jquery.filter
-//= require ckeditor
