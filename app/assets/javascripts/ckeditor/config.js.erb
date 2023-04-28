@@ -40,7 +40,7 @@ CKEDITOR.editorConfig = function( config )
   config.filebrowserUploadMethod = 'form';
 
   config.extraAllowedContent = 'span cell form input select option[*]';
-  config.contentsCss = '<%= stylesheet_path("ckeditor.css") %>';
+  config.contentsCss = '<%= asset_path("ckeditor.css") %>';
   config.extraPlugins = 'cells';
   config.removePlugins = 'resize';
   config.colorButton_colors = '4e89c0,bf370d,4b5774,4DAB36,4f4f4f';
@@ -89,6 +89,4 @@ CKEDITOR.stylesSet.add( 'my_styles', [
 ]);
 
 CKEDITOR.dtd.$removeEmpty.span = 0;
-
-
 
