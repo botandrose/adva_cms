@@ -18,7 +18,7 @@ class ArticlesController < BaseController
   end
 
   def show
-    if stale?(etag: [@article, @section, @site], last_modified: [@article, @section, @site].map(&:updated_at).compact.max, public: true)
+    if stale?([*@article.cells, @article, @section, @site], public: true)
       render template: "#{@section.type.tableize}/articles/show"
     end
   end
