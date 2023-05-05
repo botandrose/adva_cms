@@ -13,7 +13,9 @@ class Content < ActiveRecord::Base
   include Adva::HasPermalink
   has_permalink :title, :url_attribute => :permalink, :sync_url => true, :only_when_blank => true, :scope => :section_id
 
-  filtered_column :body, :excerpt
+  filtered_column :body, :excerpt # TODO rm all of this and the associated _html columns
+
+  has_cells :body, :excerpt
 
   belongs_to :site
   belongs_to :section, :touch => true
@@ -62,34 +64,6 @@ class Content < ActiveRecord::Base
 
   def to_param
     permalink
-  end
-
-  def cache_key(*timestamp_names)
-    if new_record?
-      "#{model_name.cache_key}/new"
-    else
-      timestamp_names = [:updated_at, :cells_updated_at] if timestamp_names.none?
-      timestamp = timestamp_names.map { |attr| send(attr) }.compact.map(&:to_time).max
-      timestamp = timestamp.utc.to_fs(cache_timestamp_format)
-      "#{model_name.cache_key}/#{id}-#{timestamp}"
-    end
-  end
-
-  def cells_updated_at
-    if defined?(OutputFilter::Cells)
-      OutputFilter::Cells.new(nil).send(:cells, body_html).values.map do |name, state, attrs|
-        attrs = HashWithIndifferentAccess.new(attrs)
-        cell = "#{name.camelize}Cell".constantize.new
-        args = [state]
-        attrs.delete "class" # ignore styling class
-        attrs[:format] = :timestamp
-        args << attrs unless attrs.empty?
-        begin
-          cell.render_state *args
-        rescue ArgumentError
-        end
-      end.select { |response| response.is_a?(Time) }.max
-    end
   end
 
   def owners
