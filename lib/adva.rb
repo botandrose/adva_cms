@@ -12,6 +12,7 @@ Dir["#{File.expand_path("#{__dir__}/../vendor/gems")}/**/lib"].each do |vendored
 end
 
 require "belongs_to_cacheable"
+require "cacheable_flash"
 require "filtered_column"
 require "simple_taggable"
 require "tags"
