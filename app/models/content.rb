@@ -11,7 +11,7 @@ class Content < ActiveRecord::Base
 
   filtered_column :body, :excerpt # TODO rm all of this and the associated _html columns
 
-  has_cells :body, :excerpt
+  has_cells :body, :excerpt if respond_to?(:has_cells)
 
   belongs_to :site
   belongs_to :section, :touch => true
