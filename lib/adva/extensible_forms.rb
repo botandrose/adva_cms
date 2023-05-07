@@ -91,10 +91,12 @@ module Adva
           label, wrap, hint = options.delete(:label), options.delete(:wrap), options.delete(:hint)
           name = args.first
 
+          hint = I18n.t(hint) if hint.is_a?(Symbol)
+          options[:title] = hint
+
           with_callbacks(name) do
             tag = super(*(args << options), &block)
             # remember_tabindex(tag, options)
-            tag = hint(tag, hint) if hint
             tag = labelize(type, tag, name, label) if label || self.options[:labels]
             tag = wrap(tag) if wrap || self.options[:wrap]
             tag
@@ -178,8 +180,7 @@ module Adva
     end
 
     def hint(tag, hint)
-      hint = I18n.t(hint) if hint.is_a?(Symbol)
-      tag + @template.content_tag(:span, hint, :class => 'hint', :for => extract_id(tag))
+      tag + @template.content_tag(:span, "", title: hint, class: 'hint', for: extract_id(tag))
     end
 
     def add_default_class_names(options, type)
