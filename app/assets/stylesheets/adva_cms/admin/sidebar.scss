@@ -31,9 +31,13 @@
 #sidebar .tabs > ul li {
   float: left;
 }
-#sidebar .tabs > ul li a {
+#sidebar .tabs > ul li label {
+  text-decoration: underline;
+  cursor: pointer;
   display: block;
+  color: #76a3a3;
   font-size: 12px;
+  margin-top: 0;
   padding: 3px 15px;
   outline: none;
   -webkit-border-top-left-radius: 4px;
@@ -41,22 +45,31 @@
   -moz-border-top-left-radius: 4px;
   -moz-border-top-right-radius: 4px;
 }
-#sidebar .tabs > ul li.active a {
-  background: #f6f6f6 image_url("adva_cms/admin/tab_sidebar_active.png") repeat-x;
+#sidebar .tabs > input {
+  display: none;
 }
-#sidebar .tabs > ul li a:hover {
-  background-color: #fff;
+#sidebar .tabs > #adva_current_tab_0:checked ~ ul li label[for=adva_current_tab_0],
+#sidebar .tabs > #adva_current_tab_1:checked ~ ul li label[for=adva_current_tab_1],
+#sidebar .tabs > #adva_current_tab_2:checked ~ ul li label[for=adva_current_tab_2],
+#sidebar .tabs > #adva_current_tab_3:checked ~ ul li label[for=adva_current_tab_3],
+#sidebar .tabs > #adva_current_tab_4:checked ~ ul li label[for=adva_current_tab_4] {
+  background-color: #544535;
+  color: white;
+}
+#sidebar .tabs > ul li label:hover {
+  background-color: #544535;
   text-decoration: none;
-}
-#sidebar .tabs > ul li.active a:hover {
-  cursor: default;
 }
 #sidebar .tabs .tab {
   display: none;
   clear: both;
   padding: 5px 20px 20px 20px;
 }
-#sidebar .tabs .tab.active {
+#sidebar .tabs > #adva_current_tab_0:checked ~ .tab[for=adva_current_tab_0],
+#sidebar .tabs > #adva_current_tab_1:checked ~ .tab[for=adva_current_tab_1],
+#sidebar .tabs > #adva_current_tab_2:checked ~ .tab[for=adva_current_tab_2],
+#sidebar .tabs > #adva_current_tab_3:checked ~ .tab[for=adva_current_tab_3],
+#sidebar .tabs > #adva_current_tab_4:checked ~ .tab[for=adva_current_tab_4] {
   display: block;
 }
 .filters .submit {

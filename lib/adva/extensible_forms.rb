@@ -125,15 +125,23 @@ module Adva
       yield if block_given?
       assign_ivars!
       @template.content_tag(:div, :class => 'tabs') {
+        self.class.tabs.map.with_index { |(name, _), index|
+          active = self.class.tabs.first.first == name
+          %(<input type="radio" id="adva_current_tab_#{index}" name="adva_current_tab" #{"checked" if active}>)
+        }.join.html_safe +
+
         @template.content_tag(:ul) {
-          self.class.tabs.map { |name, block|
-            klass = self.class.tabs.first.first == name ? 'active' : nil
-            @template.content_tag 'li', @template.link_to(I18n.t(name, :scope => :'adva.titles'), "##{name}"), :class => klass
+          self.class.tabs.map.with_index { |(name, _), index|
+            @template.content_tag(:li) {
+              title = I18n.t(name, :scope => :'adva.titles')
+              %(<label for="adva_current_tab_#{index}">#{title}</label>).html_safe
+            }
           }.join.html_safe
         } +
-        self.class.tabs.map { |name, block|
+
+        self.class.tabs.map.with_index { |(name, block), index|
           klass = self.class.tabs.first.first == name ? 'tab active' : 'tab'
-          @template.content_tag 'div', block.call(self), :id => "tab_#{name}", :class => klass
+          @template.content_tag 'div', block.call(self), id: "tab_#{name}", class: klass, for: "adva_current_tab_#{index}"
         }.join.html_safe
       }.html_safe
     end

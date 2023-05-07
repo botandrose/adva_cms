@@ -45,11 +45,8 @@ table, caption, tbody, tfoot, thead, tr, th, td {
 #sidebar textarea {
   font-size: 14px;
 }
-#sidebar .tabs > ul li a {
+#sidebar .tabs > ul li label {
   font-size: 15px;
-}
-#sidebar .tabs > ul li.active a {
-  background: #f6f6f6;
 }
 
 /* top.css */
