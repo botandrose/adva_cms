@@ -3,6 +3,7 @@ require "will_paginate"
 require "awesome_nested_set"
 require "actionpack/page_caching"
 require "rails-observers"
+require "jquery-rails"
 
 require "rails_ext"
 
@@ -24,7 +25,7 @@ require "adva/extensible_forms"
 module Adva
   class Engine < Rails::Engine
     initializer "add assets to precompilation list" do |app|
-      app.config.assets.precompile += %w(adva_cms/application.js)
+      app.config.assets.precompile += %w(adva_cms.js)
       app.config.assets.precompile += %w(adva_cms/admin.css)
       app.config.assets.precompile += %w(admin.css admin.js)
 
