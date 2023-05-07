@@ -5,6 +5,5 @@
 
 //= require adva_cms/admin/jquery.admin
 //= require adva_cms/admin/jquery.table_tree
-//= require adva_cms/admin/toggle_excerpt
 //= require adva_cms/admin/ckeditor
 
