@@ -10,7 +10,6 @@ class Admin::BaseController < ApplicationController
   helper TableBuilder
 
   helper :base, :resource, :content, :meta_tags
-  helper HasFilter::Helper
 
   include Adva::AuthenticateUser
 

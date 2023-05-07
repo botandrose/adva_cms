@@ -13,7 +13,6 @@ end
 
 require "belongs_to_cacheable"
 require "filtered_column"
-require "has_filter"
 require "simple_taggable"
 require "tags"
 require "table_builder"
