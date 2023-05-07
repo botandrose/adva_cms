@@ -4,10 +4,6 @@ require "adva/belongs_to_author"
 class Content < ActiveRecord::Base
   acts_as_nested_set :scope => :section_id
 
-  has_filter :tagged, :categorized,
-             :text  => { :attributes => [:title, :body, :excerpt] },
-             :state => { :states => [:published, :unpublished] }
-
   acts_as_taggable
 
   include Adva::HasPermalink

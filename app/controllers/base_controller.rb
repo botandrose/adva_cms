@@ -3,7 +3,6 @@ require "adva/authenticate_user"
 class BaseController < ApplicationController
   class SectionRoutingError < ActionController::RoutingError; end
   helper :base, :resource, :content, :meta_tags
-  helper HasFilter::Helper
   helper TableBuilder
 
   include CacheableFlash
