@@ -1,26 +1,25 @@
 <!-- HACK: empty line must be here for split_form_for to work properly -->
 <fieldset>
   <div class="col">
-	  <%= hidden_field_tag 'cl', Article.locale %>
-		
-	  <%= f.text_field :title, :class => 'big', :label => true  %>
+    <%= hidden_field_tag 'cl', Article.locale %>
 
-	  <label for="link_body">
-	    <%= t(:'adva.links.write_link') %>
-	  </label>
-	  <%= f.text_field :body, :class => 'big' %>
+    <%= f.text_field :title, class: 'big', label: true %>
 
-	  <%= f.label :draft, t(:'adva.links.question_save_as_draft') %>
-	  <%= f.check_box :draft?, :id => 'toggle_draft', :label => :'adva.links.confirm_save_as_draft' %>
+    <label for="link_body"><%= t(:'adva.links.write_link') %></label>
+    <%= f.text_field :body, class: 'big' %>
 
-	  <p id="publish_date_wrapper" style="<%= @link.draft? ? "display:none" : "" %>">
-	    <%= f.label :published_at, t(:'adva.links.publish_on_date') %>
-	    <%= f.datetime_select :published_at,
-	                          :start_year => (@link.published_at || Time.zone.now).year-1,
-	                          :end_year => (Time.zone.now.year + 5),
-	                          :order => [:month, :day, :year] %>
-		</p>
+    <%= f.label :draft, t(:'adva.links.question_save_as_draft') %>
+    <%= f.check_box :draft?, id: 'toggle_draft', label: :'adva.links.confirm_save_as_draft' %>
+
+    <p class="show-if-previous-unchecked">
+      <%= f.label :published_at, t(:'adva.links.publish_on_date') %>
+      <%= f.datetime_select :published_at,
+        start_year: (@link.published_at || Time.zone.now).year-1,
+        end_year: (Time.zone.now.year + 5),
+        order: [:month, :day, :year] %>
+    </p>
   </div>
 </fieldset>
 
-<%= render :partial => 'options', :locals => { :f => f } %>
+<%= render 'options', f: f %>
+

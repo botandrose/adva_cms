@@ -3,38 +3,36 @@
   <div class="col">
     <%= hidden_field_tag 'cl', Article.locale %>
 
-    <p>
-      <%= f.text_field :title, :class => 'big', :label => "Title", style: "float: none" %>
-    </p>
+    <p><%= f.text_field :title, class: 'big', label: "Title", style: "float: none" %></p>
 
     <p id="article_excerpt_wrapper" style="<%= @article.has_excerpt? ? "" : "display:none" %>">
-      <label for="article_excerpt">
-        <%= t(:'adva.articles.attributes.excerpt') %>
-        <span class="inline" id="hide_excerpt_hint">(<%= link_to t(:'adva.common.hide'), '#', :id => 'hide_excerpt' %>)</span>
-      </label>
-      <%= f.text_area :excerpt, :class => 'wysiwyg' %>
+    <label for="article_excerpt">
+      <%= t(:'adva.articles.attributes.excerpt') %>
+      <span class="inline" id="hide_excerpt_hint">(<%= link_to t(:'adva.common.hide'), '#', id: 'hide_excerpt' %>)</span>
+    </label>
+    <%= f.text_area :excerpt, class: 'wysiwyg' %>
     </p>
 
     <p>
-      <label for="article_body" style="display: inline">Body</label>
-      <span id="add_excerpt_hint">(<%= link_to t(:'adva.articles.excerpt_add'), '#', :id => 'add_excerpt' %>)</span>
+    <label for="article_body" style="display: inline">Body</label>
+    <span id="add_excerpt_hint">(<%= link_to t(:'adva.articles.excerpt_add'), '#', id: 'add_excerpt' %>)</span>
     </p>
 
-    <%= f.text_area :body, :class => editor_class_for(@article) %>
+    <%= f.text_area :body, class: editor_class_for(@article) %>
   </div>
 </fieldset>
 
-<%= render :partial => 'options', :locals => { :f => f } %>
+<%= render 'options', f: f %>
 
 <%= content_for :sidebar do %>
   <%= f.label :draft, t(:'adva.articles.question_save_as_draft') %>
-  <%= f.check_box :draft?, :id => 'toggle_draft', :label => :'adva.articles.confirm_save_as_draft' %>
+  <%= f.check_box :draft?, id: 'toggle_draft', label: :'adva.articles.confirm_save_as_draft' %>
 
-  <p id="publish_date_wrapper" style="<%= @article.draft? ? "display:none" : "" %>">
+  <p class=".show-if-previous-unchecked">
   <%= f.label :published_at, t(:'adva.articles.publish_on_date') %>
   <%= f.datetime_select :published_at,
-    :start_year => (@article.published_at || Time.zone.now).year-1,
-    :end_year => (Time.zone.now.year + 5),
-    :order => [:month, :day, :year] %>
+    start_year: (@article.published_at || Time.zone.now).year-1,
+    end_year: (Time.zone.now.year + 5),
+    order: [:month, :day, :year] %>
   </p>
 <% end %>
