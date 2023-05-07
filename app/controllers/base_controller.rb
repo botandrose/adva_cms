@@ -14,8 +14,6 @@ class BaseController < ApplicationController
   before_action :set_site, :set_timezone
   attr_accessor :site, :section
 
-  layout 'default'
-
   def site
     @site ||= Site.find_by_host!(request.host)
   end
