@@ -5,17 +5,22 @@
 
     <p><%= f.text_field :title, class: 'big', label: "Title", style: "float: none" %></p>
 
-    <p id="article_excerpt_wrapper" <%= "hidden" unless @article.has_excerpt? %>>
-    <label for="article_excerpt">
-      <%= t(:'adva.articles.attributes.excerpt') %>
-      <span class="inline" id="hide_excerpt_hint">(<%= link_to t(:'adva.common.hide'), '#', id: 'hide_excerpt' %>)</span>
-    </label>
-    <%= f.text_area :excerpt, class: 'wysiwyg' %>
+    <input id="toggle_excerpt" type="checkbox" <%= "checked" if @article.has_excerpt? %>>
+
+    <p class="show-if-previous-checked">
+      <label for="article_excerpt">
+        <%= t(:'adva.articles.attributes.excerpt') %>
+        <span>(<%= link_to t(:'adva.common.hide'), '#', onclick: 'document.getElementById("toggle_excerpt").checked = false; return false' %>)</span>
+      </label>
+      <%= f.text_area :excerpt, class: 'wysiwyg' %>
     </p>
 
-    <p>
-    <label for="article_body" style="display: inline">Body</label>
-    <span id="add_excerpt_hint">(<%= link_to t(:'adva.articles.excerpt_add'), '#', id: 'add_excerpt' %>)</span>
+    <p class="show-if-previous-unchecked">
+      <label for="article_body" style="display: inline">Body</label>
+      <span>(<%= link_to t(:'adva.articles.excerpt_add'), '#', onclick: 'document.getElementById("toggle_excerpt").checked = true; return false' %>)</span>
+    </p>
+    <p class="show-if-previous-checked">
+      <label for="article_body" style="display: inline">Body</label>
     </p>
 
     <%= f.text_area :body, class: editor_class_for(@article) %>
