@@ -74,3 +74,17 @@ div.pagination a {
 div.pagination a:hover, div.pagination a:focus {
   text-decoration: underline;
 }
+
+/* Checkbox toggle visibility */
+.show-if-previous-checked {
+  display: none;
+}
+:checked ~ .show-if-previous-checked {
+  display: initial;
+}
+.show-if-previous-unchecked {
+  display: initial;
+}
+:checked ~ .show-if-previous-unchecked {
+  display: none;
+}
