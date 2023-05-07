@@ -1,3 +1,5 @@
+//= require jquery
+
 $(function() {
   $('a.reorder').click(function(event) {
     event.preventDefault();

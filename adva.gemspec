@@ -22,5 +22,6 @@ Gem::Specification.new do |gem|
   gem.add_dependency "friendly_id", "~> 5.1.0" # 5.2.0 tries to call #slug= on invalid save
   gem.add_dependency "actionpack-page_caching"
   gem.add_dependency "rails-observers"
+  gem.add_dependency "jquery-rails"
 end
 

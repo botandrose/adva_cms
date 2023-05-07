@@ -1,0 +1,12 @@
+document.addEventListener("DOMContentLoaded", () => {
+  Array.from(document.querySelectorAll(".wysiwyg")).forEach(e => {
+    if(!window.CKEDITOR) return
+    CKEDITOR.timestamp = new Date().valueOf()
+    e.ckeditor = CKEDITOR.replace(e.id, {
+      width: e.getBoundingClientRect().width,
+      height: e.getBoundingClientRect().height,
+      customConfig: '<%= asset_path "ckeditor/config.js" %>',
+    })
+  })
+})
+
