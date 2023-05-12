@@ -46,7 +46,8 @@
   -moz-border-top-right-radius: 4px;
 }
 #sidebar .tabs > input {
-  display: none;
+  position: absolute;
+  left: -10000px;
 }
 #sidebar .tabs > #adva_current_tab_0:checked ~ ul li label[for=adva_current_tab_0],
 #sidebar .tabs > #adva_current_tab_1:checked ~ ul li label[for=adva_current_tab_1],
