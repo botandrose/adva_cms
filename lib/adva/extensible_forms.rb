@@ -141,7 +141,7 @@ module Adva
 
         self.class.tabs.map.with_index { |(name, block), index|
           klass = self.class.tabs.first.first == name ? 'tab active' : 'tab'
-          @template.content_tag 'div', block.call(self), id: "tab_#{name}", class: klass, for: "adva_current_tab_#{index}"
+          @template.content_tag 'fieldset', block.call(self), id: "tab_#{name}", class: klass, for: "adva_current_tab_#{index}"
         }.join.html_safe
       }.html_safe
     end
