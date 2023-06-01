@@ -22,11 +22,10 @@ class Admin::SitesController < Admin::BaseController
     site.sections << section
 
     if site.save
-      flash[:notice] = t(:'adva.sites.flash.create.success')
-      redirect_to admin_site_url(site)
+      redirect_to admin_site_url(site), notice: "The site has been created."
     else
-      flash.now[:error] = t(:'adva.sites.flash.create.failure')
-      render :action => :new
+      flash.now.alert = "The site could not be created"
+      render action: :new
     end
   end
 
@@ -35,21 +34,19 @@ class Admin::SitesController < Admin::BaseController
 
   def update
     if @site.update params[:site]
-      flash[:notice] = t(:'adva.sites.flash.update.success')
-      redirect_to edit_admin_site_url
+      redirect_to edit_admin_site_url, notice: "The site has been updated."
     else
-      flash.now[:error] = t(:'adva.sites.flash.update.failure')
-      render :action => 'edit'
+      flash.now.alert = "The site could not be updated"
+      render action: :edit
     end
   end
 
   def destroy
     if @site.destroy
-      flash[:notice] = t(:'adva.sites.flash.destroy.success')
-      redirect_to return_from(:site_deleted)
+      redirect_to return_from(:site_deleted), notice: "The site has been deleted."
     else
-      flash.now[:error] = t(:'adva.sites.flash.destroy.failure')
-      render :action => 'show'
+      flash.now.alert = "The site could not be deleted"
+      render action: :show
     end
   end
 

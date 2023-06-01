@@ -16,10 +16,9 @@ class Admin::Page::LinksController < Admin::BaseController
     @link = @section.links.build params[:link]
     if @link.save
       trigger_events(@link)
-      flash[:notice] = t(:'adva.links.flash.create.success')
-      redirect_to [:edit, :admin, @section, @link]
+      redirect_to [:edit, :admin, @section, @link], notice: "The link has been created."
     else
-      flash.now[:error] = t(:'adva.links.flash.create.failure') + current_resource_errors
+      flash.now.alert = "The link could not be created." + current_resource_errors
       render :action => 'new'
     end
   end
@@ -29,10 +28,9 @@ class Admin::Page::LinksController < Admin::BaseController
 
     if @link.save
       trigger_events(@link)
-      flash[:notice] = t(:'adva.links.flash.update.success')
-      redirect_to [:edit, :admin, @section, @link]
+      redirect_to [:edit, :admin, @section, @link], notice: "The link has been updated."
     else
-      flash.now[:error] = t(:'adva.links.flash.update.failure') + current_resource_errors
+      flash.now.alert = "The link could not be updated." + current_resource_errors
       render :action => 'edit', :cl => content_locale
     end
   end
@@ -40,10 +38,9 @@ class Admin::Page::LinksController < Admin::BaseController
   def destroy
     if @link.destroy
       trigger_events(@link)
-      flash[:notice] = t(:'adva.links.flash.destroy.success')
-      redirect_to [:admin, @section, :contents]
+      redirect_to [:admin, @section, :contents], notice: "The link has been deleted."
     else
-      flash.now[:error] = t(:'adva.links.flash.destroy.failure') + current_resource_errors
+      flash.now.alert = "The link could not be deleted." + current_resource_errors
       render :action => 'edit'
     end
   end

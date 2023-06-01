@@ -15,12 +15,12 @@ class Admin::SectionsController < Admin::BaseController
   def create
     @section = @site.sections.build params[:section]
     if @section.save
-      flash[:notice] = t(:'adva.sections.flash.create.success')
-      redirect_to (params[:commit] == t(:'adva.sections.links.save_and_create_new') ? 
+      flash.notice = "The section has been created."
+      redirect_to (params[:commit] == "Save and create another section" ?
         [:new, :admin, :section] :
         [:admin, @section, :articles])
     else
-      flash.now[:error] = t(:'adva.sections.flash.update.failure')
+      flash.now.alert = "The section could not be created."
       render :action => "new"
     end
   end
@@ -30,20 +30,18 @@ class Admin::SectionsController < Admin::BaseController
 
   def update
     if @section.update params[:section]
-      flash[:notice] = t(:'adva.sections.flash.update.success')
-      redirect_to [:edit, :admin, @section]
+      redirect_to [:edit, :admin, @section], notice: "The section has been updated."
     else
-      flash.now[:error] = t(:'adva.sections.flash.update.failure')
+      flash.now.alert = "The section could not be updated."
       render :action => 'edit'
     end
   end
 
   def destroy
     if @section.destroy
-      flash[:notice] = t(:'adva.sections.flash.destroy.success')
-      redirect_to [:new, :admin, :section]
+      redirect_to [:new, :admin, :section], notice: "The section has been deleted."
     else
-      flash.now[:error] = t(:'adva.sections.flash.destroy.failure')
+      flash.now.alert = "The section could not be deleted."
       render :action => 'edit'
     end
   end

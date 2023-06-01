@@ -5,14 +5,15 @@
 
     <%= f.text_field :title, class: 'big', label: true %>
 
-    <label for="link_body"><%= t(:'adva.links.write_link') %></label>
+      
+    <label for="link_body">Enter the link address</label>
     <%= f.text_field :body, class: 'big' %>
 
-    <%= f.label :draft, t(:'adva.links.question_save_as_draft') %>
-    <%= f.check_box :draft?, id: 'toggle_draft', label: :'adva.links.confirm_save_as_draft' %>
+    <%= f.label :draft, "Save as Draft?" %>
+    <%= f.check_box :draft?, id: 'toggle_draft', label: "Yes, save this link as a draft" %>
 
     <p class="show-if-previous-unchecked">
-      <%= f.label :published_at, t(:'adva.links.publish_on_date') %>
+      <%= f.label :published_at, "Publish on this date" %>
       <%= f.datetime_select :published_at,
         start_year: (@link.published_at || Time.zone.now).year-1,
         end_year: (Time.zone.now.year + 5),

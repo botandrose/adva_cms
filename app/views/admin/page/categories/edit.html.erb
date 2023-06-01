@@ -1,20 +1,20 @@
 <%= content_for :sidebar do %>
-	<p class="hint text_only large padded">
-		<%= t :'adva.categories.hints.parent_setting_for_edit' %>
-	</p>
+  <p class="hint text_only large padded">
+  You can use the reorder button on the index page of categories to nest and reorder your categories, you can find further instructions for this on the index page help hints.
+  </p>
 <% end %>
 
-<h2><%= t(:'adva.categories.titles.edit') %></h2>
+<h2>Edit Category</h2>
 
 <%= form_for [:admin, @section, @category] do |f| %>
-	<% f.field_set do %>
+  <% f.field_set do %>
     <div class="col">
-      <%= f.text_field :title, :label => true, :hint => :'adva.hints.categories' %>
-		</col>
+      <%= f.text_field :title, label: true, hint: "Avoid names countaining only 4 or 2 digits!" %>
+    </div>
 
     <div class="col">
-      <%= f.text_field :permalink, :label => true, :hint => :'adva.categories.hints.permalink' %>
-		</col>
+      <%= f.text_field :permalink, label: true, hint: "You can use normal letters and special letters like scandinavian letters but avoid special characters like $%&!" %>
+    </div>
   <% end %>
 
   <% save_or_cancel_links f, cancel_url: [:admin, @section, :categories] %>

@@ -30,53 +30,34 @@ class Admin::Page::ArticlesController < Admin::BaseController
     @article = @section.articles.build(params[:article])
     if @article.save
       trigger_events(@article)
-      flash[:notice] = t(:'adva.articles.flash.create.success')
-      redirect_to [:edit, :admin, @section, @article]
+      redirect_to [:edit, :admin, @section, @article], notice: "The article has been created."
     else
       set_categories
-      flash.now[:error] = t(:'adva.articles.flash.create.failure') + current_resource_errors
+      flash.now.alert = "The article could not be created." + current_resource_errors
       render :action => 'new'
     end
   end
 
   def update
-    params[:article][:version].present? ? rollback : update_attributes
-  end
-
-  def update_attributes
     @article.attributes = params[:article]
 
     if @article.save
       trigger_events(@article)
-      flash[:notice] = t(:'adva.articles.flash.update.success')
-      redirect_to [:edit, :admin, @section, @article]
+      redirect_to [:edit, :admin, @section, @article], notice: "The article has been updated."
     else
       set_categories
-      flash.now[:error] = t(:'adva.articles.flash.update.failure') + current_resource_errors
+      flash.now.alert = "The article could not be updated." + current_resource_errors
       render :action => 'edit'
     end
-  end
-
-  def rollback
-    version = params[:article][:version].to_i
-
-    if @article.version != version and @article.revert_to(version)
-      trigger_event(@article, :rolledback)
-      flash[:notice] = t(:'adva.articles.flash.rollback.success', :version => version)
-    else
-      flash[:error] = t(:'adva.articles.flash.rollback.failure', :version => version)
-    end
-    redirect_to [:edit, :admin, @section, @article]
   end
 
   def destroy
     if @article.destroy
       trigger_events(@article)
-      flash[:notice] = t(:'adva.articles.flash.destroy.success')
-      redirect_to [:admin, @section, :contents]
+      redirect_to [:admin, @section, :contents], notice: "The article has been deleted."
     else
       set_categories
-      flash.now[:error] = t(:'adva.articles.flash.destroy.failure') + current_resource_errors
+      flash.now.alert = "The article could not be deleted." + current_resource_errors
       render :action => 'edit'
     end
   end
@@ -130,12 +111,12 @@ class Admin::Page::ArticlesController < Admin::BaseController
       
       unless updated_at = params[:article].delete(:updated_at)
         # TODO raise something more explicit here
-        raise t(:'adva.articles.exception.missing_timestamp')
+        raise "Can not update article: timestamp missing. Please make sure that your form has a hidden field: updated_at."
       end
       
       # We parse the timestamp of article too so we can get rid of those microseconds postgresql adds
       if @article.updated_at && (Time.zone.parse(updated_at) != Time.zone.parse(@article.updated_at.to_s))
-        flash[:error] = t(:'adva.articles.flash.optimistic_lock.failure')
+        flash.now.alert = "In the meantime this article has been updated by someone else. Please resolve any conflicts."
         render :action => :edit
       end
     end

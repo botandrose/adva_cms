@@ -34,7 +34,7 @@ module BaseHelper
   def filter_options
     FilteredColumn.filters.keys.inject([]) do |arr, key|
       arr << [FilteredColumn.filters[key].filter_name, key.to_s]
-    end.unshift [t(:'adva.settings.filter_options.plain_html'), '']
+    end.unshift ["Plain HTML", '']
   end
 
   def author_options(users)

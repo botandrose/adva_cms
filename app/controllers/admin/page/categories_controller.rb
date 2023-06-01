@@ -11,20 +11,18 @@ class Admin::Page::CategoriesController < Admin::BaseController
   def create
     @category = @section.categories.build params[:category]
     if @category.save
-      flash[:notice] = t(:'adva.categories.flash.create.success')
-      redirect_to [:admin, @section, :categories]
+      redirect_to [:admin, @section, :categories], notice: "The category has been created."
     else
-      flash.now[:error] = t(:'adva.categories.flash.create.failure') + current_resource_errors
+      flash.now.alert = "The category could not be created." + current_resource_errors
       render :action => "new"
     end
   end
 
   def update
     if @category.update params[:category]
-      flash[:notice] = t(:'adva.categories.flash.update.success')
-      redirect_to [:admin, @section, :categories]
+      redirect_to [:admin, @section, :categories], notice: "The category has been updated."
     else
-      flash.now[:error] = t(:'adva.categories.flash.update.failure') + current_resource_errors
+      flash.now.alert = "The category could not be updated." + current_resource_errors
       render :action => 'edit'
     end
   end
@@ -40,10 +38,9 @@ class Admin::Page::CategoriesController < Admin::BaseController
 
   def destroy
     if @category.destroy
-      flash[:notice] = t(:'adva.categories.flash.destroy.success')
-      redirect_to [:admin, @section, :categories]
+      redirect_to [:admin, @section, :categories], notice: "The category has been deleted."
     else
-      flash.now[:error] = t(:'adva.categories.flash.destroy.failure') + current_resource_errors
+      flash.now.alert = "The category could not be deleted." + current_resource_errors
       render :action => 'edit'
     end
   end

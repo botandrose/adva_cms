@@ -6,7 +6,7 @@ module ActivitiesHelper
                :locals => { :activity => activity, :recent => recent }
       end.join
     else
-      html = %(<li class="empty shade">#{I18n.t(:'adva.activity.none')}.</li>)
+      html = %(<li class="empty shade">Nothing happened.</li>)
     end
     raw %(<ul class="activities">#{html}</ul>)
   end

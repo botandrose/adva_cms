@@ -3,17 +3,17 @@
     f.tabs do
       f.tab :options do
         html = (@section.try(:single_link_mode) ? '' : f.text_field(:permalink, label: true)) +
-          f.text_field(:tag_list, label: true, hint: :'adva.hints.tags')
+          f.text_field(:tag_list, label: true, hint: "Enter one or more tags separated by a space. You may include spaces by enclosing a tag with quotes. (For example, <em>\"Web Dev\" Tutorials</em>).")
 
         if @categories.present?
           if !(@section.try(:single_link_mode) ? @section.single_link_mode : false)
-            html << %(<label>#{t(:'adva.titles.publish_in_categories')}</label>) +
+      
+            html << %(<label>Publish in these categories</label>) +
               render(:partial => 'categories/checkboxes', :locals => { :categories => @categories, :content => @link })
           end
         end
 
-        html << f.select(:filter, filter_options, {}, :class => 'columnsFilter', :label => :'adva.titles.filter', :hint => :'adva.hints.filter') +
-          f.select(:author_id, author_options(@site.users), { :selected => author_selected(@link) }, :label => true)
+        html << f.select(:author_id, author_options(@site.users), { :selected => author_selected(@link) }, :label => true)
       end
     end
   end

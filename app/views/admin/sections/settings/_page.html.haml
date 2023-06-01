@@ -1,10 +1,8 @@
-%h2= t :'adva.sections.titles.page_settings'
+%h2 Page Settings
 
 %fieldset#section_section_settings
   .col
-    = f.label t(:"adva.sections.titles.behaviour")
-    %p= f.radio_button :single_article_mode, true, :label => :"adva.sections.settings.single_article_mode"
-    %p= f.radio_button :single_article_mode, false, :label => :"adva.sections.settings.multi_article_mode"
+    Behaviour
+    %p= f.radio_button :single_article_mode, true, label: "Single article per page"
+    %p= f.radio_button :single_article_mode, false, label: "Multiple articles per page"
 
-  .col
-    = f.select :content_filter, filter_options, {}, :label => true, :hint => :'adva.sections.hints.content_filter'
