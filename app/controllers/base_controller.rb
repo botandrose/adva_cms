@@ -22,12 +22,11 @@ class BaseController < ApplicationController
 
     alias :set_site :site
 
-    def sections
+    helper_method def sections
       @sections ||= site.sections
     end
-    helper_method :sections
 
-    def set_section
+    helper_method def section
       @section ||= begin
         if params.key?(:section_permalink)
           sections.find_by_permalink!(params[:section_permalink])
@@ -38,7 +37,7 @@ class BaseController < ApplicationController
       raise ActiveRecord::RecordNotFound unless @section.published?(true) || current_user.admin?
       @section
     end
-    alias :section :set_section
+    alias :set_section :section
 
     def set_timezone
       Time.zone = @site.timezone if @site

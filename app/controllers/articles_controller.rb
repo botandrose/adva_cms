@@ -1,78 +1,57 @@
 class ArticlesController < BaseController
-  before_action :set_section
-  before_action :adjust_action
-  before_action :set_category
-  before_action :set_tags
-  before_action :set_articles
-  before_action :set_article, only: :show
-
   def index
-    @article = @articles.first
+    @article = articles.first
     if !@article
       raise ActiveRecord::RecordNotFound
-    elsif @article.is_a?(Link)
-      redirect_to @article.body
     else
       show
     end
   end
 
   def show
-    if stale?([*@article.cells, @article, @section, @site], public: true)
-      render template: "#{@section.type.tableize}/articles/show"
+    @article ||= section.articles.find_by_permalink!(params[:permalink])
+    if @article.draft?
+      raise ActiveRecord::RecordNotFound unless current_user.admin?
+    end
+    return redirect_to @article.body if @article.is_a?(Link)
+
+    if stale?([*@article.cells, @article, section, site], public: true)
+      render template: "#{section.type.tableize}/articles/show"
     end
   end
 
-  protected
+  private
 
-    def current_resource
-      @section.try(:single_article_mode) ? @section : @article || @section
+  helper_method def articles
+    @articles ||= begin
+      scope = category ? category.all_contents : section.contents
+      scope = scope.tagged(tags) if tags.any?
+      scope = scope.published
+      scope.paginate(page: current_page).limit(section.contents_per_page)
     end
+  end
 
-    # adjusts the action from :index to :show when the current section is in single-article mode ...
-    def adjust_action
-      if params[:action] == 'index' and @section.try(:single_article_mode)
-        # ... but only if there is one published article
-        unless @section.contents.blank? || (@section.contents.first.draft? && current_user.admin?)
-          @action_name = @_params[:action] = request.parameters['action'] = 'show'
-        end
-      end
+  helper_method def category
+    if !defined?(@category)
+      @category = params[:category_id] ? section.categories.find(params[:category_id]) : nil
     end
+    @category
+  end
 
-    def set_article
-      @article = if params[:permalink]
-        @articles.find_by_permalink!(params[:permalink])
-      elsif @section.try(:single_article_mode)
-        @articles.first
-      end
-    end
-
-    def set_articles
-      scope = @category ? @category.all_contents : @section.contents
-      scope = scope.includes(:author)
-      scope = scope.tagged(@tags) if @tags.present?
-      scope = scope.published if !current_user.admin?
-      @articles = scope.paginate(page: current_page).limit(@section.contents_per_page)
-    end
-
-    def set_category
-      if params[:category_id]
-        @category = @section.categories.find(params[:category_id])
-        raise ActiveRecord::RecordNotFound unless @category
-      end
-    end
-
-    def set_tags
-      if params[:tags]
+  helper_method def tags
+    if !defined?(@tags)
+      @tags = if params[:tags]
         names = params[:tags].split('+')
         @tags = Tag.where(name: names).pluck(:name)
         raise ActiveRecord::RecordNotFound unless @tags.size == names.size
+      else
+        []
       end
     end
+    @tags
+  end
 
-    def guard_view_permissions
-      if @article && @article.draft?
-        raise ActiveRecord::RecordNotFound unless current_user.admin?
-      end
-    end
+  helper_method def current_resource
+    section.try(:single_article_mode) ? section : @article || section
+  end
 end
