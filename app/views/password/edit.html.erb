@@ -1,17 +1,24 @@
-<h2><%= t(:'adva.passwords.titles.edit') %></h2>
+<h2>Edit Password</h2>
 
-<p><%= params[:token].blank? ? t(:'adva.passwords.info.please_enter_new_password_and_token') : t(:'adva.passwords.info.please_enter_new_password') %></p>
+<p>
+  <% if params[:token].blank? %>
+    Please enter the confirmation code you received via email and your new password.
+  <% else %>
+    Please enter your new password.
+  <% end %>
+</p>
+        
 
 <%= form_for 'user', :url => password_path, :html => { :method => :put } do |f| %>
   <% f.field_set do %>
     <% if current_user.anonymous? %>
-      <%= label_tag t(:'adva.passwords.attributes.token') %>
+      <%= label_tag "Token" %>
       <%= text_field_tag :token %>
     <% end %>
-    <%= f.password_field :password, :label => :"adva.users.attributes.new_password" %>
+    <%= f.password_field :password, label: "New password" %>
   <% end %>
 
   <% f.buttons do %>
-    <%= submit_tag t(:'adva.common.save') %>
+    <%= submit_tag "Save" %>
   <% end %>
 <% end %>

@@ -103,14 +103,14 @@ module ResourceHelper
   def normalize_resource_link_options(options, action, type, resource)
     options[:class] ||= "#{action} #{type}"
     options[:id] ||= resource_link_id(action, type, resource)
-    options[:title] ||= t(:"adva.titles.#{action}")
+    options[:title] ||= action.to_s.titleize
     options.reverse_merge!(resource_delete_options(type, options)) if action == :delete
     options
   end
 
   def normalize_resource_link_text(text, action, type)
     type = type.to_s.gsub('/', '_').pluralize
-    text ||= t(:"adva.#{type}.links.#{action}", :default => :"adva.resources.links.#{action}")
+    text ||= action.capitalize
     text = t(text) if text.is_a?(Symbol)
     text
   end
@@ -118,8 +118,7 @@ module ResourceHelper
   def resource_delete_options(type, options)
     type = type.to_s.gsub('/', '_').pluralize
     message = options.delete(:confirm)
-    message ||= t(:"adva.#{type}.confirm_delete", :default => :"adva.resources.confirm_delete")
-    message = t(message) if message.is_a?(Symbol)
+    message ||= "Are you sure you want to delete this #{type}?"
     { :data => { :confirm => message }, :method => :delete }
   end
 end

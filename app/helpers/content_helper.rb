@@ -31,7 +31,7 @@ module ContentHelper
   def content_status(content)
     return "<span>&nbsp;</span>" unless content.respond_to?(:published?)
     klass = content.published? ? 'published' : 'pending'
-    text  = content.published? ? t(:'adva.titles.published') : t(:'adva.titles.pending')
+    text  = content.published? ? "Published" : "Pending"
 
     "<span title='#{text}' alt='#{text}' class='status #{klass}'>#{text}</span>"
   end
@@ -40,7 +40,7 @@ module ContentHelper
     options = args.extract_options!
     content, text = *args.reverse
 
-    text ||= :"adva.#{content.class.name.tableize}.links.preview"
+    text ||= "Preview"
     url = show_path(content, :cl => content.class.locale, :namespace => nil)
 
     options.reverse_merge!(:url => url, :class => "preview #{content.class.name.underscore}")
@@ -64,8 +64,10 @@ module ContentHelper
 
   def links_to_content_categories(content, key = nil)
     return if content.categories.empty?
-    links = content.categories.map { |category| link_to_category content.section, category }
-    key ? t(key, :links => links.join(', ')) : links
+    links = content.categories.map do |category|
+      link_to_category content.section, category
+    end
+    raw "in: #{links.join(', ')}"
   end
 
   def link_to_tag(*args, &block)
@@ -84,7 +86,7 @@ module ContentHelper
   def links_to_content_tags(content, key = nil)
     return if content.tags.empty?
     links = content.tags.map { |tag| link_to_tag content.section, tag }
-    key ? t(key, links: links.join(', ')).html_safe : links
+    raw "tagged: #{links.join(', ')}"
   end
 
   def content_category_checkbox(content, category)

@@ -11,15 +11,15 @@
       r.add_class "level_#{content.level}"
       r.cell content_status(content) + " " + link_to(content.title, [:edit, :admin, @section, content], :class => content.state)
       r.cell content.category_titles.join(", ") if @section.categories.any?
-      r.cell content.accept_comments? && content.comments.present? ? link_to(content.comments.size, admin_comments_path) : t(:"adva.common.none") if defined?(Comment)
+      r.cell content.accept_comments? && content.comments.present? ? link_to(content.comments.size, admin_comments_path) : "None" if defined?(Comment)
       r.cell published_at_formatted(content)
       r.cell link_to("Edit", [:edit, :admin, @section, content], :class => "edit content") +
         link_to("Delete", [:admin, @section, content], method: :delete, class: "delete content", data: { confirm: "Are you sure you want to delete this content?" })
     end
 
     t.empty :p, :class => 'empty' do
-      raw t(:'adva.contents.no_contents', :section => @section.title) + "\n" +
-        link_to(t(:'adva.contents.links.create_now'), [:new, :admin, @section, :content])
+      raw "There are no contents in #{@section.title}\n" +
+        link_to("Create one now", [:new, :admin, @section, :content])
     end
   end
 %>

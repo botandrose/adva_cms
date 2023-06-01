@@ -28,31 +28,15 @@ class Admin::BaseController < ApplicationController
     end
 
     def require_authentication
-      if @site
-        return redirect_to_login(t(:'adva.flash.login_to_access_admin_area_of_site')) if current_user.anonymous?
-        unless current_user.admin?
-          return redirect_to_login(t(:'adva.flash.no_permission_for_admin_area_of_site'))
-        end
-      else
-        return redirect_to_login(t(:'adva.flash.login_to_access_admin_area_of_account')) if current_user.anonymous?
-        unless current_user.admin?
-          return redirect_to_login(t(:'adva.flash.no_permission_for_admin_area_of_account'))
-        end
+      if current_user.anonymous?
+        return redirect_to_login("Please login to access the admin area of this site.")
+      elsif !current_user.admin?
+        return redirect_to_login("You do not have permission to access the admin area of this site. Please, contact your system administrator or login with another user account.")
       end
     end
 
     def redirect_to_login(notice = nil)
-      flash[:notice] = notice
-      redirect_to login_url(:return_to => request.url)
-    end
-
-    def rescue_action(exception)
-      if exception.is_a? ActionController::RoleRequired
-        @error = exception
-        render :template => 'shared/messages/insufficient_permissions'
-      else
-        super
-      end
+      redirect_to login_url(return_to: request.url), notice: notice
     end
 
     def return_from(action, options = {})

@@ -9,15 +9,15 @@
 
     <p class="show-if-previous-checked">
       <label for="article_excerpt">
-        <%= t(:'adva.articles.attributes.excerpt') %>
-        <span>(<%= link_to t(:'adva.common.hide'), '#', onclick: 'document.getElementById("toggle_excerpt").checked = false; return false' %>)</span>
+        Excerpt
+        <span>(<%= link_to "Hide", '#', onclick: 'document.getElementById("toggle_excerpt").checked = false; return false' %>)</span>
       </label>
       <%= f.text_area :excerpt, class: 'wysiwyg' %>
     </p>
 
     <p class="show-if-previous-unchecked">
       <label for="article_body" style="display: inline">Body</label>
-      <span>(<%= link_to t(:'adva.articles.excerpt_add'), '#', onclick: 'document.getElementById("toggle_excerpt").checked = true; return false' %>)</span>
+      <span>(<%= link_to "Add an excerpt", '#', onclick: 'document.getElementById("toggle_excerpt").checked = true; return false' %>)</span>
     </p>
     <p class="show-if-previous-checked">
       <label for="article_body" style="display: inline">Body</label>
@@ -30,11 +30,11 @@
 <%= render 'options', f: f %>
 
 <%= content_for :sidebar do %>
-  <%= f.label :draft, t(:'adva.articles.question_save_as_draft') %>
-  <%= f.check_box :draft?, label: :'adva.articles.confirm_save_as_draft' %>
+  <%= f.label :draft, "Save as Draft?" %>
+  <%= f.check_box :draft?, label: "Yes, save this article as a draft" %>
 
   <p class=".show-if-previous-unchecked">
-  <%= f.label :published_at, t(:'adva.articles.publish_on_date') %>
+  <%= f.label :published_at, "Publish on this date" %>
   <%= f.datetime_select :published_at,
     start_year: (@article.published_at || Time.zone.now).year-1,
     end_year: (Time.zone.now.year + 5),

@@ -1,10 +1,12 @@
 <% if users.present? %>
-  <h3><%= t(:'adva.titles.recently_logged_in') %></h3>
+  <h3>Recently logged in</h3>
   <ul id="users">
     <% users.each do |user| %>
       <li>
         <%= gravatar_img(user) %><%= link_to who(user), :controller => 'users', :action => 'show', :id => user %><br /> 
-        <%= t(:'adva.users.info.showed_up', :time_ago => distance_of_time_in_words_to_now(user.updated_at)) %>
+        showed up: 
+        <%= distance_of_time_in_words_to_now user.updated_at %>
+        ago
       </li>
     <% end %>
   </ul>

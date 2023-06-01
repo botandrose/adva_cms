@@ -30,7 +30,7 @@ class PasswordMailer < ActionMailer::Base
     mail({
       to: attributes[:user].email,
       from: attributes[:from],
-      subject: I18n.t(:'adva.passwords.notifications.reset_password.subject'),
+      subject: "Forgotten Password",
     })
   end
 
@@ -39,7 +39,7 @@ class PasswordMailer < ActionMailer::Base
     mail({
       to: attributes[:user].email,
       from: attributes[:from],
-      subject: I18n.t(:'adva.passwords.notifications.password_updated.subject'),
+      subject: "Password Updated",
     })
   end
 end

@@ -1,13 +1,13 @@
 <ul id="users">
   <% @users.each do |user| %>
-		<li>
-		  <%= gravatar_img(user) %>
-		  <h4><%= link_to user.name, [:admin, user] %></h4>
-		  <p><%= user.email %></p>
-		  <p class="actions">
-		    <%= link_to t(:'adva.links.edit'), [:edit, :admin, user], :class => 'edit' %>
-        <%= link_to t(:'adva.links.delete'), [:admin, user], :class => 'delete', :data => { :confirm => t(:'adva.users.confirm_delete') }, :method => :delete %>
-		  </p>
-		</li> 
-	<% end %>
+    <li>
+      <%= gravatar_img(user) %>
+      <h4><%= link_to user.name, [:admin, user] %></h4>
+      <p><%= user.email %></p>
+      <p class="actions">
+        <%= link_to "Edit", [:edit, :admin, user], class: 'edit' %>
+        <%= link_to "Delete", [:admin, user], method: :delete, class: 'delete', data: { confirm: "Are you sure you want to delete this user?" } %>
+      </p>
+    </li> 
+  <% end %>
 </ul>	

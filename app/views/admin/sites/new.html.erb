@@ -1,7 +1,7 @@
-<h2><%= t(:'adva.sites.title.create') %></h2> 
+<h2>New Site</h2> 
 
 <%= form_for [:admin, Site.new] do |form| %>
-  <h2><%= t(:'adva.titles.home_section') %></h2>  
+  <h2>Home Section</h2>  
 
   <% form.field_set :'home_section' do %>
     <%= fields_for :section, Section.new(params[:section]) do |s| %>

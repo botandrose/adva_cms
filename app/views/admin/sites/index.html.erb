@@ -14,7 +14,7 @@
     end
 
     t.empty :p, :class => 'empty' do
-      "<p>" + t(:'adva.sites.no_sites') + "</p>" +
+      "<p>You currently do not have any sites created.</p>" +
         "<p>" + link_to("Create one now &raquo;", new_admin_site_path) + "</p>"
     end
   end
