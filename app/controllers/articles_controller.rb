@@ -1,10 +1,10 @@
 class ArticlesController < BaseController
   before_action :set_section
   before_action :adjust_action
-  before_action :set_category, :only => :index
-  before_action :set_tags,     :only => :index
-  before_action :set_articles, :only => :index
-  before_action :set_article,  :only => :show
+  before_action :set_category
+  before_action :set_tags
+  before_action :set_articles
+  before_action :set_article, only: :show
 
   def index
     @article = @articles.first
@@ -41,16 +41,17 @@ class ArticlesController < BaseController
 
     def set_article
       @article = if params[:permalink]
-        @section.contents.includes(:author).find_by_permalink!(params[:permalink])
+        @articles.find_by_permalink!(params[:permalink])
       elsif @section.try(:single_article_mode)
-        @section.contents.first
+        @articles.first
       end
     end
 
     def set_articles
       scope = @category ? @category.all_contents : @section.contents
+      scope = scope.includes(:author)
       scope = scope.tagged(@tags) if @tags.present?
-      scope = scope.published
+      scope = scope.published if !current_user.admin?
       @articles = scope.paginate(page: current_page).limit(@section.contents_per_page)
     end
 
