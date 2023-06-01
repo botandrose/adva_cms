@@ -26,7 +26,7 @@ class Category < ActiveRecord::Base
   end
 
   def all_contents
-    Content.by_category(self)
+    Content.by_category(self).order(published_at: :desc)
   end
 
   protected
