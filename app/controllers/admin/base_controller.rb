@@ -9,7 +9,7 @@ class Admin::BaseController < ApplicationController
   include ResourceHelper
   helper TableBuilder
 
-  helper :base, :resource, :content, :meta_tags
+  helper :base, :resource, :content
 
   include Adva::AuthenticateUser
 

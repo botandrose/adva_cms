@@ -28,8 +28,6 @@ class Site < ActiveRecord::Base
 
   cattr_accessor :multi_sites_enabled, :cache_sweeper_logging
 
-  class_attribute :meta_fields, default: %w(keywords description author copyright geourl)
-
   class << self
     def find_by_host!(host)
       return Site.first if count == 1 && !multi_sites_enabled

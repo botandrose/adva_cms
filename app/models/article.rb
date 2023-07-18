@@ -4,8 +4,6 @@ class Article < Content
   validates_presence_of :title, :body
   validates_uniqueness_of :permalink, scope: :section_id, case_sensitive: true
 
-  class_attribute :meta_fields, default: %w(keywords description author copyright geourl)
-
   class << self
     def locale
       "en"
@@ -36,12 +34,5 @@ class Article < Content
     # raise "can not create full_permalink for an unpublished article" unless published?
     date = [:year, :month, :day].map { |key| [key, (published? ? published_at : created_at).send(key)] }.flatten
     Hash[:permalink, permalink, *date]
-  end
-
-  def default_meta_description
-    sanitizer = defined?(Rails::Html::FullSanitizer) ? Rails::Html::FullSanitizer.new : HTML::FullSanitizer.new
-    sanitized_excerpt = sanitizer.sanitize(excerpt || "").gsub(/\s+/, " ").strip.truncate(160)
-    sanitized_body = sanitizer.sanitize(body || "").gsub(/\s+/, " ").strip.truncate(160)
-    sanitized_excerpt.present? ? sanitized_excerpt : sanitized_body
   end
 end
