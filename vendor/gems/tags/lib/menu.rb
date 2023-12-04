@@ -108,7 +108,7 @@ module Menu
     end
 
     def text
-      @text ||= key.is_a?(Symbol) ? I18n.t(key, :scope => :'adva.titles') : key
+      @text ||= key.is_a?(Symbol) ? key.to_s.titleize : key
     end
 
     def content

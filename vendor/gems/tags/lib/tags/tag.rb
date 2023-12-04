@@ -85,7 +85,7 @@ module Tags
     end
 
     def content=(content)
-      @content = content.is_a?(Symbol) ? I18n.t(content) : content
+      @content = content.is_a?(Symbol) ? content.to_s.titleize : content
     end
 
     def tag_name
