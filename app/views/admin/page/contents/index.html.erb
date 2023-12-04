@@ -18,7 +18,7 @@
     end
 
     t.empty :p, :class => 'empty' do
-      raw "There are no contents in #{@section.title}\n" +
+      raw "There are no contents in #{@section.title}. " +
         link_to("Create one now", [:new, :admin, @section, :content])
     end
   end
