@@ -27,7 +27,7 @@ class ArticlesController < BaseController
       scope = category ? category.all_contents : section.contents
       scope = scope.tagged(tags) if tags.any?
       scope = scope.published
-      scope.paginate(page: current_page).limit(section.contents_per_page)
+      scope.paginate(page: current_page).limit(section.contents_per_page.to_i)
     end
   end
 
