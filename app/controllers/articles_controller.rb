@@ -39,15 +39,10 @@ class ArticlesController < BaseController
   end
 
   helper_method def tags
-    if !defined?(@tags)
-      @tags = if params[:tags]
-        names = params[:tags].split('+')
-        @tags = Tag.where(name: names).pluck(:name)
-        raise ActiveRecord::RecordNotFound unless @tags.size == names.size
-      else
-        []
-      end
-    end
+    return @tags if defined?(@tags)
+    names = params[:tags].to_s.split('+')
+    @tags = Tag.where(name: names).pluck(:name)
+    raise ActiveRecord::RecordNotFound if @tags.size != names.size
     @tags
   end
 
