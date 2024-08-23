@@ -2,6 +2,13 @@ require "adva/has_permalink"
 require "adva/belongs_to_author"
 
 class Content < ActiveRecord::Base
+  # Fix STI in dev
+  unless Rails.application.config.eager_load
+    def self.find_sti_class(type_name)
+      eval(type_name.to_s)
+    end
+  end
+
   acts_as_nested_set :scope => :section_id
 
   acts_as_taggable
@@ -145,3 +152,4 @@ class Content < ActiveRecord::Base
       end
     end
 end
+
