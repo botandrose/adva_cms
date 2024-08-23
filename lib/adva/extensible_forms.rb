@@ -76,35 +76,6 @@ module Adva
         end
     end
 
-    helpers = field_helpers + %w(select date_select datetime_select time_select time_zone_select collection_select) -
-                              %w(hidden_field label fields_for apply_form_for_options!)
-
-    helpers.each do |method_name|
-      class_eval <<-src, __FILE__, __LINE__
-        def #{method_name}(*args, &block)
-          type = #{method_name.to_sym.inspect}
-
-          options = args.extract_options!
-          options = add_default_class_names(options, type)
-          # options = add_tabindex(options, type)
-
-          label, wrap, hint = options.delete(:label), options.delete(:wrap), options.delete(:hint)
-          name = args.first
-
-          hint = I18n.t(hint) if hint.is_a?(Symbol)
-          options[:title] = hint
-
-          with_callbacks(name) do
-            tag = super(*(args << options), &block)
-            # remember_tabindex(tag, options)
-            tag = labelize(type, tag, name, label) if label || self.options[:labels]
-            tag = wrap(tag) if wrap || self.options[:wrap]
-            tag
-          end
-        end
-      src
-    end
-
     def field_set(*args, &block)
       options = args.extract_options!
       options = add_default_class_names(options, :field_set)
@@ -163,25 +134,6 @@ module Adva
     end
 
     protected
-
-    def labelize(type, tag, method, label = nil)
-      label = case label
-      when String then label
-      when Symbol then I18n.t(label)
-      when TrueClass then
-        scope = [:activerecord, :attributes] + object.class.to_s.underscore.split('/')
-        string = I18n.t(method, :scope => scope)
-        string.is_a?(String) ? string : method.to_s.titleize
-      else nil
-      end
-
-      case type
-      when :check_box, :radio_button
-        tag + self.label(method, label, :class => 'inline light', :for => extract_id(tag), :id => "#{extract_id(tag)}_label")
-      else
-        self.label(method, label) + tag
-      end
-    end
 
     def wrap(tag)
       @template.content_tag(:p, tag)

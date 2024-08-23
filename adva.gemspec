@@ -17,6 +17,7 @@ Gem::Specification.new do |gem|
 
   gem.add_dependency "will_paginate"
   gem.add_dependency "awesome_nested_set"
+  gem.add_dependency "labelled_form"
   gem.add_dependency "ckeditor"
   gem.add_dependency "nacelle"
   gem.add_dependency "friendly_id", "~> 5.1.0" # 5.2.0 tries to call #slug= on invalid save
