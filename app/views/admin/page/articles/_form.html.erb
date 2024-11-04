@@ -33,7 +33,7 @@
   <%= f.label :draft, "Save as Draft?" %>
   <%= f.check_box :draft?, label: "Yes, save this article as a draft" %>
 
-  <p class=".show-if-previous-unchecked">
+  <p class="show-if-previous-unchecked">
   <%= f.label :published_at, "Publish on this date" %>
   <%= f.datetime_select :published_at,
     start_year: (@article.published_at || Time.zone.now).year-1,
