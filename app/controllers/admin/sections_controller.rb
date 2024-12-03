@@ -52,7 +52,7 @@ class Admin::SectionsController < Admin::BaseController
       parent = Section.find_by(id: attrs[:parent_id])
       left = Section.find_by_id attrs[:left_id]
       if parent
-        content.move_to_child_with_index parent, 0
+        section.move_to_child_with_index parent, 0
       else
         section.move_to_root
         section.move_to_left_of section.siblings.first

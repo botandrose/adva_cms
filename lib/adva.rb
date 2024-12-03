@@ -3,7 +3,6 @@ require "will_paginate"
 require "awesome_nested_set"
 require "actionpack/page_caching"
 require "rails-observers"
-require "jquery-rails"
 
 require "rails_ext"
 
