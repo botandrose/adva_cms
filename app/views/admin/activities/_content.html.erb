@@ -10,7 +10,7 @@
     <% type = activity.object_attributes['type'].tableize.singularize.titleize %>
     <% actions = activity.all_actions.to_sentence %>
     <% name = (activity.section ? link_to(activity.section.title, [:admin, activity.section, :contents]) : "Deleted Section").html_safe %>
-    <%= "#{type} #{actions} in #{name}." %>
+    <%= type %> <%= actions %> in <%= name %>.
   </p>
   <%= link_to_if activity.section, activity.title, [:edit, :admin, activity.section, activity.object] %>
 </li>
