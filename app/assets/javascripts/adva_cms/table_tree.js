@@ -289,7 +289,7 @@ class Table extends Base {
     this.trs = Array.from(this.table.querySelectorAll('tr'))
     this.children = this.trs.map(tr => {
       if(this.table_tree.level(tr) === 0) {
-        return new Node(this.table_tree, this, tr, this.table_tree.level(tr))
+        return new TableNode(this.table_tree, this, tr, this.table_tree.level(tr))
       }
     }).filter(e => e)
   }
@@ -392,7 +392,7 @@ class Table extends Base {
   }
 }
 
-class Node extends Base {
+class TableNode extends Base {
   constructor(table_tree, parent, element, level) {
     super()
     this.table_tree = table_tree
@@ -403,7 +403,7 @@ class Node extends Base {
     this.children = this.find_children().map(child => {
       var level = this.table_tree.level(child)
       if(level == this.level + 1) {
-        return new Node(this.table_tree, this, child, level)
+        return new TableNode(this.table_tree, this, child, level)
       }
     }).filter(e => e)
   }
