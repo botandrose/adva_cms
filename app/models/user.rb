@@ -18,14 +18,15 @@ class User < ActiveRecord::Base
     :with => /(\A(\s*)\Z)|(\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z)/i
 
   validates_presence_of     :password,                         :if => :password_required?
-  validates_length_of       :password, :within => 4..40,       :if => :password_required?
+  validates_length_of       :password, :within => 12..128,     :if => :password_required?
+  validate                  :password_complexity,              :if => :password_required?
 
   class << self
     def authenticate(credentials)
       return false unless user = User.find_by_email(credentials[:email])
       user.authenticate(credentials[:password]) ? user : false
     end
-    
+
     def anonymous(attributes = {}) # FIXME rename to build_anonymous
       attributes[:anonymous] = true
       new attributes
@@ -101,5 +102,19 @@ class User < ActiveRecord::Base
 
     def password_required?
       !anonymous? && (password_hash.nil? || password.present?)
+    end
+
+    def password_complexity
+      return unless password.present?
+
+      character_types = 0
+      character_types += 1 if password.match?(/[a-z]/)      # lowercase
+      character_types += 1 if password.match?(/[A-Z]/)      # uppercase
+      character_types += 1 if password.match?(/[0-9]/)      # numbers
+      character_types += 1 if password.match?(/[!@#$%^&*()_+\-=\[\]{}|;:,.<>?]/) # symbols
+
+      if character_types < 3
+        errors.add(:password, 'must contain at least 3 of the following: lowercase letters, uppercase letters, numbers, or special characters')
+      end
     end
 end
