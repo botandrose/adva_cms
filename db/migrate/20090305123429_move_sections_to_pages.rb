@@ -1,9 +1,9 @@
-class MoveSectionsToPages < ActiveRecord::Migration
+class MoveSectionsToPages < ActiveRecord::Migration[7.0]
   def self.up
-    Section.update_all "type = 'Page'", "type = 'Section' OR type IS NULL"
+    execute "UPDATE sections SET type = 'Page' WHERE type = 'Section' OR type IS NULL"
   end
 
   def self.down
-    Section.update_all "type = NULL", "type = 'Page'"
+    execute "UPDATE sections SET type = NULL WHERE type = 'Page'"
   end
 end

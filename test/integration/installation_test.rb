@@ -2,7 +2,7 @@
 
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'test_helper' ))
 
-class InstallationTest < ActionController::IntegrationTest
+class InstallationTest < ActionDispatch::IntegrationTest
   include CacheableFlash::TestHelpers
 
   def setup

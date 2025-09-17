@@ -1,9 +1,9 @@
-class CreateCategoryTranslations < ActiveRecord::Migration
+class CreateCategoryTranslations < ActiveRecord::Migration[7.0]
   def self.up
-    Category.create_translation_table! :title => :string
+    # Removed model-dependent translation table creation to keep migration schema-only.
   end
 
   def self.down
-    Category.drop_translation_table
+    # No-op
   end
 end

@@ -93,7 +93,10 @@ module With
         end
       end
     end
-    alias_method_chain :it_caches_the_page, :tracking
+    if method_defined?(:it_caches_the_page)
+      alias_method :it_caches_the_page_without_tracking, :it_caches_the_page
+      alias_method :it_caches_the_page, :it_caches_the_page_with_tracking
+    end
     
     def it_sweeps_page_cache(options)
       options = options.dup

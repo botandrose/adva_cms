@@ -1,5 +1,7 @@
 module With
   class Context < Node
+    # Prevent Array() coercion from invoking method_missing(:to_ary)
+    def to_ary; nil; end
     class << self
       def build(*names, &block)
         context = new

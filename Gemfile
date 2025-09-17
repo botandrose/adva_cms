@@ -1,4 +1,4 @@
 source 'https://rubygems.org'
 
-# Specify your gem's dependencies in adva.gemspec
-gemspec
+# Delegate to the Rails 7.2 Gemfile for local dev/test
+eval_gemfile 'gemfiles/rails_7_2.gemfile'

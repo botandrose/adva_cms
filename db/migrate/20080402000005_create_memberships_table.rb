@@ -1,4 +1,4 @@
-class CreateMembershipsTable < ActiveRecord::Migration
+class CreateMembershipsTable < ActiveRecord::Migration[7.0]
   def self.up
     create_table :memberships, :force => true do |t|
       t.references :site

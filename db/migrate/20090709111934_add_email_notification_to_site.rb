@@ -1,4 +1,4 @@
-class AddEmailNotificationToSite < ActiveRecord::Migration
+class AddEmailNotificationToSite < ActiveRecord::Migration[7.0]
 
   # Throwaway - short term solution
   

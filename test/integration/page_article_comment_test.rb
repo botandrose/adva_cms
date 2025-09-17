@@ -1,7 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_helper' )
 
 module IntegrationTests
-  class PageArticleCommentTest < ActionController::IntegrationTest
+class PageArticleCommentTest < ActionDispatch::IntegrationTest
     def setup
       super
       @site = use_site! 'site with pages'

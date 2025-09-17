@@ -1,4 +1,4 @@
-class CreateContentsTable < ActiveRecord::Migration
+class CreateContentsTable < ActiveRecord::Migration[7.0]
   def self.up
     create_table :contents, :force => true do |t|
       t.references :site
@@ -24,12 +24,13 @@ class CreateContentsTable < ActiveRecord::Migration
       t.datetime   :published_at
       t.timestamps
     end
-    Content.create_translation_table! :title => :string, :body => :text,
-      :excerpt => :text, :body_html => :text, :excerpt_html => :text
+    # Removed model-dependent translation table creation. Migrations should be
+    # schema-only. If a translation table is needed, add a dedicated schema
+    # migration that does not depend on model code.
   end
 
   def self.down
     drop_table :contents
-    Content.drop_translation_table
+    # No-op: do not attempt to drop model-managed translation tables here.
   end
 end

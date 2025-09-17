@@ -1,0 +1,11 @@
+source "https://rubygems.org"
+
+gemspec path: ".."
+
+gem "rails", "~> 8.0.0"
+gem "sqlite3", "~> 2.1"
+gem "rake"
+# Keep Rails 8 deps minimal to ease resolution
+gem "haml", ">= 6.0"
+gem "rack", "~> 3.1.7"
+gem "test-unit", "~> 3.5"

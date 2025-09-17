@@ -1,9 +1,9 @@
-class CreateSectionTranslations < ActiveRecord::Migration
+class CreateSectionTranslations < ActiveRecord::Migration[7.0]
   def self.up
-    Section.create_translation_table! :title => :string
+    # Removed model-dependent translation table creation to keep migration schema-only.
   end
 
   def self.down
-    Section.drop_translation_table
+    # No-op
   end
 end

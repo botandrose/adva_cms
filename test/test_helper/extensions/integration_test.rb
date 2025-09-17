@@ -1,4 +1,4 @@
-module ActionController
+module ActionDispatch
   class IntegrationTest
     def default_theme?
       controller.site.themes.active.empty?

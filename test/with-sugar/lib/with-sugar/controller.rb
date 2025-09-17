@@ -92,16 +92,21 @@ module With
   protected
 
     def assert_content_type(type = :html)
-      mime = Mime::Type.lookup_by_extension((type || :html).to_s)
-      assert_equal mime, @response.content_type, "Renders with Content-Type of #{@response.content_type}, not #{mime}"
+      expected = Mime::Type.lookup_by_extension((type || :html).to_s).to_s
+      actual = if @response.respond_to?(:media_type)
+                 @response.media_type
+               else
+                 @response.content_type.to_s
+               end
+      assert_equal expected, actual, "Renders with Content-Type of #{actual.inspect}, not #{expected.inspect}"
     end
 
     def assert_status(status)
       case status
-      when String, Fixnum
+      when String, Integer
         assert_equal status.to_s, @response.code, "Renders with status of #{@response.code.inspect}, not #{status}"
       when Symbol
-        code_value = ActionController::StatusCodes::SYMBOL_TO_STATUS_CODE[status]
+        code_value = (defined?(Rack::Utils::SYMBOL_TO_STATUS_CODE) ? Rack::Utils::SYMBOL_TO_STATUS_CODE[status] : 200)
         assert_equal code_value.to_s, @response.code, "Renders with status of #{@response.code.inspect}, not #{code_value.inspect} (#{status.inspect})"
       else
         assert_equal "200", @response.code, "Is not successful"

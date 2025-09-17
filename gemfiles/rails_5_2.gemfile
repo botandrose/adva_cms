@@ -1,0 +1,9 @@
+source "https://rubygems.org"
+
+# Reference the gemspec from the repo root
+gemspec path: ".."
+
+gem "rails", "~> 5.2.8"
+gem "sqlite3", "~> 1.4"
+gem "rake"
+

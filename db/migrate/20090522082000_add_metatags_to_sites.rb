@@ -1,4 +1,4 @@
-class AddMetatagsToSites < ActiveRecord::Migration
+class AddMetatagsToSites < ActiveRecord::Migration[7.0]
   def self.up
     add_column :sites, :meta_author, :string
     add_column :sites, :meta_geourl, :string

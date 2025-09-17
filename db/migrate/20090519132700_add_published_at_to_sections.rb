@@ -1,7 +1,7 @@
-class AddPublishedAtToSections < ActiveRecord::Migration
+class AddPublishedAtToSections < ActiveRecord::Migration[7.0]
   def self.up
     add_column :sections, :published_at, :datetime
-    Section.all.reject { |s| s.class == Page && s.single_article_mode }.each { |s| s.update_attribute(:published_at, Time.current) }
+    # Removed data backfill using models. Keep migrations schema-only.
   end
 
   def self.down

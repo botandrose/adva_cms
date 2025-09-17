@@ -16,8 +16,8 @@ class Activity < ActiveRecord::Base
   include Adva::BelongsToAuthor
   belongs_to_author
 
-  serialize :actions
-  serialize :object_attributes
+  serialize :actions, coder: YAML
+  serialize :object_attributes, coder: YAML
 
   validates_presence_of :site, :section, :object
 

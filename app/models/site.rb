@@ -1,6 +1,6 @@
 class Site < ActiveRecord::Base
-  serialize :permissions
-  serialize :spam_options
+  serialize :permissions, coder: YAML
+  serialize :spam_options, coder: YAML
 
   has_many :sections, :dependent => :destroy do
     def paths
@@ -31,7 +31,7 @@ class Site < ActiveRecord::Base
   class << self
     def find_by_host!(host)
       return Site.first if count == 1 && !multi_sites_enabled
-      where("? = ANY (hosts)", host).first or raise ActiveRecord::RecordNotFound
+      where(host: host).first or raise ActiveRecord::RecordNotFound
     end
 
     def bust_cache!

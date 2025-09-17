@@ -4,7 +4,7 @@ module Adva
       base.class_eval do
         extend ClassMethods
         class_attribute :option_definitions, default: {}
-        serialize :options
+        serialize :options, coder: YAML
       end
     end
 
@@ -43,4 +43,3 @@ module Adva
     end
   end
 end
-

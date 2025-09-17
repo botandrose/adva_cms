@@ -1,4 +1,4 @@
-class CreateSectionsTable < ActiveRecord::Migration
+class CreateSectionsTable < ActiveRecord::Migration[7.0]
   def self.up
     create_table :sections do |t|
       t.string      :type

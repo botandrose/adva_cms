@@ -15,7 +15,9 @@ module With
   
   module ClassMethods
     def view(name, options = {}, &block)
-      options[:path] ||= controller_class.controller_path if respond_to?(:controller_class)
+      if respond_to?(:controller_class) && controller_class
+        options[:path] ||= controller_class.controller_path
+      end
       name = "#{options[:path]}/#{name}"
       With.view name, options, &block
     end
@@ -47,7 +49,7 @@ module With
   end
   
   def has_tag(*args, &block)
-    assert_select *args, &block
+    assert_select(*args, &block)
   end
   
   def has_form_posting_to(path, &block)

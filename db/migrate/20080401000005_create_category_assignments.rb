@@ -1,4 +1,4 @@
-class CreateCategoryAssignments < ActiveRecord::Migration
+class CreateCategoryAssignments < ActiveRecord::Migration[7.0]
   def self.up
     create_table :category_assignments do |t|
       t.references :content

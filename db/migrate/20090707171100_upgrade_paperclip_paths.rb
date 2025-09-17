@@ -1,29 +1,6 @@
-class UpgradePaperclipPaths < ActiveRecord::Migration
-  include 
+class UpgradePaperclipPaths < ActiveRecord::Migration[7.0]
   def self.up
-    sites = Site.all
-      sites.each do |site|
-        # Old paperclip directories
-        old_assets_dir = "#{Rails.root}/public/assets"
-        old_photos_dir = "#{Rails.root}/public/photos"
-        old_themes_dir = "#{Rails.root}/public/themes"
-        old_photos_dir_multisite = "#{Rails.root}/public/sites/site-#{site.perma_host}/photos"
-        old_themes_dir_multisite = "#{Rails.root}/public/themes/site-#{site.id}"
-        
-        # New paperclip directory
-        site_upload_dir = "#{Rails.root}/public/sites/site-#{site.id}"
-        FileUtils.mkdir_p(site_upload_dir) unless File.exists?(site_upload_dir)
-        
-        # Copy old files to new location
-        p "Starting file copy ..."
-        FileUtils.cp_r("#{old_assets_dir}/.", site_upload_dir + '/assets', :verbose => true) if File.exists?(old_assets_dir)
-        FileUtils.cp_r("#{old_photos_dir}/.", site_upload_dir + '/photos', :verbose => true) if File.exists?(old_photos_dir)
-        FileUtils.cp_r("#{old_themes_dir}/.", site_upload_dir + '/themes', :verbose => true) if File.exists?(old_themes_dir)
-        FileUtils.cp_r("#{old_photos_dir_multisite}/.", site_upload_dir + '/photos', :verbose => true) if File.exists?(old_photos_dir_multisite)
-        FileUtils.cp_r("#{old_themes_dir_multisite}/.", site_upload_dir + '/themes', :verbose => true) if File.exists?(old_themes_dir_multisite)
-        p "Cleanup the new themes directory..."
-        FileUtils.rm_rf(site_upload_dir + "/themes/site-#{site.id}", :verbose => true) if File.exists?(site_upload_dir + "/themes/site-#{site.id}")
-    end
+    # No-op: remove model/filesystem side effects from migration.
   end
   
   def self.down

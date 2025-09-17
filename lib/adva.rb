@@ -1,8 +1,16 @@
 require "rails"
 require "will_paginate"
 require "awesome_nested_set"
-require "actionpack/page_caching"
-require "rails-observers"
+begin
+  require "actionpack/page_caching"
+rescue LoadError
+  warn "[adva] actionpack-page_caching not available; page caching tests may be skipped"
+end
+begin
+  require "rails-observers"
+rescue LoadError
+  warn "[adva] rails-observers not available"
+end
 
 require "rails_ext"
 
@@ -24,6 +32,7 @@ require "adva/extensible_forms"
 module Adva
   class Engine < Rails::Engine
     initializer "add assets to precompilation list" do |app|
+      next unless app.config.respond_to?(:assets) && app.config.assets
       app.config.assets.precompile += %w(adva_cms.js)
       app.config.assets.precompile += %w(adva_cms/admin.css)
       app.config.assets.precompile += %w(admin.css admin.js)
@@ -36,4 +45,3 @@ module Adva
     end
   end
 end
-

@@ -1,4 +1,4 @@
-class AddAccountToUser < ActiveRecord::Migration
+class AddAccountToUser < ActiveRecord::Migration[7.0]
   def self.up
     add_column  :users, :account_id, :integer
     add_index   :users, :account_id

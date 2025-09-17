@@ -1,4 +1,4 @@
-class CreateTaggableTables < ActiveRecord::Migration
+class CreateTaggableTables < ActiveRecord::Migration[7.0]
   def self.up
     create_table :tags do |t|
       t.column :name, :string

@@ -10,7 +10,7 @@ class Section < ActiveRecord::Base
     types.push(type) unless types.include?(type)
   end
 
-  serialize :permissions
+  serialize :permissions, coder: YAML
 
   include Adva::HasOptions
   has_option :contents_per_page, :default => 15
