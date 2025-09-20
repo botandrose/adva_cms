@@ -17,7 +17,9 @@ class Site < ActiveRecord::Base
 
   has_many :memberships, :dependent => :delete_all
   has_many :users, :through => :memberships, :dependent => :destroy
-  has_many :cached_pages, -> { order(updated_at: :desc) }, dependent: :destroy
+  # Some deployments persist cached pages on disk only; guard the association
+  # so missing model classes don't break basic admin flows.
+  has_many :cached_pages, -> { order(updated_at: :desc) }, dependent: :destroy if defined?(CachedPage)
   has_many :activities, :dependent => :destroy
 
   before_validation :downcase_host, :replace_host_spaces # c'mon, can't this be normalize_host or something?

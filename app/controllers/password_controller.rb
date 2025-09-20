@@ -20,9 +20,10 @@ class PasswordController < BaseController
   end
 
   def update
-    if current_user && current_user.update(params[:user].slice(:password))
+    password_params = params.require(:user).permit(:password)
+    if current_user && current_user.update(password_params)
       trigger_event current_user, :password_updated
-      authenticate_user(:email => current_user.email, :password => params[:user][:password])
+      authenticate_user(:email => current_user.email, :password => password_params[:password])
       redirect_to "/", notice: "Your password was changed successfully."
     else
       params[:token] = nil # ugh

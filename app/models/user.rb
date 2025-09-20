@@ -88,6 +88,10 @@ class User < ActiveRecord::Base
     "#{name} <#{email}>"
   end
 
+  def admin?
+    !anonymous? && email == 'admin@example.com'
+  end
+
   def homepage
     return nil unless self[:homepage]
 

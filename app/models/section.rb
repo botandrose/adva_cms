@@ -40,6 +40,12 @@ class Section < ActiveRecord::Base
   validates_uniqueness_of :permalink, scope: :site_id, case_sensitive: true
   validates_numericality_of :contents_per_page, :only_integer => true, :message => :only_integer
 
+  # Legacy UI field used in admin form; provide a virtual attribute so the form renders.
+  attr_writer :hidden_on_global_nav
+  def hidden_on_global_nav
+    @hidden_on_global_nav || false
+  end
+
   # validates_each :template, :layout do |record, attr, value|
   #   record.errors.add attr, 'may not contain dots' if value.index('.') # FIXME i18n
   #   record.errors.add attr, 'may not start with a slahs' if value.index('.') # FIXME i18n

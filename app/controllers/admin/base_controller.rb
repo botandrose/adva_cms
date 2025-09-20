@@ -40,12 +40,7 @@ class Admin::BaseController < ApplicationController
     end
 
     def return_from(action, options = {})
-      CGI.unescape(params[:return_to] || begin
-        url = Registry.get(:redirect, action)
-        url = Registry.get(:redirect, url) if url.is_a?(Symbol)
-        url = url.call(self) if url.is_a?(Proc)
-        url || options[:default] || '/'
-      end)
+      CGI.unescape(params[:return_to] || options[:default] || '/')
     end
 
     def current_page

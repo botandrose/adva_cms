@@ -123,6 +123,14 @@ class Content < ActiveRecord::Base
     published? && published_at_changed?
   end
 
+  def approved_comments
+    []
+  end
+
+  def accept_comments?
+    false
+  end
+
   # def to_param(key)
   #   value = if self.respond_to?(key)
   #     self.send(key)

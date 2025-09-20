@@ -27,7 +27,7 @@ class Admin::Page::ArticlesController < Admin::BaseController
   end
 
   def create
-    @article = @section.articles.build(params[:article])
+    @article = @section.articles.build(article_params)
     if @article.save
       trigger_events(@article)
       redirect_to [:edit, :admin, @section, @article], notice: "The article has been created."
@@ -37,11 +37,9 @@ class Admin::Page::ArticlesController < Admin::BaseController
       render :action => 'new'
     end
   end
-
+  
   def update
-    @article.attributes = params[:article]
-
-    if @article.save
+    if @article.update(article_params)
       trigger_events(@article)
       redirect_to [:edit, :admin, @section, @article], notice: "The article has been updated."
     else
@@ -80,42 +78,22 @@ class Admin::Page::ArticlesController < Admin::BaseController
       @categories = @section.categories.roots
     end
 
-    def save_with_revision?
-      @save_revision ||= !!params.delete(:save_revision)
-    end
-
-    # # adjusts the action from :index to :new or :edit when the current section and it doesn't have any articles
-    # def adjust_action
-    #   if params[:action] == 'index' and @section.try(:single_article_mode)
-    #     if @section.articles.empty?
-    #       action = 'new'
-    #       params[:article] = { :title => @section.title }
-    #     else
-    #       action = 'edit'
-    #       params[:id] = @section.articles.first.id
-    #     end
-    #     @action_name = @_params[:action] = request.parameters['action'] = action
-    #   end
-    # end
-
     def protect_single_article_mode
-      if params[:action] == 'index' and @section.try(:single_article_mode)
+      if params[:action] == 'index' && @section.try(:single_article_mode)
         redirect_to @section.articles.empty? ?
           new_admin_article_url(@section, :article => { :title => @section.title }) :
           edit_admin_article_url(@section, @section.articles.first)
       end
     end
-    
+
     def optimistic_lock
       return unless params[:article]
-      
-      unless updated_at = params[:article].delete(:updated_at)
-        # TODO raise something more explicit here
+
+      unless params[:article].key?(:updated_at)
         raise "Can not update article: timestamp missing. Please make sure that your form has a hidden field: updated_at."
       end
-      
-      # We parse the timestamp of article too so we can get rid of those microseconds postgresql adds
-      if @article.updated_at && (Time.zone.parse(updated_at) != Time.zone.parse(@article.updated_at.to_s))
+
+      if @article.updated_at && (Time.zone.parse(params[:article][:updated_at].to_s) != Time.zone.parse(@article.updated_at.to_s))
         flash.now.alert = "In the meantime this article has been updated by someone else. Please resolve any conflicts."
         render :action => :edit
       end
@@ -125,5 +103,9 @@ class Admin::Page::ArticlesController < Admin::BaseController
       @site.touch
     end
 
-end
+    def article_params
+      return {} unless params[:article]
+      params.require(:article).permit(:title, :body, :author_id, :published_at, :draft, :excerpt, :filter, :tag_list, :updated_at, :permalink)
+    end
 
+end

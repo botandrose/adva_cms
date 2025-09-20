@@ -3,7 +3,8 @@ class Admin::UsersController < Admin::BaseController
   before_action :authorize_access
 
   def index
-    @users = User.where(admin: true).to_a + @site.users.to_a
+    admin_users = User.all.select(&:admin?)
+    @users = admin_users + @site.users.to_a
   end
 
   def show
@@ -14,7 +15,7 @@ class Admin::UsersController < Admin::BaseController
   end
 
   def create
-    @user = User.new(params[:user])
+    @user = User.new(user_params)
     @user.memberships.build(:site => @site) if @site and !@user.admin?
 
     if @user.save
@@ -31,7 +32,7 @@ class Admin::UsersController < Admin::BaseController
   end
 
   def update
-    if @user.update(params[:user])
+    if @user.update(user_params)
       trigger_events(@user)
       redirect_to [:admin, @user], notice: "The user has been updated."
     else
@@ -58,6 +59,11 @@ class Admin::UsersController < Admin::BaseController
 
     def set_user
       @user = User.find(params[:id])
+    end
+
+    def user_params
+      return {} unless params[:user]
+      params.require(:user).permit(:first_name, :last_name, :email, :password)
     end
 
     # FIXME extract this and use Rbac contexts instead

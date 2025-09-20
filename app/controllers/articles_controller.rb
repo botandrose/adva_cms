@@ -1,17 +1,19 @@
 class ArticlesController < BaseController
   def index
     @article = articles.first
-    if !@article
-      raise ActiveRecord::RecordNotFound
-    else
+    if @article
       show
+    else
+      # No articles for the current section: render the section index
+      # rather than raising, so root pages without articles still work.
+      render template: "#{section.type.tableize}/articles/index"
     end
   end
 
   def show
     @article ||= section.articles.find_by_permalink!(params[:permalink])
     if @article.draft?
-      raise ActiveRecord::RecordNotFound unless current_user.admin?
+      raise ActiveRecord::RecordNotFound unless current_user&.admin?
     end
     return redirect_to @article.body if @article.is_a?(Link)
 

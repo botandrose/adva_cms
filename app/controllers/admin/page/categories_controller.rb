@@ -9,7 +9,7 @@ class Admin::Page::CategoriesController < Admin::BaseController
   end
 
   def create
-    @category = @section.categories.build params[:category]
+    @category = @section.categories.build category_params
     if @category.save
       redirect_to [:admin, @section, :categories], notice: "The category has been created."
     else
@@ -19,7 +19,7 @@ class Admin::Page::CategoriesController < Admin::BaseController
   end
 
   def update
-    if @category.update params[:category]
+    if @category.update category_params
       redirect_to [:admin, @section, :categories], notice: "The category has been updated."
     else
       flash.now.alert = "The category could not be updated." + current_resource_errors
@@ -57,5 +57,10 @@ class Admin::Page::CategoriesController < Admin::BaseController
 
     def set_category
       @category = @section.categories.find(params[:id])
+    end
+
+    def category_params
+      return {} unless params[:category]
+      params.require(:category).permit(:title, :permalink, :parent_id)
     end
 end

@@ -1,0 +1,48 @@
+ENV["RAILS_ENV"] ||= "test"
+
+require File.expand_path("internal/config/environment", __dir__)
+require "rspec/rails"
+
+# Keep Rails 7 path helpers in specs
+begin
+  require "rails-controller-testing"
+  %i[assigns assert_template].each do |_|
+    # no-op; the gem mixes into test frameworks, not RSpec; request specs won't need these
+  end
+rescue LoadError
+end
+
+Dir[File.join(__dir__, "support", "**", "*.rb")].sort.each { |f| require f }
+
+RSpec.configure do |config|
+  config.use_transactional_fixtures = true
+  config.infer_spec_type_from_file_location!
+  config.filter_rails_from_backtrace!
+  # Disable CSRF in request specs to avoid 422 on form posts
+  config.before do
+    if defined?(ActionController::Base)
+      ActionController::Base.allow_forgery_protection = false
+    end
+  end
+  # Enable exception handling for most specs, but allow it to be overridden
+  config.before(type: :request) do
+    if defined?(Rails) && Rails.respond_to?(:application)
+      # Allow rescue_from to work by enabling exception handling
+      Rails.application.env_config["action_dispatch.show_exceptions"] = true
+      Rails.application.env_config["action_dispatch.show_detailed_exceptions"] = false
+    end
+  end
+
+  # Set default locale to en for consistency
+  config.before do
+    I18n.default_locale = :en
+    I18n.locale = :en
+  end
+
+  # Stub event system to prevent email sending during tests
+  config.before do
+    # Stub trigger_event methods to prevent email sending
+    allow_any_instance_of(ActionController::Base).to receive(:trigger_event)
+    allow_any_instance_of(ActionController::Base).to receive(:trigger_events)
+  end
+end

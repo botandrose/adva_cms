@@ -17,8 +17,8 @@ class Admin::SitesController < Admin::BaseController
   end
 
   def create
-    site = Site.new params[:site]
-    section = site.sections.build(params[:section])
+    site = Site.new site_params
+    section = site.sections.build(section_params)
     site.sections << section
 
     if site.save
@@ -33,7 +33,7 @@ class Admin::SitesController < Admin::BaseController
   end
 
   def update
-    if @site.update params[:site]
+    if @site.update site_params
       redirect_to edit_admin_site_url, notice: "The site has been updated."
     else
       flash.now.alert = "The site could not be updated"
@@ -63,6 +63,11 @@ class Admin::SitesController < Admin::BaseController
       end
     end
 
+    # For resourceful routes under /admin/sites/:id we must respect :id, not the host.
+    def set_site
+      @site = params[:id] ? Site.find(params[:id]) : Site.find_by_host!(request.host)
+    end
+
     def params_site
       params[:site] ||= {}
       params[:site][:timezone]       ||= Time.zone.name
@@ -74,7 +79,17 @@ class Admin::SitesController < Admin::BaseController
     def params_section
       params[:section] ||= {}
       params[:section][:title] ||= 'Home'
-      params[:section][:title] ||= Section.types.first
+      params[:section][:type]  ||= Section.types.first
+    end
+
+    def site_params
+      return {} unless params[:site]
+      params.require(:site).permit(:name, :title, :host, :email, :timezone, :comment_filter)
+    end
+
+    def section_params
+      return {} unless params[:section]
+      params.require(:section).permit(:title, :permalink, :type)
     end
 
     def protect_single_site_mode

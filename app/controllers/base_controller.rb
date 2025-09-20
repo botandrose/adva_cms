@@ -11,6 +11,8 @@ class BaseController < ApplicationController
 
   include Adva::AuthenticateUser
 
+  rescue_from ActiveRecord::RecordNotFound, with: :not_found
+
   before_action :set_site, :set_timezone
   attr_accessor :site, :section
 
@@ -34,7 +36,7 @@ class BaseController < ApplicationController
           sections.first
         end
       end
-      raise ActiveRecord::RecordNotFound unless @section.published?(true) || current_user.admin?
+      raise ActiveRecord::RecordNotFound unless @section.published?(true) || (current_user&.admin?)
       @section
     end
     alias :set_section :section
@@ -81,6 +83,10 @@ class BaseController < ApplicationController
 
     def skip_caching!
       @skip_caching = true
+    end
+
+    def not_found
+      render plain: "Not Found", status: 404
     end
 end
 

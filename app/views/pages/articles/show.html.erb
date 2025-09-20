@@ -1,9 +1,7 @@
 <% if @article %>
 
   <div id="<%= dom_id @article %>" class="entry">
-		<% unless @section.try(:single_article_mode) %>
- 			<h2><%= link_to_content(@article) %></h2> 
-		<% end %>
+		<h2><%= @article.title %></h2>
 
   	<div class="body">
 	    <%= @article.excerpt_html %>
