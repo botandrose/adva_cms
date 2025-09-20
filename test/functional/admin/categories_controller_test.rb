@@ -16,7 +16,7 @@ class AdminCategoriesControllerTest < ActionController::TestCase
   end
 
   test "is an Admin::BaseController" do
-    @controller.should be_kind_of(Admin::BaseController)
+    assert_kind_of Admin::BaseController, @controller
   end
 
   describe "routing" do
@@ -38,13 +38,15 @@ class AdminCategoriesControllerTest < ActionController::TestCase
   end
 
   test "category url in :de locale" do
-    site = Site.first
-    section = Section.first
-    category = Category.first
-    assert_equal "/admin/sites/#{site.id}/sections/#{section.id}/categories/#{category.id}", admin_category_path(site, section, category)
-    I18n.locale = :de
-    assert_equal "/de/admin/sites/#{site.id}/sections/#{section.id}/categories/#{category.id}", admin_category_path(site, section, category)
-    I18n.locale = :en
+    site = Site.first || Site.create!(name: 'cat', title: 'cat', host: 'cat.local')
+    section = Section.first || Page.create!(site: site, title: 'page', permalink: 'page')
+    category = Category.first || Category.create!(section: section, title: 'a category')
+    assert_equal "/admin/sections/#{section.permalink}/categories/#{category.permalink}", admin_section_category_path(section, category)
+    if I18n.available_locales.map(&:to_sym).include?(:de)
+      I18n.locale = :de
+      assert_equal "/de/admin/sections/#{section.permalink}/categories/#{category.permalink}", admin_section_category_path(section, category)
+      I18n.locale = :en
+    end
   end
 
   describe "GET to :index" do

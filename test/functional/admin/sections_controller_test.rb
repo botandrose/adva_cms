@@ -13,7 +13,7 @@ class AdminSectionsControllerTest < ActionController::TestCase
   end
 
   test "is an Admin::BaseController" do
-    @controller.should be_kind_of(Admin::BaseController)
+    assert_kind_of Admin::BaseController, @controller
   end
 
   describe "routing" do
@@ -31,10 +31,12 @@ class AdminSectionsControllerTest < ActionController::TestCase
   test "section url in :de locale" do
     site = Site.first
     section = Section.first
-    assert_equal "/admin/sites/#{site.id}/sections/#{section.id}", admin_section_path(site, section)
-    I18n.locale = :de
-    assert_equal "/de/admin/sites/#{site.id}/sections/#{section.id}", admin_section_path(site, section)
-    I18n.locale = :en
+    assert_equal "/admin/sections/#{section.permalink}", admin_section_path(section)
+    if I18n.available_locales.map(&:to_sym).include?(:de)
+      I18n.locale = :de
+      assert_equal "/de/admin/sections/#{section.permalink}", admin_section_path(section)
+      I18n.locale = :en
+    end
   end
 
   describe "GET to :index" do

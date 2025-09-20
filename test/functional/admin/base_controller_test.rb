@@ -66,3 +66,17 @@
 #     end
 #   end
 # end
+
+require File.expand_path(File.dirname(__FILE__) + "/../../test_helper")
+
+class AdminBaseControllerTest < ActionController::TestCase
+  tests Admin::SitesController
+  with_common :a_site
+
+  test "redirects to login when anonymous user hits admin" do
+    site = Site.find_by_host('site-with-pages.com') || Site.create!(name: 'site with pages', title: 'site with pages title', host: 'site-with-pages.com')
+    @request.host = site.host
+    get :index
+    assert_redirected_to login_url(return_to: admin_sites_url)
+  end
+end

@@ -34,7 +34,7 @@ class AdminArticlesControllerTest < ActionController::TestCase
   end
 
   test "is an Admin::BaseController" do
-    @controller.should be_kind_of(Admin::BaseController)
+    assert_kind_of Admin::BaseController, @controller
   end
 
   describe "routing" do

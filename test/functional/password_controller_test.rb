@@ -4,7 +4,7 @@ class PasswordControllerTest < ActionController::TestCase
   with_common :a_site, :a_user
 
   test "is an BaseController" do
-    @controller.should be_kind_of(BaseController)
+    assert_kind_of BaseController, @controller
   end
 
   describe "GET to :new" do

@@ -6,7 +6,7 @@ class PageArticlesControllerTest < ActionController::TestCase
   with_common :rescue_action_in_public
   
   test "is a BaseController" do
-    @controller.should be_kind_of(BaseController)
+    assert_kind_of BaseController, @controller
   end
   
   describe 'GET to :index' do

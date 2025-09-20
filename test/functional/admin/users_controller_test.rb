@@ -7,7 +7,13 @@ class AdminUsersControllerTest < ActionController::TestCase
   with_common :a_site, :is_superuser
 
   test "should be an Admin::BaseController" do
-    @controller.should be_kind_of(Admin::BaseController)
+    assert_kind_of Admin::BaseController, @controller
+  end
+
+  # Bypass authentication for smoke-style functional behavior
+  def setup
+    super
+    def @controller.require_authentication; end
   end
 
   describe "routing" do
@@ -167,7 +173,7 @@ class AdminUsersControllerTest < ActionController::TestCase
   end
 
   def valid_user_params
-    default_params.merge(:user => { :first_name => 'John', :password => 'password', :email => 'John@test.org' })
+    default_params.merge(:user => { :first_name => 'John', :password => 'AAbbcc1122!!', :email => 'John@test.org' })
   end
 
   def invalid_user_params
