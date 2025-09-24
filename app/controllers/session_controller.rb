@@ -12,7 +12,7 @@ class SessionController < BaseController
   def create
     if authenticate_user(params[:user])
       remember_me! if params[:user][:remember_me]
-      redirect_to return_from(:login), notice: "Logged in successfully."
+      redirect_to params[:return_to] || '/', notice: "Logged in successfully."
     else
       @user = User.new(:email => params[:user][:email])
       @remember_me = params[:user][:remember_me]
@@ -23,6 +23,6 @@ class SessionController < BaseController
 
   def destroy
     logout
-    redirect_to return_from(:logout), notice: "Logged out successfully."
+    redirect_to '/', notice: "Logged out successfully."
   end
 end

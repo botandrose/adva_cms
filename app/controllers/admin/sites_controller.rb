@@ -43,7 +43,7 @@ class Admin::SitesController < Admin::BaseController
 
   def destroy
     if @site.destroy
-      redirect_to return_from(:site_deleted), notice: "The site has been deleted."
+      redirect_to admin_sites_url, notice: "The site has been deleted."
     else
       flash.now.alert = "The site could not be deleted"
       render action: :show

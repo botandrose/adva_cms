@@ -39,9 +39,6 @@ class Admin::BaseController < ApplicationController
       redirect_to login_url(return_to: request.url), notice: notice
     end
 
-    def return_from(action, options = {})
-      CGI.unescape(params[:return_to] || options[:default] || '/')
-    end
 
     def current_page
       @page ||= params[:page].present? ? params[:page].to_i : 1

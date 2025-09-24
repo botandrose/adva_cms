@@ -69,9 +69,6 @@ class BaseController < ApplicationController
       redirect_to login_url(return_to: request.url), notice: notice
     end
 
-    def return_from(action, options = {})
-      CGI.unescape(params[:return_to] || options[:default] || '/')
-    end
     
     def current_resource
       @section || @site
