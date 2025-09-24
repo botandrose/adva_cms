@@ -15,11 +15,7 @@ class ArticlesController < BaseController
     end
     return redirect_to @article.body if @article.is_a?(Link)
 
-    keys = []
-    keys.concat(@article.cells) if @article.respond_to?(:cells)
-    keys.concat([@article, section, site])
-    keys.select! { |k| k.respond_to?(:updated_at) }
-    if keys.empty? || stale?(keys, public: true)
+    if stale?([*@article.cells, @article, section, site], public: true)
       render template: "#{section.type.tableize}/articles/show"
     end
   end

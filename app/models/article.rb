@@ -1,6 +1,8 @@
 class Article < Content
   # default_scope :order => "#{self.table_name}.published_at DESC"
 
+  has_cells :body
+
   validates_presence_of :title, :body
   validates_uniqueness_of :permalink, scope: :section_id, case_sensitive: true
 

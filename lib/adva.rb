@@ -1,6 +1,7 @@
 require "rails"
 require "will_paginate"
 require "awesome_nested_set"
+require "nacelle"
 begin
   require "actionpack/page_caching"
 rescue LoadError

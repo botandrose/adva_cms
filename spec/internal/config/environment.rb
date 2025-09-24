@@ -38,9 +38,14 @@ end
 # Configure an in-memory or file-based sqlite database for tests
 require "fileutils"
 FileUtils.mkdir_p(File.expand_path("../../tmp", __dir__))
+db_path = File.expand_path("../../tmp/test.sqlite3", __dir__)
+
+# Remove existing database to start fresh
+FileUtils.rm_f(db_path) if File.exist?(db_path)
+
 ActiveRecord::Base.establish_connection(
   adapter: "sqlite3",
-  database: File.expand_path("../../tmp/test.sqlite3", __dir__)
+  database: db_path
 )
 
 # Run engine migrations BEFORE app init (schema-only migrations)
