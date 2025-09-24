@@ -6,6 +6,7 @@ class User < ActiveRecord::Base
   #                             :authenticate_with => nil
 
   scope :verified, -> { where.not(verified_at: nil) }
+  scope :admin, -> { where(admin: true) }
 
   has_many :memberships, :dependent => :delete_all
   has_many :sites, :through => :memberships
@@ -86,10 +87,6 @@ class User < ActiveRecord::Base
 
   def email_with_name
     "#{name} <#{email}>"
-  end
-
-  def admin?
-    !anonymous? && email == 'admin@example.com'
   end
 
   def homepage

@@ -3,7 +3,7 @@ class Admin::UsersController < Admin::BaseController
   before_action :authorize_access
 
   def index
-    admin_users = User.all.select(&:admin?)
+    admin_users = User.admin
     @users = admin_users + @site.users.to_a
   end
 
@@ -63,7 +63,7 @@ class Admin::UsersController < Admin::BaseController
 
     def user_params
       return {} unless params[:user]
-      params.require(:user).permit(:first_name, :last_name, :email, :password)
+      params.require(:user).permit(:first_name, :last_name, :email, :password, :admin, :homepage)
     end
 
     # FIXME extract this and use Rbac contexts instead
