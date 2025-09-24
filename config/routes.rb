@@ -43,7 +43,6 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :cells, :only => :index
 
     resources :users
   end
