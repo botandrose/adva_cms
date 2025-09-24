@@ -1,12 +1,10 @@
 class ArticlesController < BaseController
   def index
     @article = articles.first
-    if @article
-      show
+    if !@article
+      raise ActiveRecord::RecordNotFound
     else
-      # No articles for the current section: render the section index
-      # rather than raising, so root pages without articles still work.
-      render template: "#{section.type.tableize}/articles/index"
+      show
     end
   end
 
