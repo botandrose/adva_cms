@@ -7,7 +7,9 @@ require "bundler/setup"
 require "adva"
 Internal::Application.configure do
   config.consider_all_requests_local = true
-  config.action_dispatch.show_exceptions = false
+  # Enable exception handling to convert ActiveRecord::RecordNotFound to 404
+  config.action_dispatch.show_exceptions = true
+  config.action_dispatch.show_detailed_exceptions = false
 end
 require "menu"
 # Make TableBuilder helper available

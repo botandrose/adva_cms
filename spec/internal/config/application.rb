@@ -13,5 +13,10 @@ module Internal
     config.eager_load = false
     config.hosts.clear
     config.secret_key_base = "test_secret_key_base_please_change"
+
+    # Ensure ActiveRecord::RecordNotFound is handled as 404
+    config.action_dispatch.rescue_responses.merge!(
+      "ActiveRecord::RecordNotFound" => :not_found
+    )
   end
 end
