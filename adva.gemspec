@@ -30,4 +30,7 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency "rails-controller-testing", "~> 1.0"
   gem.add_development_dependency "haml", ">= 6.0"
   gem.add_development_dependency "rake"
+  gem.add_development_dependency "simplecov", "~> 0.22"
+  gem.add_development_dependency "simplecov-html", "~> 0.13"
+  gem.add_development_dependency "sqlite3", "~> 1.7"
 end

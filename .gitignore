@@ -20,3 +20,4 @@ vendor/engines/adva_rbac/spec/log/*
 pkg
 *~
 /nbproject
+coverage/

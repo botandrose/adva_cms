@@ -1,5 +1,23 @@
 ENV["RAILS_ENV"] ||= "test"
 
+# Start SimpleCov before loading Rails
+require 'simplecov'
+require 'simplecov-html'
+
+SimpleCov.start 'rails' do
+  add_filter '/spec/'
+  add_filter '/vendor/'
+  add_filter '/test/'
+
+  add_group 'Controllers', 'app/controllers'
+  add_group 'Models', 'app/models'
+  add_group 'Helpers', 'app/helpers'
+  add_group 'Observers', 'app/observers'
+  add_group 'Libraries', 'lib'
+
+  formatter SimpleCov::Formatter::HTMLFormatter
+end
+
 require File.expand_path("internal/config/environment", __dir__)
 require "rspec/rails"
 
