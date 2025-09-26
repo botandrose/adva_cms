@@ -24,4 +24,10 @@ Gem::Specification.new do |gem|
   gem.add_dependency "actionpack-page_caching"
   gem.add_dependency "rails-observers"
   gem.add_dependency "sassc-rails"
+
+  gem.add_development_dependency "appraisal"
+  gem.add_development_dependency "rspec-rails", "~> 6.1"
+  gem.add_development_dependency "rails-controller-testing", "~> 1.0"
+  gem.add_development_dependency "haml", ">= 6.0"
+  gem.add_development_dependency "rake"
 end
