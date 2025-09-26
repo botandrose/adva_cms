@@ -14,4 +14,11 @@ Gem::Specification.new do |gem|
   gem.name          = "tags"
   gem.require_paths = ["lib"]
   gem.version       = Tags::VERSION
+
+  gem.add_development_dependency "rspec"
+  gem.add_development_dependency "nokogiri"
+  gem.add_development_dependency "actionview"
+  gem.add_development_dependency "activesupport"
+  gem.add_development_dependency "actionpack"
+  gem.add_development_dependency "rake"
 end

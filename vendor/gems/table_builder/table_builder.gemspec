@@ -14,4 +14,10 @@ Gem::Specification.new do |gem|
   gem.name          = "table_builder"
   gem.require_paths = ["lib"]
   gem.version       = TableBuilder::VERSION
+
+  gem.add_development_dependency "rspec"
+  gem.add_development_dependency "nokogiri"
+  gem.add_development_dependency "actionview"
+  gem.add_development_dependency "activesupport"
+  gem.add_development_dependency "rake"
 end

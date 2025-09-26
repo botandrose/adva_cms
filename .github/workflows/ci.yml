@@ -3,7 +3,7 @@ name: CI
 on: [push, pull_request]
 
 jobs:
-  test:
+  specs:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -28,4 +28,36 @@ jobs:
           bundler-cache: true
 
       - name: Run tests
+        run: bundle exec rake
+
+  vendor-specs:
+    name: Vendor specs (${{ matrix.gem }} / Ruby ${{ matrix.ruby }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby: ["3.2", "3.3", "3.4"]
+        gem: [
+        # "belongs_to_cacheable", no test suite
+          "simple_taggable",
+          "tags",
+          "table_builder",
+        # "authentication", no test suite, gonna be replaced by authlogic soon anyways
+          "cacheable_flash"
+        ]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+          bundler-cache: true
+        env:
+          BUNDLE_GEMFILE: vendor/gems/${{ matrix.gem }}/Gemfile
+
+      - name: Run rake in gem directory
+        working-directory: vendor/gems/${{ matrix.gem }}
         run: bundle exec rake
