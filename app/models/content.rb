@@ -16,7 +16,6 @@ class Content < ActiveRecord::Base
   include Adva::HasPermalink
   has_permalink :title, :url_attribute => :permalink, :sync_url => true, :only_when_blank => true, :scope => :section_id
 
-  filtered_column :body, :excerpt # TODO rm all of this and the associated _html columns
 
   has_cells :body, :excerpt if respond_to?(:has_cells)
 

@@ -57,7 +57,7 @@ task :vendor_gems_tests do
           unless test_files.empty?
             puts "Running tests directly..."
             test_ran = true
-            test_passed = system("ruby -Ilib:test #{test_files.join(' ')} 2>/dev/null")
+            test_passed = system("ruby -Ilib:test #{test_files.join(' ')}")
           end
         elsif Dir.exist?('spec')
           spec_files = Dir.glob('spec/**/*_spec.rb')
@@ -65,7 +65,7 @@ task :vendor_gems_tests do
             puts "Running specs directly..."
             test_ran = true
             if system('which rspec > /dev/null 2>&1')
-              test_passed = system('rspec 2>/dev/null')
+              test_passed = system('rspec')
             end
           end
         end

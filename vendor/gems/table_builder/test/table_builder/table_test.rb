@@ -1,15 +1,6 @@
-require File.dirname(__FILE__) + "/../test_helper"
+require_relative "../test_helper"
 
 module TableBuilder
-  class TagTest < Test::Unit::TestCase
-    def test_render
-      tag = Tag.new
-      tag.tag_name = 'foo'
-      html = tag.render { |html| html << 'bar' }
-      assert_html html, 'foo', 'bar'
-    end
-  end
-  
   class CellTest < Test::Unit::TestCase
     def test_render
       html = Cell.new(Row.new(Table.new), 'foo').render
@@ -51,7 +42,7 @@ module TableBuilder
     def test_translates_head_cell_content
       TableBuilder.options[:i18n_scope] = 'foo'
       head = build_table(build_column(:foo)).head
-      assert_html head.render, 'th', 'translation missing: en, foo, strings, columns, foo'
+      assert_html head.render, 'th', 'Translation missing: en.foo.strings.columns.foo'
     end
     
     def test_head_with_total_row
@@ -76,17 +67,17 @@ module TableBuilder
     def test_cell_html_options
       body = build_table.body
       body.row { |row, record| row.cell(record, :class => 'baz') }
-      assert_html body.render, 'td[class=baz]', 'foo'
+      assert_html body.render, 'td.baz', 'foo'
     end
   end
   
   class TableTest < Test::Unit::TestCase
     def test_render_basic
-      table = Table.new %w(a b) do |table|
+      table = Table.new(nil, %w(a b)) do |table|
         table.column('a'); table.column('b')
         table.row { |row, record| row.cell(record); row.cell(record) }
       end
-      assert_html table.render, 'table[id=strings][class=list]' do
+      assert_html table.render, 'table#strings.list' do
         assert_select 'thead tr th[scope=col]', 'a'
         assert_select 'tbody tr td', 'a'
         assert_select 'tbody tr[class=alternate] td', 'b'
@@ -94,11 +85,11 @@ module TableBuilder
     end
   
     def test_render_calling_column_and_cell_shortcuts
-      table = Table.new %w(a b) do |table|
+      table = Table.new(nil, %w(a b)) do |table|
         table.column 'a', 'b'
         table.row { |row, record| row.cell record, record }
       end
-      assert_html table.render, 'table[id=strings][class=list]' do
+      assert_html table.render, 'table#strings.list' do
         assert_select 'thead tr th[scope=col]', 'a'
         assert_select 'tbody tr td', 'a'
         assert_select 'tbody tr[class=alternate] td', 'b'
@@ -107,7 +98,8 @@ module TableBuilder
       
     def test_block_can_access_view_helpers_and_instance_variables
       @foo = 'foo'
-      table = Table.new %w(a) do |table|
+      def bar; 'bar'; end
+      table = Table.new(nil, %w(a)) do |table|
         table.column 'a'
         table.row { |row, record, index| row.cell @foo + bar }
       end
@@ -117,15 +109,15 @@ module TableBuilder
     end
       
     def test_column_html_class_inherits_to_tbody_cells
-      table = Table.new %w(a) do |table|
+      table = Table.new(nil, %w(a)) do |table|
         table.column 'a', :class => 'foo'
         table.row { |row, record, index| row.cell 'bar' }
       end
-      assert_html table.render, 'tbody tr td[class=foo]', 'bar'
+      assert_html table.render, 'tbody tr td.foo', 'bar'
     end
       
     def test_table_collection_name
-      assert_equal 'objects', Table.new([Object.new]).collection_name
+      assert_equal 'objects', Table.new(nil, [Object.new]).collection_name
     end
   
     protected

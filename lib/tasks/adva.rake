@@ -6,7 +6,7 @@ namespace :adva do
 
   task :remove_translations => :environment do
     Content.all.each do |content|
-      title, body, excerpt = content.class.connection.select_one("SELECT title, body_html, excerpt_html FROM content_translations WHERE content_id=#{content.id} ORDER BY id DESC LIMIT 1").values
+      title, body, excerpt = content.class.connection.select_one("SELECT title, body, excerpt FROM content_translations WHERE content_id=#{content.id} ORDER BY id DESC LIMIT 1").values
       puts content.id
       content.update! title: title, body: body, excerpt: excerpt
     end
@@ -76,7 +76,7 @@ namespace :adva do
       target_dir = "public"
       sources = Dir["vendor/plugins/{*,*/**}/public/*/*"] +
                 Dir["vendor/plugins/{*,*/**}/vendor/plugins/**/public/*/*"]
-      
+
       sources.each do |source|
         split = source.split('/')
         folder, type = split[-1], split[-2]
@@ -90,7 +90,7 @@ namespace :adva do
       end
       print "Done\n"
     end
-    
+
     def copy_plugins
       target = "#{Rails.root}/public/"
       sources = Dir["#{Rails.root}/vendor/plugins/{*,*/**}/public/*"] +

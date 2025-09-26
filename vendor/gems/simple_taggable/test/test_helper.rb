@@ -18,9 +18,9 @@ load File.expand_path(dir + '/db/schema.rb')
 class ActiveSupport::TestCase
   include ActiveRecord::TestFixtures
 
-  self.use_transactional_fixtures = true
+  self.use_transactional_tests = true
   self.use_instantiated_fixtures  = true
-  self.fixture_path = File.dirname(__FILE__) + '/fixtures/'
+  self.fixture_paths = [File.dirname(__FILE__) + '/fixtures/']
   
   def assert_queries(num = 1)
     $query_count = 0

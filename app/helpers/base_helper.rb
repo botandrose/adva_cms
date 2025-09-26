@@ -49,8 +49,8 @@ module BaseHelper
     # content.try(:author_id) || current_user.id
     current_user.id
   end
-  
+
   def link_path(section, link, *args)
-    link.body_html
+    link.body
   end
 end

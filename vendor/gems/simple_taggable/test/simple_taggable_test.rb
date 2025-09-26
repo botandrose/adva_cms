@@ -8,7 +8,7 @@ require "subscription"
 require "magazine"
 require "user"
 
-require "byebug"
+# require "byebug"
 
 class SimpleTaggableTest < ActiveSupport::TestCase
   fixtures :tags, :taggings, :photos, :posts, :subscriptions, :magazines, :users
@@ -159,13 +159,13 @@ class SimpleTaggableTest < ActiveSupport::TestCase
   
   test 'adding new tags via #tag_list writer' do
     assert_equivalent %w(Nature), TagList.from(@sky.tag_list)
-    @sky.update_attributes!(:tag_list => "#{@sky.tag_list} One Two")
+    @sky.update!(:tag_list => "#{@sky.tag_list} One Two")
     assert_equivalent %w(Nature One Two), TagList.from(@sky.tag_list)
   end
   
   test 'removing tags via #tag_list writer' do
     assert_equivalent %w(Nature), TagList.from(@sky.tag_list)
-    @sky.update_attributes!(:tag_list => "")
+    @sky.update!(:tag_list => "")
     assert_equivalent [], TagList.from(@sky.tag_list)
   end
   
@@ -179,7 +179,7 @@ class SimpleTaggableTest < ActiveSupport::TestCase
   test 'tag_list writer clears tag_list with nil' do
     photo = @small_dog
     assert !photo.tag_list.blank?
-    assert photo.update_attributes(:tag_list => nil)
+    assert photo.update(:tag_list => nil)
     assert photo.tag_list.blank?
     assert photo.reload.tag_list.blank?
   end
@@ -187,7 +187,7 @@ class SimpleTaggableTest < ActiveSupport::TestCase
   test 'tag_list writer clears tag_list with a string containing only spaces' do
     photo = @small_dog
     assert !photo.tag_list.blank?
-    assert photo.update_attributes(:tag_list => '  ')
+    assert photo.update(:tag_list => '  ')
     assert photo.tag_list.blank?
     assert photo.reload.tag_list.blank?
   end
@@ -201,7 +201,7 @@ class SimpleTaggableTest < ActiveSupport::TestCase
   end
   
   test 'changing the case of tags via #tag_list writer' do
-    @small_dog.update_attributes!(:tag_list => @small_dog.tag_list.to_s.upcase)
+    @small_dog.update!(:tag_list => @small_dog.tag_list.to_s.upcase)
     assert_equal 'ANIMAL NATURE GREAT', @small_dog.reload.tag_list.to_s
   end
   
@@ -238,7 +238,7 @@ class SimpleTaggableTest < ActiveSupport::TestCase
     @small_dog.save!
     assert_equal 'Animal Nature Great', @small_dog.cached_tag_list
   
-    @small_dog.update_attributes(:tag_list => 'Foo')
+    @small_dog.update(:tag_list => 'Foo')
     assert_equal 'Foo', @small_dog.cached_tag_list
     assert_equal 'Foo', @small_dog.reload.cached_tag_list
   end

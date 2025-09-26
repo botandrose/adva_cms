@@ -22,7 +22,6 @@ end
 
 require "belongs_to_cacheable"
 require "cacheable_flash"
-require "filtered_column"
 require "simple_taggable"
 require "tags"
 require "table_builder"

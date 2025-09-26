@@ -20,7 +20,7 @@ module ContentHelper
   # end
 
   def page_link_path section, link, options={}
-    link.body_html
+    link.body
   end
 
   def content_path(section, content, options={})

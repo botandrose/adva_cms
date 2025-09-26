@@ -19,7 +19,7 @@ module TableBuilder
     end
     
     def render
-      build if respond_to?(:build)
+      build if respond_to?(:build, true)
       super(@rows.map(&:render).join)
     end
   end
