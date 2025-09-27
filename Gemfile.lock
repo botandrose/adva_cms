@@ -1,5 +1,5 @@
 PATH
-  remote: ../../..
+  remote: .
   specs:
     adva (0.3.3)
       actionpack-page_caching

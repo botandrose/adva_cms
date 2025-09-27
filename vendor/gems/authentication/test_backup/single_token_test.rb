@@ -5,12 +5,11 @@ require File.join(File.dirname(__FILE__), 'abstract_unit')
 # those tokens correctly
 class SingleTokenTest < Test::Unit::TestCase
   include Authentication::HashHelper
-  fixtures :users
 
   def setup
     @tokener = Authentication::SingleToken.new
 
-    @joe = users(:joe)
+    @joe = User.create!(name: 'Joe')
     @key = @tokener.assign_token @joe, 'standard', 3.days.from_now
     @joe.save!
     @joe.reload

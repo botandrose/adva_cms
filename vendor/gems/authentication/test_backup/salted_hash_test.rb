@@ -4,13 +4,12 @@ require File.join(File.dirname(__FILE__), 'abstract_unit')
 # Tests SaltedHash class to ensure it can authenticate and assign
 # passwords correctly
 class SaltedHashTest < Test::Unit::TestCase
-  fixtures :users
 
   def setup
     @password = "foobazzle"
     @crypter = Authentication::SaltedHash.new
 
-    @joe = users(:joe)
+    @joe = User.create!(name: 'Joe')
     @crypter.assign_password @joe, @password
     @joe.save!
     @joe.reload

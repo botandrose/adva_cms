@@ -5,8 +5,29 @@ PKG_NAME = 'authentication'
 PKG_VERSION = 0.02
 
 require 'rake/testtask'
-require 'rake/rdoctask'
-require 'rake/packagetask'
+
+# Rake/RDoc task names changed in modern Rake; support both.
+begin
+  require 'rdoc/task'
+rescue LoadError
+  begin
+    require 'rake/rdoctask'
+  rescue LoadError
+    # RDoc tasks unavailable; ok for running tests.
+  end
+end
+
+# Packaging tasks are optional; skip if not available.
+begin
+  require 'rake/packagetask'
+rescue LoadError
+  begin
+    require 'rubygems/package_task'
+    Rake::PackageTask = Gem::PackageTask unless defined?(Rake::PackageTask)
+  rescue LoadError
+    # No package task available.
+  end
+end
 
 desc 'Default: run unit tests.'
 task :default => :test
@@ -14,25 +35,30 @@ task :default => :test
 desc "Test the #{PKG_NAME} plugin."
 Rake::TestTask.new(:test) do |t|
   t.libs << 'lib'
-  t.pattern = 'test/**/*_test.rb'
+  # This gem’s tests live under test_backup/
+  t.pattern = 'test_backup/**/*_test.rb'
   t.verbose = true
 end
 
 desc "Generate documentation for the #{PKG_NAME} plugin"
-Rake::RDocTask.new(:rdoc) do |rdoc|
-  rdoc.rdoc_dir = 'html'
-  rdoc.title    = PKG_NAME
-  rdoc.options << '--line-numbers' << '--inline-source'
-  rdoc.rdoc_files.include('README')
-  rdoc.rdoc_files.include('lib/**/*.rb')
+if defined?(Rake::RDocTask)
+  Rake::RDocTask.new(:rdoc) do |rdoc|
+    rdoc.rdoc_dir = 'html'
+    rdoc.title    = PKG_NAME
+    rdoc.options << '--line-numbers' << '--inline-source'
+    rdoc.rdoc_files.include('README')
+    rdoc.rdoc_files.include('lib/**/*.rb')
+  end
 end
 
-Rake::PackageTask.new(PKG_NAME, PKG_VERSION) do |pkg|
-  pkg.need_tar_gz = true
-  pkg.package_files.include('{lib,test}/**/*')
-  pkg.package_files.include('README')
-  pkg.package_files.include('MIT-LICENSE')
-  pkg.package_files.include('Rakefile')
+if defined?(Rake::PackageTask)
+  Rake::PackageTask.new(PKG_NAME, PKG_VERSION) do |pkg|
+    pkg.need_tar_gz = true
+    pkg.package_files.include('{lib,test}/**/*')
+    pkg.package_files.include('README')
+    pkg.package_files.include('MIT-LICENSE')
+    pkg.package_files.include('Rakefile')
+  end
 end
 
 desc 'Tag release'

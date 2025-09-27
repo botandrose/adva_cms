@@ -7,12 +7,11 @@ require File.join(File.dirname(__FILE__), 'abstract_unit')
 # about expiration
 class RememberMe < Test::Unit::TestCase
   include Authentication::HashHelper
-  fixtures :users
 
   def setup
     @tokener = Authentication::RememberMe.new
 
-    @joe = users(:joe)
+    @joe = User.create!(name: 'Joe')
     @key = @tokener.assign_token @joe, 'remember me'
     @joe.save!
     @joe.reload
