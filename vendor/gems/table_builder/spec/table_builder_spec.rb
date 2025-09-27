@@ -136,16 +136,16 @@ module TableBuilder
   RSpec.describe 'Rendering', type: :view do
     before do
       articles = [Record.new(1, 'foo'), Record.new(2, 'bar')]
-      @view = ActionView::Base.new([File.dirname(__FILE__) + '/../test/fixtures/templates'], { :articles => articles })
-      @view.extend(TableBuilder)
+      @view = TestView.new(File.dirname(__FILE__) + '/../test/fixtures/templates', { :articles => articles })
       TableBuilder.options[:i18n_scope] = :test
-      I18n.backend.send :merge_translations,
+      I18n.backend.store_translations(
         :en, :test => { :'table_builder_records' => { :columns => { :id => 'ID', :title => 'Title' } } }
+      )
     end
 
     it 'renders simple table' do
-      html = @view.render(:file => 'table_simple')
-      assert_html html, 'table[id=table_builder_records][class=list]' do
+      html = @view.render(file: 'table_simple')
+      assert_html html, 'table#table_builder_records.list' do
         assert_select 'thead tr' do
           assert_select 'th[scope=col]', 'ID'
           assert_select 'th[scope=col]', 'Title'
@@ -164,12 +164,12 @@ module TableBuilder
     end
 
     it 'renders auto body same as simple' do
-      expect(@view.render(:file => 'table_simple')).to eq(@view.render(:file => 'table_auto_body'))
+      expect(@view.render(file: 'table_simple')).to eq(@view.render(file: 'table_auto_body'))
     end
 
     it 'renders auto columns' do
-      html = @view.render(:file => 'table_auto_columns')
-      assert_html html, 'table[id=table_builder_records][class=list]' do
+      html = @view.render(file: 'table_auto_columns')
+      assert_html html, 'table#table_builder_records.list' do
         assert_select 'thead tr' do
           assert_select 'th[scope=col]', 'Id'
           assert_select 'th[scope=col]', 'Title'
@@ -188,8 +188,8 @@ module TableBuilder
     end
 
     it 'renders all elements' do
-      html = @view.render(:file => 'table_all')
-      assert_html html, 'table[id=table_builder_records][class=list]' do
+      html = @view.render(file: 'table_all')
+      assert_html html, 'table#table_builder_records.list' do
         assert_select 'thead tr' do
           assert_select 'th[colspan=2][class=total]', 'total: 2'
         end
@@ -213,9 +213,8 @@ module TableBuilder
     end
 
     it 'renders all with empty collection' do
-      view = ActionView::Base.new([File.dirname(__FILE__) + '/../test/fixtures/templates'], { :articles => [] })
-      view.extend(TableBuilder)
-      html = view.render(:file => 'table_all')
+      view = TestView.new(File.dirname(__FILE__) + '/../test/fixtures/templates', { :articles => [] })
+      html = view.render(file: 'table_all')
       assert_html html, 'p[class=empty]', 'no records!'
     end
   end

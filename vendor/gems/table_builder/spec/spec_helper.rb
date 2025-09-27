@@ -5,9 +5,8 @@ $: << File.expand_path('../../lib', __FILE__)
 
 # Load dependencies in correct order
 require 'active_support/all'
-require 'action_view/helpers/tag_helper'
-require 'action_view/base'
 require 'i18n'
+require 'erb'
 
 # Load table_builder
 require 'table_builder'
@@ -26,7 +25,7 @@ end
 module TableTestHelper
   def build_table(*columns)
     columns = [build_column('foo'), build_column('bar')] if columns.empty?
-    Table.new(nil, %w(foo bar)) do |table|
+    TableBuilder::Table.new(nil, %w(foo bar)) do |table|
       columns.each { |column| table.column(column.name, column.options) }
     end
   end
@@ -37,7 +36,28 @@ module TableTestHelper
 
   def build_body_row
     body = build_table.body
-    body.send(:new_row)
+    TableBuilder::Row.new(body)
+  end
+end
+
+# Minimal view to render ERB templates without ActionView
+class TestView
+  include TableBuilder
+
+  def initialize(templates_path, assigns = {})
+    @templates_path = templates_path
+    assigns.each { |k, v| instance_variable_set("@#{k}", v) }
+    @__output = +""
+  end
+
+  def render(file:)
+    path = File.join(@templates_path, "#{file}.html.erb")
+    result = ERB.new(File.read(path)).result(binding)
+    @__output.empty? ? result : @__output
+  end
+
+  def concat(str)
+    @__output << str.to_s
   end
 end
 
@@ -56,6 +76,7 @@ def assert_html(html, selector, expected_content = nil, &block)
   if block_given?
     # For nested assertions, we need to create a context
     nested_context = Object.new
+    nested_context.extend(RSpec::Matchers)
     nested_context.define_singleton_method(:assert_select) do |nested_selector, nested_content = nil|
       nested_elements = doc.css(nested_selector)
       expect(nested_elements).not_to be_empty, "Expected to find elements matching '#{nested_selector}'"
@@ -75,3 +96,6 @@ require 'ostruct'
 
 # Load Nokogiri for HTML parsing
 require 'nokogiri'
+
+# I18n config
+I18n.enforce_available_locales = false

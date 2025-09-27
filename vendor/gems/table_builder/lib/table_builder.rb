@@ -1,6 +1,8 @@
 require "table_builder/version"
 
-require 'action_view/helpers/tag_helper'
+require 'active_support/core_ext/hash/reverse_merge'
+require 'active_support/core_ext/string/inflections'
+require 'active_support/core_ext/object/try'
 
 require 'table_builder/tag'
 require 'table_builder/cell'
@@ -20,8 +22,15 @@ module TableBuilder
   }
 
   def table_for(collection = [], options = {}, &block)
-    Table.new(self, collection, options, &block).render
+    output = Table.new(self, collection, options, &block).render
+    if respond_to?(:concat)
+      concat(output)
+      nil
+    else
+      output
+    end
   end
 end
 
 TableBuilder.options[:i18n_scope] = :adva
+require 'erb'

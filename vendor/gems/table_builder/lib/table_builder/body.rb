@@ -2,7 +2,20 @@ module TableBuilder
   class Body < Rows
     self.tag_name = :tbody
 
-    include ActionView::RecordIdentifier
+    module RecordIdentifier
+      def dom_id(record)
+        base = record.class.name.to_s.split('::').last
+        base = base.empty? ? 'record' : base
+        base = base.gsub(/([a-z\d])([A-Z])/, '\\1_\\2').downcase
+        if record.respond_to?(:id) && record.id
+          "#{base}_#{record.id}"
+        else
+          "new_#{base}"
+        end
+      end
+    end
+
+    include RecordIdentifier
     
     def row(options = {}, &block)
       table.collection.each_with_index do |record, ix|

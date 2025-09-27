@@ -12,7 +12,15 @@ module TableBuilder
       self.class.tag_name
     end
 
-    include ActionView::Helpers::TagHelper
+    module HtmlHelper
+      def content_tag(name, content = nil, options = {})
+        attrs = options.map { |k, v| %(#{k}="#{ERB::Util.html_escape(v)}") }.join(' ')
+        attrs = " #{attrs}" unless attrs.empty?
+        "<#{name}#{attrs}>#{content}</#{name}>"
+      end
+    end
+
+    include HtmlHelper
 
     attr_reader :options, :parent
 
@@ -40,7 +48,7 @@ module TableBuilder
     def render(content = nil)
       content = '' if content.nil?
       yield(content) if content.empty? && block_given?
-      content = content.html_safe
+      content = content.respond_to?(:html_safe) ? content.html_safe : content.to_s
       content_tag(tag_name, content, options)
     end
     
