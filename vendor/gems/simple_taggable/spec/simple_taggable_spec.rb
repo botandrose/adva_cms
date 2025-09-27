@@ -284,4 +284,65 @@ RSpec.describe SimpleTaggable do
       expect(@jane_post.tag_list.names).to eq(['great', 'sucks'])
     end
   end
+
+  describe 'tag_list_remove' do
+    it 'removes tags from tag_list' do
+      @jane_post.tag_list = 'great, sucks, nature'
+      @jane_post.tag_list_remove 'sucks'
+      expect(@jane_post.tag_list.names).to eq(['great', 'nature'])
+    end
+
+    it 'removes multiple tags from tag_list' do
+      @jane_post.tag_list = 'great, sucks, nature, awesome'
+      @jane_post.tag_list_remove 'sucks', 'awesome'
+      expect(@jane_post.tag_list.names).to eq(['great', 'nature'])
+    end
+  end
+
+  describe 'tag_list_add' do
+    it 'adds tags to tag_list' do
+      @jane_post.tag_list = 'great, nature'
+      @jane_post.tag_list_add 'sucks'
+      expect(@jane_post.tag_list.names).to eq(['great', 'nature', 'sucks'])
+    end
+
+    it 'adds multiple tags to tag_list' do
+      @jane_post.tag_list = 'great'
+      @jane_post.tag_list_add 'sucks', 'nature'
+      expect(@jane_post.tag_list.names).to eq(['great', 'sucks', 'nature'])
+    end
+  end
+
+  describe 'instance tag_counts' do
+    it 'returns tag counts for a specific instance' do
+      @jane_post.tag_list = 'great, nature'
+      @jane_post.save!
+      counts = @jane_post.tag_counts
+      expect(counts.map(&:name)).to include('great', 'nature')
+    end
+  end
+end
+
+RSpec.describe Tag do
+  describe '#==' do
+    it 'compares tags by name' do
+      tag1 = Tag.create!(name: 'test')
+      # Use an unsaved tag with the same name to avoid uniqueness validation
+      tag2 = Tag.new(name: 'test')
+      expect(tag1 == tag2).to be true
+    end
+
+    it 'returns false for different tag names' do
+      tag1 = Tag.create!(name: 'test1')
+      tag2 = Tag.create!(name: 'test2')
+      expect(tag1 == tag2).to be false
+    end
+  end
+
+  describe '#to_s' do
+    it 'returns the tag name as string' do
+      tag = Tag.create!(name: 'test')
+      expect(tag.to_s).to eq('test')
+    end
+  end
 end

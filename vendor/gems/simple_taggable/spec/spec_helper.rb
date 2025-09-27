@@ -1,3 +1,9 @@
+require 'simplecov'
+SimpleCov.start do
+  add_filter '/spec/'
+  add_group 'Models', 'lib/simple_taggable'
+end
+
 require 'rspec'
 require 'active_support'
 require 'active_support/core_ext/string'
