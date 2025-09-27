@@ -13,5 +13,20 @@ RSpec.describe Section, type: :model do
     s = Page.create!(site: site, title: 'a', permalink: 'a')
     expect(s.to_param).to eq('a')
   end
-end
 
+  it "parameterizes permalink on assignment" do
+    s = Page.create!(site: site, title: 'Hello', permalink: 'Hello World!')
+    expect(s.permalink).to eq('hello-world')
+  end
+
+  it "provides default option value via has_option" do
+    s = Page.create!(site: site, title: 'opt', permalink: 'opt')
+    expect(s.contents_per_page).to eq(15)
+  end
+
+  it "does not change permalink when title changes (friendly id only when blank)" do
+    s = Page.create!(site: site, title: 'a', permalink: 'custom')
+    s.update!(title: 'changed')
+    expect(s.reload.permalink).to eq('custom')
+  end
+end

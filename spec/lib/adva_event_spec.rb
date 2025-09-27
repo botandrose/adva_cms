@@ -52,4 +52,10 @@ RSpec.describe Adva::Event do
     expect { Adva::Event.trigger(:article_deleted, obj, :spec) }.not_to raise_error
     expect(StringNamedObserver.received.size).to eq(1)
   end
+
+  it "raises NoMethodError for unknown option via method_missing" do
+    event = Adva::Event.new(:x, :obj, :src, known: 1)
+    expect(event.known).to eq(1)
+    expect { event.unknown }.to raise_error(NoMethodError)
+  end
 end

@@ -9,5 +9,15 @@ RSpec.describe BaseHelper, type: :helper do
     expect(html).to include('<abbr class="datetime"')
     expect(html).to include(t.utc.xmlschema)
   end
-end
 
+  it "column and buttons helpers wrap content" do
+    expect(column { 'X' }).to include('<div class="col">', 'X')
+    expect(buttons { 'Y' }).to include('<p class="buttons">', 'Y')
+  end
+
+  it "link_path returns link body" do
+    link = double('Link', body: 'http://example.com')
+    section = double('Section')
+    expect(link_path(section, link)).to eq('http://example.com')
+  end
+end

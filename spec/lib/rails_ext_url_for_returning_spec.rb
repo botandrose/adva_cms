@@ -4,9 +4,7 @@ RSpec.describe "UrlForReturning", type: :request do
   it "adds return_to when :return is true or :here" do
     controller = BaseController.new
     request = ActionDispatch::TestRequest.create
-    class << request
-      def request_uri; "/current/path?x=1"; end
-    end
+    def request.request_uri; "/current/path?x=1"; end
     controller.set_request!(request)
 
     url = controller.url_for(controller: "session", action: "new", only_path: true, return: true)
@@ -19,3 +17,4 @@ RSpec.describe "UrlForReturning", type: :request do
     expect(url_none).not_to include("return_to=")
   end
 end
+

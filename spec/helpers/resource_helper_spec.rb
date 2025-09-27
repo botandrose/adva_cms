@@ -24,4 +24,41 @@ RSpec.describe ResourceHelper, type: :helper do
   it "builds delete options with default confirm" do
     expect(resource_delete_options('article', {})).to eq({ data: { confirm: 'Are you sure you want to delete this articles?' }, method: :delete })
   end
+
+  it "normalize_resource_link_options populates defaults and id" do
+    site = Site.create!(name: 'n', title: 't', host: 'opts.local')
+    section = Page.create!(site: site, title: 'p', permalink: 'p')
+    user = User.create!(first_name: 'U', email: 'u3@example.com', password: 'AAbbcc1122!!', verified_at: Time.now)
+    article = Article.create!(site: site, section: section, title: 'a', body: 'b', author: user, published_at: 1.hour.ago, permalink: 'a2')
+    opts = normalize_resource_link_options({}, :edit, 'article', article)
+    expect(opts[:class]).to eq('edit article')
+    expect(opts[:title]).to eq('Edit')
+    expect(opts[:id]).to eq("edit_article_#{article.id}")
+  end
+
+  it "collects resource owners via owners chain" do
+    site = Site.create!(name: 'n', title: 't', host: 'owners.local')
+    section = Page.create!(site: site, title: 'p', permalink: 'p')
+    user = User.create!(first_name: 'U', email: 'u2@example.com', password: 'AAbbcc1122!!', verified_at: Time.now)
+    article = Article.create!(site: site, section: section, title: 'a', body: 'b', author: user, published_at: 1.hour.ago, permalink: 'a')
+    expect(resource_owners(article)).to eq([site, section, article])
+  end
+
+  it "normalizes resource link text with symbol via t()" do
+    allow(self).to receive(:t).with(:edit_label).and_return('Translated Edit')
+    text = normalize_resource_link_text(:edit_label, :edit, 'article')
+    expect(text).to eq('Translated Edit')
+  end
+
+  it "resource_url_namespace prefers explicit option and deletes it" do
+    opts = { namespace: :admin, only_path: true }
+    ns = resource_url_namespace(opts)
+    expect(ns).to eq(:admin)
+    expect(opts).not_to have_key(:namespace)
+  end
+
+  it "current_controller_namespace derives from controller_path" do
+    allow(self).to receive(:controller_path).and_return('admin/pages')
+    expect(current_controller_namespace).to eq('admin')
+  end
 end
