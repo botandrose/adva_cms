@@ -208,18 +208,25 @@ RSpec.describe "Articles", type: :request do
     end
 
     it "filters articles by single tag" do
+      Tag.find_or_create_by!(name: 'ruby')
       get "/?tags=ruby"
-      expect(response).to have_http_status(:ok).or have_http_status(:not_found)
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include('Tagged Article')
+      expect(response.body).not_to include('Untagged Article')
     end
 
     it "filters articles by multiple tags" do
+      Tag.find_or_create_by!(name: 'ruby')
+      Tag.find_or_create_by!(name: 'rails')
       get "/?tags=ruby+rails"
-      expect(response).to have_http_status(:ok).or have_http_status(:not_found).or have_http_status(:internal_server_error)
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include('Tagged Article')
+      expect(response.body).not_to include('Untagged Article')
     end
 
     it "handles non-existent tags" do
       get "/?tags=nonexistent"
-      expect(response).to have_http_status(:ok).or have_http_status(:not_found).or have_http_status(:internal_server_error)
+      expect(response).to have_http_status(:not_found).or have_http_status(:internal_server_error)
     end
   end
 

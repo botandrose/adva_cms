@@ -33,9 +33,9 @@ end
 Dir[File.join(__dir__, "support", "**", "*.rb")].sort.each { |f| require f }
 
 RSpec.configure do |config|
+  # Enable transactional fixtures (faster than truncation)
   config.use_transactional_fixtures = true
-  config.infer_spec_type_from_file_location!
-  config.filter_rails_from_backtrace!
+
   # Disable CSRF in request specs to avoid 422 on form posts
   config.before do
     if defined?(ActionController::Base)
