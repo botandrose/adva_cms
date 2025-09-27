@@ -15,3 +15,7 @@ spec/reports
 test/tmp
 test/version_tmp
 tmp
+html/
+.rspec_status
+spec/tmp/
+authentication_plugin_test.sqlite3.db

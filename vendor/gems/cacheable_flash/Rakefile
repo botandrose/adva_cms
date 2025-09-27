@@ -1,11 +1,5 @@
-# frozen_string_literal: true
-
+#!/usr/bin/env rake
 require "bundler/gem_tasks"
-begin
-  require "rspec/core/rake_task"
-  RSpec::Core::RakeTask.new(:spec)
-  task default: [:spec]
-rescue LoadError
-  warn "RSpec not available. Install it to run `rake spec`."
-  task default: %i[]
-end
+require "rspec/core/rake_task"
+RSpec::Core::RakeTask.new(:spec)
+task :default => :spec
