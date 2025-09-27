@@ -31,6 +31,7 @@ class Section < ActiveRecord::Base
   end
 
   has_many :contents, -> { order(:lft) }, foreign_key: :section_id
+  has_many :activities, dependent: :destroy
 
   before_save  :update_path
   before_create :set_as_published

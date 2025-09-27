@@ -190,4 +190,49 @@ RSpec.describe 'Authentication dispatch' do
     jenny.save!
     expect(jenny.authenticate('test')).to be true
   end
+
+  it 'assigns and saves token in one step with assign_token!' do
+    user = User.new(first_name: 'Test', last_name: 'User')
+    user.save!
+
+    # Mock the single token module to return a token
+    allow_any_instance_of(Authentication::SingleToken).to receive(:assign_token).and_return('test_token_123')
+
+    token = user.assign_token!('password', 3.days.from_now)
+
+    expect(token).to eq('test_token_123')
+    expect(user.changed?).to be false # Should be saved
+  end
+
+  describe 'real password authentication' do
+    it 'authenticates with SaltedHash password authentication' do
+      user = User.new(first_name: 'Test', name: 'Test User')
+      user.password = 'test_password_123'
+      user.save!
+      user.reload
+
+      expect(user.authenticate('test_password_123')).to be true
+      expect(user.authenticate('wrong_password')).to be false
+    end
+
+    it 'supports class-level authenticate method pattern' do
+      user = User.create!(first_name: 'Test', name: 'Test User', password: 'test_password_123')
+
+      # Define a class method similar to what adva User model has
+      def User.authenticate(credentials)
+        return false unless user = User.find_by(name: credentials[:name])
+        user.authenticate(credentials[:password]) ? user : false
+      end
+
+      result = User.authenticate(name: 'Test User', password: 'test_password_123')
+      expect(result).to eq(user)
+
+      result = User.authenticate(name: 'Test User', password: 'wrong_password')
+      expect(result).to be false
+
+      result = User.authenticate(name: 'Wrong User', password: 'test_password_123')
+      expect(result).to be false
+    end
+  end
+
 end

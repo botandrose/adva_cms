@@ -285,4 +285,82 @@ RSpec.describe Content, type: :model do
       expect(section.contents.primary).to eq(content1)
     end
   end
+
+  describe "#author_id=" do
+    let(:content) { Article.new(site: site, section: section, title: 'Test', body: 'Test content') }
+    let(:other_user) { User.create!(first_name: 'Jane', email: 'jane@example.com', password: 'AAbbcc1122!!') }
+
+    it "sets the author when given a valid user id" do
+      content.author_id = other_user.id
+      expect(content.author).to eq(other_user)
+    end
+
+    it "does not set author when given nil" do
+      content.author_id = nil
+      expect(content.author).to be_nil
+    end
+  end
+
+  describe "#just_published?" do
+    let(:content) { Article.create!(site: site, section: section, title: 'Test', body: 'Test content', author: user) }
+
+    it "returns true when content is published and published_at changed" do
+      content.published_at = Time.current
+      expect(content.just_published?).to be_truthy
+    end
+
+    it "returns false when content is not published" do
+      content.published_at = nil
+      expect(content.just_published?).to be_falsey
+    end
+
+    it "returns false when published but published_at has not changed" do
+      content.update!(published_at: Time.current)
+      content.reload
+      expect(content.just_published?).to be_falsey
+    end
+  end
+
+  describe "#approved_comments" do
+    let(:content) { Article.create!(site: site, section: section, title: 'Test', body: 'Test content', author: user) }
+
+    it "returns an empty array" do
+      expect(content.approved_comments).to eq([])
+    end
+  end
+
+  describe "#accept_comments?" do
+    let(:content) { Article.create!(site: site, section: section, title: 'Test', body: 'Test content', author: user) }
+
+    it "returns false" do
+      expect(content.accept_comments?).to be_falsey
+    end
+  end
+
+  describe "#owners" do
+    let(:content) { Article.create!(site: site, section: section, title: 'Test', body: 'Test content', author: user) }
+
+    it "returns an array including the owner and its owners" do
+      allow(section).to receive(:owners).and_return([site])
+      expect(content.owners).to include(section)
+    end
+  end
+
+  describe "STI support" do
+    it "can find STI classes in development mode" do
+      # This tests the find_sti_class override for development
+      expect(Content.find_sti_class('Article')).to eq(Article)
+    end
+  end
+
+  describe "after_save callback" do
+    let(:content) { Article.create!(site: site, section: section, title: 'Test', body: 'Test content', author: user) }
+
+    it "touches associated categories" do
+      content.categories << category
+      expect(category).to receive(:touch)
+      content.save!
+    end
+  end
+
 end

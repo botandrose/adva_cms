@@ -24,7 +24,7 @@ class User < ActiveRecord::Base
 
   class << self
     def authenticate(credentials)
-      return false unless user = User.find_by_email(credentials[:email])
+      return false unless user = User.find_by(email: credentials[:email])
       user.authenticate(credentials[:password]) ? user : false
     end
 

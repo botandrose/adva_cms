@@ -166,7 +166,6 @@ module Authentication
       include Authentication::InstanceMethods
       if method_defined?(:password=) # TODO rather have these in the client class?
         before_validation :assign_password
-        # after_save :reset_password
       end
     end
   end
@@ -257,11 +256,6 @@ module Authentication
       true
     end
 
-    # Callback after save to ensure cleartext password is deleted
-    def reset_password
-      self.password = nil
-      self.password_confirmation = nil if respond_to? :password_confirmation
-    end
   end
 end
 
