@@ -4,7 +4,7 @@ module TableBuilder
 
     module RecordIdentifier
       def dom_id(record)
-        base = record.class.name.to_s.split('::').last
+        base = (record.class.name || '').split('::').last || ''
         base = base.empty? ? 'record' : base
         base = base.gsub(/([a-z\d])([A-Z])/, '\\1_\\2').downcase
         if record.respond_to?(:id) && record.id

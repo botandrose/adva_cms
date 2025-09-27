@@ -69,6 +69,36 @@ module TableBuilder
       body.row { |row, record| row.cell(record, :class => 'baz') }
       assert_html body.render, 'td.baz', 'foo'
     end
+
+    it 'assigns DOM id for records with id' do
+      klass = Class.new do
+        attr_reader :id
+        def initialize(id) @id = id end
+        def new_record?; false; end
+      end
+      record = klass.new(7)
+      table = Table.new(nil, [record], collection_name: 'records') do |t|
+        t.column 'a'
+        t.row { |row, r| row.cell 'x' }
+      end
+      html = table.render
+      # class name is anonymous, but dom_id uses last const name; for anonymous it falls back to 'record'
+      assert_html html, 'tbody tr[id^="record_"]'
+    end
+
+    it 'assigns DOM id for new records without id' do
+      klass = Class.new do
+        def id; nil; end
+        def new_record?; true; end
+      end
+      record = klass.new
+      table = Table.new(nil, [record], collection_name: 'records') do |t|
+        t.column 'a'
+        t.row { |row, r| row.cell 'x' }
+      end
+      html = table.render
+      assert_html html, 'tbody tr[id^="new_"]'
+    end
   end
 
   RSpec.describe Table do
@@ -127,6 +157,47 @@ module TableBuilder
     end
   end
 
+  RSpec.describe Tag do
+    it 'does not add blank class names' do
+      row = Row.new(Table.new, nil, class: 'foo')
+      row.add_class('')
+      expect(row.options[:class]).to eq('foo')
+    end
+
+    it 'can mark a row as alternate via helper' do
+      row = Row.new(Table.new)
+      options = {}
+      row.send(:alternate, options)
+      expect(options[:class]).to include('alternate')
+    end
+
+    it 'returns level from class level accessor' do
+      row = Row.new(Table.new)
+      expect(row.level).to eq(2)
+    end
+
+    it 'delegates collection_class to table' do
+      table = Table.new(nil, [Object.new])
+      row = Row.new(table)
+      expect(row.collection_class).to eq(Object)
+    end
+
+    it 'delegates collection_name to table' do
+      table = Table.new(nil, [Object.new])
+      row = Row.new(table)
+      expect(row.collection_name).to eq('objects')
+    end
+  end
+
+  RSpec.describe 'table_for helper' do
+    it 'returns output when concat is unavailable' do
+      host = Object.new
+      host.extend(TableBuilder)
+      output = host.table_for(%w[a b]) { |t| t.column 'a'; t.row { |r, rec| r.cell rec } }
+      expect(output).to include('<table')
+    end
+  end
+
   class Record
     attr_reader :id, :title
     def initialize(id, title); @id = id; @title = title; end
@@ -136,7 +207,8 @@ module TableBuilder
   RSpec.describe 'Rendering', type: :view do
     before do
       articles = [Record.new(1, 'foo'), Record.new(2, 'bar')]
-      @view = TestView.new(File.dirname(__FILE__) + '/../test/fixtures/templates', { :articles => articles })
+      templates_path = File.expand_path('support/fixtures/templates', __dir__)
+      @view = TestView.new(templates_path, { :articles => articles })
       TableBuilder.options[:i18n_scope] = :test
       I18n.backend.store_translations(
         :en, :test => { :'table_builder_records' => { :columns => { :id => 'ID', :title => 'Title' } } }
@@ -213,7 +285,8 @@ module TableBuilder
     end
 
     it 'renders all with empty collection' do
-      view = TestView.new(File.dirname(__FILE__) + '/../test/fixtures/templates', { :articles => [] })
+      templates_path = File.expand_path('support/fixtures/templates', __dir__)
+      view = TestView.new(templates_path, { :articles => [] })
       html = view.render(file: 'table_all')
       assert_html html, 'p[class=empty]', 'no records!'
     end

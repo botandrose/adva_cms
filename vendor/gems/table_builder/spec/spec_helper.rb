@@ -1,3 +1,13 @@
+begin
+  require 'simplecov'
+  SimpleCov.start do
+    add_filter '/spec/'
+  end
+  SimpleCov.minimum_coverage 100
+rescue LoadError
+  # SimpleCov not available; proceed without coverage enforcement
+end
+
 require 'rspec'
 
 # Add the lib directory to the load path
