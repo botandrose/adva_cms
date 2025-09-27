@@ -38,11 +38,11 @@ jobs:
       matrix:
         ruby: ["3.2", "3.3", "3.4"]
         gem: [
-        # "belongs_to_cacheable", no test suite
+          "belongs_to_cacheable",
           "simple_taggable",
           "tags",
           "table_builder",
-        # "authentication", no test suite, gonna be replaced by authlogic soon anyways
+          "authentication",
           "cacheable_flash"
         ]
 
