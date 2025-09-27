@@ -72,13 +72,14 @@ module ActiveRecord
         def tagged *tags
           options = tags.extract_options!
           tags = TagList.from(tags)
+          original_unique_count = tags.map { |t| t.to_s.downcase }.uniq.size
           tags.cover_pluralities!
-          except = TagList.from(options[:except]) if options[:except]
+          except = options[:except]
 
           conditions = Array(options[:conditions])
           conditions << tags_condition(tags)
-          conditions << except_condition(except)  if options[:except]
-          conditions << match_all_condition(tags) if options.delete(:match_all)
+          conditions << except_condition(except)  if except
+          conditions << match_all_condition(tags, original_unique_count) if options.delete(:match_all)
 
           select("DISTINCT #{table_name}.*")
             .joins("INNER JOIN taggings
@@ -93,17 +94,16 @@ module ActiveRecord
           tags.empty? ? '0 = 1' : '(' + tags.map { |t| sanitize_sql(['tags.name LIKE ?', t]) } * ' OR ' + ')'
         end
 
-        def match_all_condition(tags)
+        def match_all_condition(tags, required_count)
           %((SELECT COUNT(*) FROM taggings INNER JOIN tags ON taggings.tag_id = tags.id
              WHERE taggings.taggable_type = '#{base_class.name}' AND
-                   taggable_id = #{table_name}.id AND #{tags_condition(tags)}) >= #{tags.size/2})
+                   taggable_id = #{table_name}.id AND #{tags_condition(tags)}) >= #{required_count})
         end
 
-        def except_condition(tags)
-          %(#{table_name}.id NOT IN
-             (SELECT taggings.taggable_id FROM taggings
-              INNER JOIN tags ON taggings.tag_id = tags.id
-              WHERE #{tags_condition(tags)} AND taggings.taggable_type = '#{base_class.name}') )
+        def except_condition(except)
+          ids = Array(except).map { |obj| obj.is_a?(ActiveRecord::Base) ? obj.id : obj }.compact
+          return '1=1' if ids.empty?
+          %(#{table_name}.id NOT IN (#{ids.join(',')}))
         end
       end
 
@@ -119,8 +119,9 @@ module ActiveRecord
         end
 
         def tag_list
-          @tag_list ||= cached_tag_list.nil? ? TagList.new(*tags.map(&:name)) : TagList.from(cached_tag_list)
-          @tag_list.to_s
+          cached = cached_tag_list
+          use_cache = cached.present? && cached != '""'
+          @tag_list ||= use_cache ? TagList.from(cached) : TagList.new(*tags.map(&:name))
         end
 
         def tag_list=(value)
@@ -135,25 +136,41 @@ module ActiveRecord
         protected
 
         def cache_tag_list
-          self.cached_tag_list = tag_list.to_s
+          return unless @tag_list
+          normalized = @tag_list.map { |n| n.to_s.downcase.strip }.uniq.join(', ')
+          self.cached_tag_list = normalized
         end
+
+        public
 
         def save_tags
           return unless @tag_list
 
-          new_tag_names = @tag_list - tags.map(&:name)
-          old_tags = tags.reject { |tag| @tag_list.include?(tag.name) }
+          current_tag_names_downcased = tags.map { |t| t.name.downcase }
+          desired_tag_names = @tag_list
+
+          # Add missing tags (case-insensitive)
+          names_to_add = desired_tag_names.reject { |n| current_tag_names_downcased.include?(n.to_s.downcase) }
+
+          # Remove tags no longer desired (case-insensitive)
+          desired_downcased = desired_tag_names.map { |n| n.to_s.downcase }
+          old_tags = tags.reject { |tag| desired_downcased.include?(tag.name.downcase) }
 
           self.class.transaction do
             unless old_tags.empty?
               taggings.where(tag_id: old_tags).each(&:destroy)
-              taggings.reset
             end
-            new_tag_names.each { |name| tags << Tag.find_or_create_by_name(name) }
 
-            duplicate_taggings = taggings.group_by(&:tag_id).values.map { |tags| tags[1..-1] }.flatten
+            names_to_add.each { |name| self.tags << Tag.find_or_create_by_name(name) }
+
+            # Deduplicate taggings by tag_id
+            duplicate_taggings = taggings.group_by(&:tag_id).values.map { |arr| arr[1..-1] }.compact.flatten
             duplicate_taggings.each(&:destroy)
           end
+          tags.reset
+          taggings.reset
+          # Clear memoized TagList so subsequent reads reflect persisted/cached values
+          @tag_list = nil
         end
       end
     end
@@ -161,3 +178,4 @@ module ActiveRecord
 end
 
 ActiveRecord::Base.send :extend, ActiveRecord::Acts::Taggable::ActMacro
+ActiveRecord::Base.send :extend, ActiveRecord::Acts::Taggable::ClassMethods

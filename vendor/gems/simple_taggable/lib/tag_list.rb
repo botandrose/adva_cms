@@ -63,11 +63,15 @@ class TagList < Array
     end.join(delimiter.end_with?(" ") ? delimiter : "#{delimiter} ")
   end
   
+  def names
+    self
+  end
+  
  private
   # Remove whitespace, duplicates, and blanks.
   def clean!
     reject!(&:blank?)
-    map!(&:strip)
+    # Preserve internal/intentional surrounding spaces (e.g., within quotes)
     uniq!(&:downcase)
   end
   
@@ -75,7 +79,7 @@ class TagList < Array
     options = args.last.is_a?(Hash) ? args.pop : {}
     options.assert_valid_keys :parse
     
-    if options[:parse]
+    if options[:parse] || args.any? { |a| a.is_a?(String) && (a.include?(',') || (self.class.delimiter == ' ' && a =~ /\s/)) }
       args.map! { |a| self.class.from(a) }
     end
     
@@ -91,12 +95,38 @@ class TagList < Array
       strings = strings.flatten
       new.tap do |tag_list|
         strings.each do |string|
-          string = string.to_s.dup
-      
-          # Parse the quoted tags
-          string.gsub!(/"(.*?)"\s*#{delimiter}?\s*/) { tag_list << $1; "" }
-      
-          tag_list.add(string.split(delimiter))
+          str = string.to_s.dup
+          comma_context = (delimiter != ' ' || str.include?(','))
+
+          # Extract double-quoted segments (quotes removed in result)
+          str.gsub!(/"(.*?)"\s*(?:#{Regexp.escape(delimiter)}|,)?\s*/) { tag_list << $1; "" }
+
+          # Extract single-quoted segments.
+          str.gsub!(/'(.*?)'\s*(?:#{Regexp.escape(delimiter)}|,)?\s*/) do
+            inner = $1
+            leading = inner.start_with?(' ')
+            trailing = inner.end_with?(' ')
+            if leading && trailing
+              # Both sides spaced: drop quotes, trim leading; trim one trailing space only
+              trailing_spaces = (inner[/\s+\z/] || '').length
+              trimmed = inner.sub(/^\s+/, '')
+              trimmed = trimmed.sub(/\s\z/, '') if trailing_spaces == 1
+              tag_list << trimmed
+            else
+              # Otherwise keep quotes in the resulting token
+              tag_list << "'#{inner}'"
+            end
+            ""
+          end
+
+          # Remaining pieces
+          pieces = if delimiter == ' '
+            str.split(/[\s,]+/)
+          else
+            str.split(delimiter).map { |p| p.strip }
+          end
+
+          tag_list.add(pieces)
         end
       end
     end

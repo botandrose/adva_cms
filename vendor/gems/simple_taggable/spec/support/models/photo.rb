@@ -6,3 +6,4 @@ end
 
 class SpecialPhoto < Photo
 end
+

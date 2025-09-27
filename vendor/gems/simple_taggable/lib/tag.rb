@@ -2,15 +2,20 @@ class Tag < ActiveRecord::Base
   has_many :taggings
   has_many :taggables, :through => :taggings, :source_type => "Content"
 
+  before_validation do
+    self.name = name.to_s.downcase.strip if attribute_present?('name') || !name.nil?
+  end
+
   validates_presence_of :name
-  validates_uniqueness_of :name, case_sensitive: true
+  validates_uniqueness_of :name, case_sensitive: false
 
   cattr_accessor :destroy_unused
   self.destroy_unused = true
   
   class << self
     def find_or_create_by_name(name)
-      where(["name LIKE ?", name]).first || create(name: name)
+      normalized = name.to_s.downcase.strip
+      where(name: normalized).first || create(name: normalized)
     end
   end
 
@@ -27,5 +32,4 @@ class Tag < ActiveRecord::Base
   end
   alias :to_param :to_s
 end
-
 
