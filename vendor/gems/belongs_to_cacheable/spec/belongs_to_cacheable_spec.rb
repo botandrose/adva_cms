@@ -49,4 +49,26 @@ describe "belongs_to_cacheable:" do
     values = [@article.author_name, @article.author_email]
     values.should == ['the author name', 'author@email.org']
   end
+
+  it "is_author? returns true when comparing with the same author object" do
+    @article.author = @author
+    @article.is_author?(@author).should be true
+  end
+
+  it "is_author? returns false when comparing with a different author object" do
+    other_author = User.new :name => 'other author', :email => 'other@email.org'
+    @article.author = @author
+    @article.is_author?(other_author).should be false
+  end
+
+  it "is_last_author? returns true when comparing with the same last_author object" do
+    @article.last_author = @author
+    @article.is_last_author?(@author).should be true
+  end
+
+  it "is_last_author? returns false when comparing with a different last_author object" do
+    other_author = User.new :name => 'other author', :email => 'other@email.org'
+    @article.last_author = @author
+    @article.is_last_author?(other_author).should be false
+  end
 end
