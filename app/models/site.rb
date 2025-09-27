@@ -70,15 +70,6 @@ class Site < ActiveRecord::Base
     activities.find_coinciding_grouped_by_dates(Time.zone.now.to_date, 1.day.ago.to_date)
   end
 
-  def plugins
-    @plugins ||= Rails.plugins.values.inject(ActiveSupport::OrderedHash.new) do |plugins, plugin|
-      plugin = plugin.clone
-      plugin.owner = self
-      plugins[plugin.name.to_sym] = plugin
-      plugins
-    end
-  end
-
   def email_from
     "#{name} <#{email}>" unless name.blank? || email.blank?
   end
