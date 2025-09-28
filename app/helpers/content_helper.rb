@@ -59,7 +59,11 @@ module ContentHelper
     section = args.pop || category.section
     route_name = :"#{section.class.name.downcase}_category_path"
     text ||= category.title
-    link_to(text, send(route_name, section_permalink: section.permalink, category_id: category.id))
+    if category.persisted?
+      link_to(text, send(route_name, section_permalink: section.permalink, category_id: category.id))
+    else
+      link_to(text, section)
+    end
   end
 
   def links_to_content_categories(content, key = nil)

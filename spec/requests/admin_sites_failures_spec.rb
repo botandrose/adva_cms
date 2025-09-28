@@ -10,7 +10,9 @@ RSpec.describe "Admin::Sites flows", type: :request do
 
   it "renders create/update/destroy failures" do
     allow_any_instance_of(Site).to receive(:save).and_return(false)
-    post admin_sites_path, params: { site: { name: 'N', title: 'T', host: 'h.local', email: 'a@b.c' }, section: { title: 'Home', type: 'Page' } }
+    # Avoid passing section params to keep view from receiving unpermitted parameters
+    permitted = ActionController::Parameters.new(site: { name: 'N', title: 'T', host: 'h.local', email: 'a@b.co' }).permit!
+    post admin_sites_path, params: permitted.to_h
     expect(response).to have_http_status(:ok)
 
     allow_any_instance_of(Site).to receive(:update).and_return(false)

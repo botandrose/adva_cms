@@ -4,7 +4,9 @@
   <h2>Home Section</h2>  
 
   <% form.field_set :'home_section' do %>
-    <%= fields_for :section, Section.new(params[:section]) do |s| %>
+    <%# Avoid passing unpermitted parameters directly to AR models %>
+    <% section_attrs = { title: params.dig(:section, :title), type: params.dig(:section, :type) }.compact %>
+    <%= fields_for :section, Section.new(section_attrs) do |s| %>
       <% column do %>
         <%= s.label :title %>
         <%= s.text_field :title %>

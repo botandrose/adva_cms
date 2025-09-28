@@ -2,6 +2,7 @@ class Admin::SitesController < Admin::BaseController
   before_action :params_site, :only => [:new, :create]
   before_action :params_section, :only => [:new, :create]
   before_action :protect_single_site_mode, :only => [:index, :new, :create, :destroy]
+  before_action :load_show_dependencies, only: [:show]
 
   def index
     @sites = Site.paginate(:page => params[:page], :per_page => params[:per_page]).order(:id)
@@ -46,6 +47,7 @@ class Admin::SitesController < Admin::BaseController
       redirect_to admin_sites_url, notice: "The site has been deleted."
     else
       flash.now.alert = "The site could not be deleted"
+      load_show_dependencies
       render action: :show
     end
   end
@@ -101,5 +103,11 @@ class Admin::SitesController < Admin::BaseController
           render :action => :multi_sites_disabled, :layout => 'admin'
         end
       end
+    end
+
+    def load_show_dependencies
+      @users = @site.users
+      @contents = @site.respond_to?(:unapproved_comments) ? @site.unapproved_comments.group_by(&:commentable) : {}
+      @activities = @site.grouped_activities
     end
 end

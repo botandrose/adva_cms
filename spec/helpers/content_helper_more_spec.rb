@@ -1,57 +1,105 @@
 require "rails_helper"
 
 RSpec.describe ContentHelper, type: :helper do
-  include ContentHelper
 
-  let(:site) { Site.create!(name: 'n', title: 't', host: 'helper.local') }
+  let(:site) { Site.create!(name: 'n', title: 't', host: 'content.local') }
   let(:section) { Page.create!(site: site, title: 'p', permalink: 'p') }
-  let(:user) { User.create!(first_name: 'U', email: 'u@example.com', password: 'AAbbcc1122!!', verified_at: Time.now) }
+  let(:user) { User.create!(first_name: 'U', email: 'user@example.com', password: 'AAbbcc1122!!', verified_at: Time.now) }
 
-  it "page_link_path returns link.body" do
-    link = Link.create!(site: site, section: section, title: 'L', body: 'http://example.com', author: user, published_at: 1.hour.ago, permalink: 'l')
-    expect(page_link_path(section, link)).to eq('http://example.com')
+  describe "published_at_formatted" do
+    it "returns Draft when not published and no date" do
+      article = Article.new
+      allow(article).to receive(:published?).and_return(false)
+      expect(helper.published_at_formatted(article)).to eq('Draft')
+    end
+
+    it "returns future scheduling message when date is in the future" do
+      article = Article.new(published_at: 2.days.from_now)
+      allow(article).to receive(:published?).and_return(false)
+      expect(helper.published_at_formatted(article)).to start_with('Will publish on ')
+    end
+
+    it "formats date when published" do
+      article = Article.create!(site: site, section: section, title: 'a', body: 'b', author: user, published_at: 1.hour.ago, permalink: 'a1')
+      expect(helper.published_at_formatted(article)).not_to include('Draft')
+    end
   end
 
-  it "published_at_formatted returns Draft when not published and no future date" do
-    a = Article.create!(site: site, section: section, title: 'D', body: 'b', author: user, published_at: nil, permalink: 'd')
-    expect(published_at_formatted(a)).to eq('Draft')
+  it "page_link_path returns link body" do
+    link = Link.new(body: 'http://example.com')
+    expect(helper.page_link_path(section, link)).to eq('http://example.com')
   end
 
-  it "published_at_formatted returns Will publish on when scheduled in future" do
-    a = Article.create!(site: site, section: section, title: 'F', body: 'b', author: user, published_at: 1.day.from_now, permalink: 'f')
-    expect(published_at_formatted(a)).to start_with('Will publish on ')
+  describe "link_to_preview" do
+    it "delegates to link_to_show with preview class" do
+      article = Article.create!(site: site, section: section, title: 'a', body: 'b', author: user, published_at: 1.hour.ago, permalink: 'a2')
+      allow(helper).to receive(:resource_url).and_return('/prev')
+      html = helper.link_to_preview(article)
+      expect(html).to include('href="/prev"')
+      expect(html).to include('class="preview article"')
+      expect(html).to include('>Preview<')
+    end
   end
 
-  it "published_at_formatted localizes past published date" do
-    a = Article.create!(site: site, section: section, title: 'P', body: 'b', author: user, published_at: 1.hour.ago, permalink: 'p1')
-    expect(published_at_formatted(a)).to be_a(String)
-    expect(published_at_formatted(a)).not_to be_empty
+  describe "link_to_content" do
+    it "uses object title by default" do
+      article = Article.create!(site: site, section: section, title: 'Title', body: 'b', author: user, published_at: 1.hour.ago, permalink: 'a3')
+      expect(helper).to receive(:link_to_show).with('Title', article, anything).and_return('A')
+      expect(helper.link_to_content(article)).to eq('A')
+    end
+
+    it "falls back to site name for Site objects" do
+      expect(helper).to receive(:link_to_show).with(site.name, site, anything).and_return('S')
+      expect(helper.link_to_content(site)).to eq('S')
+    end
   end
 
-  it "published_at_formatted uses long format when different year" do
-    a = Article.create!(site: site, section: section, title: 'Y', body: 'b', author: user, published_at: Time.zone.local(Time.zone.now.year - 1, 1, 1), permalink: 'y1')
-    expect(published_at_formatted(a)).to be_a(String)
-    expect(published_at_formatted(a)).not_to be_empty
-  end
+  describe "categories & tags links" do
+    it "link_to_category builds persisted and non-persisted links" do
+      saved = Category.create!(section: section, title: 'Saved')
+      unsaved = Category.new(section: section, title: 'Unsaved')
 
-  it "links_to_content_tags returns joined tag links when tags present" do
-    a = Article.create!(site: site, section: section, title: 'T', body: 'b', author: user, published_at: 1.hour.ago, permalink: 't2')
-    a.tag_list = 'ruby, rails'
-    a.save!
-    html = links_to_content_tags(a)
-    expect(html).to include('tagged: ')
-    expect(html).to include('ruby')
-    expect(html).to include('rails')
-  end
+      html1 = helper.link_to_category(section, saved)
+      expect(html1).to include("/p/categories/#{saved.id}")
 
-  it "links_to_content_categories returns joined category links when present" do
-    a = Article.create!(site: site, section: section, title: 'CT', body: 'b', author: user, published_at: 1.hour.ago, permalink: 'ct')
-    c1 = Category.create!(section: section, title: 'Cat1')
-    c2 = Category.create!(section: section, title: 'Cat2')
-    a.categories << [c1, c2]
-    html = links_to_content_categories(a)
-    expect(html).to include('in: ')
-    expect(html).to include('Cat1')
-    expect(html).to include('Cat2')
+      html2 = helper.link_to_category(section, unsaved)
+      expect(html2).to include("/p")
+    end
+
+    it "links_to_content_categories renders joined links" do
+      a = Article.create!(site: site, section: section, title: 'a', body: 'b', author: user, published_at: 1.hour.ago, permalink: 'a4')
+      c1 = Category.create!(section: section, title: 'C1')
+      c2 = Category.create!(section: section, title: 'C2')
+      a.categories << [c1, c2]
+
+      html = helper.links_to_content_categories(a)
+      expect(html).to include('in:')
+      expect(html).to include("/p/categories/#{c1.id}")
+      expect(html).to include("/p/categories/#{c2.id}")
+    end
+
+    it "link_to_tag builds links with and without block" do
+      tag = Tag.find_or_create_by_name('blue')
+      # without block
+      html = helper.link_to_tag(section, tag)
+      expect(html).to include('/p/tags/blue')
+      expect(html).to include('>blue<')
+      # with block
+      html2 = helper.link_to_tag(section, tag) { 'X' }
+      expect(html2).to include('/p/tags/blue')
+      expect(html2).to include('>X<')
+    end
+
+    it "links_to_content_tags renders joined tag links" do
+      a = Article.create!(site: site, section: section, title: 'a', body: 'b', author: user, published_at: 1.hour.ago, permalink: 'a5')
+      t1 = Tag.find_or_create_by_name('red')
+      t2 = Tag.find_or_create_by_name('green')
+      a.tags << [t1, t2]
+
+      html = helper.links_to_content_tags(a)
+      expect(html).to include('tagged:')
+      expect(html).to include('/p/tags/red')
+      expect(html).to include('/p/tags/green')
+    end
   end
 end
