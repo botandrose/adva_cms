@@ -1,34 +1,10 @@
 ENV["RAILS_ENV"] ||= "test"
 
-# Start SimpleCov before loading Rails
-require 'simplecov'
-require 'simplecov-html'
+require "spec_helper"
 
-SimpleCov.start 'rails' do
-  add_filter '/spec/'
-  add_filter '/vendor/'
-  add_filter '/test/'
-
-  add_group 'Controllers', 'app/controllers'
-  add_group 'Models', 'app/models'
-  add_group 'Helpers', 'app/helpers'
-  add_group 'Observers', 'app/observers'
-  add_group 'Libraries', 'lib'
-
-  formatter SimpleCov::Formatter::HTMLFormatter
-end
-
-require File.expand_path("internal/config/environment", __dir__)
+require_relative "./internal/config/environment"
 require "rspec/rails"
-
-# Keep Rails 7 path helpers in specs
-begin
-  require "rails-controller-testing"
-  %i[assigns assert_template].each do |_|
-    # no-op; the gem mixes into test frameworks, not RSpec; request specs won't need these
-  end
-rescue LoadError
-end
+require "rails-controller-testing"
 
 Dir[File.join(__dir__, "support", "**", "*.rb")].sort.each { |f| require f }
 

@@ -98,7 +98,7 @@ class Admin::SitesController < Admin::BaseController
           site = Site.first
           redirect_to admin_site_url(site)
         else
-          render :action => :multi_sites_disabled, :layout => 'simple'
+          render :action => :multi_sites_disabled, :layout => 'admin'
         end
       end
     end

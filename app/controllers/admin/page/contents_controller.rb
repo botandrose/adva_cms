@@ -1,8 +1,8 @@
 class Admin::Page::ContentsController < Admin::BaseController
   default_param :content, :author_id, :only => [:create, :update], &lambda { |*| current_user.id }
 
-  before_action :protect_single_content_mode
   before_action :set_section
+  before_action :protect_single_content_mode
   before_action :set_categories, :only => [:new, :edit]
 
   def index
@@ -22,7 +22,7 @@ class Admin::Page::ContentsController < Admin::BaseController
       end
       content.move_to_right_of left if left
     end
-    render :text => 'OK'
+    head :ok
   end
   
   protected 
@@ -40,11 +40,10 @@ class Admin::Page::ContentsController < Admin::BaseController
     end
 
     def protect_single_content_mode
-      if params[:action] == 'index' and @section.try(:single_article_mode)
+      if params[:action] == 'index' && @section.try(:single_article_mode)
         redirect_to @section.contents.empty? ?
-          new_admin_article_url(@section, :content => { :title => @section.title }) :
-          edit_admin_article_url(@section, @section.articles.first)
+          new_admin_page_article_url(@section, :content => { :title => @section.title }) :
+          edit_admin_page_article_url(@section, @section.articles.first)
       end
     end
 end
-

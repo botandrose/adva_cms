@@ -33,7 +33,7 @@ class Admin::Page::CategoriesController < Admin::BaseController
     # resource or use :update. applies to articles, sections, categories etc.
     @section.categories.update(params[:categories].keys, params[:categories].values)
     @section.categories.update_paths!
-    render :text => 'OK'
+    head :ok
   end
 
   def destroy

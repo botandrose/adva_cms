@@ -1,12 +1,18 @@
-if ENV["COVERAGE"]
-  require "coverage"
-  require "json"
-  require "fileutils"
-  begin
-    Coverage.start(lines: true)
-  rescue ArgumentError
-    Coverage.start
-  end
+require 'simplecov'
+require 'simplecov-html'
+
+SimpleCov.start 'rails' do
+  add_filter '/spec/'
+  add_filter '/vendor/'
+  add_filter '/lib/adva/version.rb'
+
+  add_group 'Controllers', 'app/controllers'
+  add_group 'Models', 'app/models'
+  add_group 'Helpers', 'app/helpers'
+  add_group 'Observers', 'app/observers'
+  add_group 'Libraries', 'lib'
+
+  formatter SimpleCov::Formatter::HTMLFormatter
 end
 
 RSpec.configure do |config|

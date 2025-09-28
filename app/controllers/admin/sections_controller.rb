@@ -13,7 +13,7 @@ class Admin::SectionsController < Admin::BaseController
   end
 
   def create
-    @section = @site.sections.build params[:section]
+    @section = @site.sections.build(section_params)
     if @section.save
       flash.notice = "The section has been created."
       redirect_to (params[:commit] == "Save and create another section" ?
@@ -29,7 +29,7 @@ class Admin::SectionsController < Admin::BaseController
   end
 
   def update
-    if @section.update params[:section]
+    if @section.update(section_params)
       redirect_to [:edit, :admin, @section], notice: "The section has been updated."
     else
       flash.now.alert = "The section could not be updated."
@@ -70,6 +70,11 @@ class Admin::SectionsController < Admin::BaseController
 
     def set_section
       @section = @site.sections.find_by_permalink!(params[:id])
+    end
+
+    def section_params
+      return {} unless params[:section]
+      params.require(:section).permit(:title, :permalink, :type)
     end
 
     def normalize_params(hash = nil)
