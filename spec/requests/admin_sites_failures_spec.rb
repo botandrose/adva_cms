@@ -32,5 +32,14 @@ RSpec.describe "Admin::Sites flows", type: :request do
     get new_admin_site_path
     expect(response).to have_http_status(:ok)
     expect(response.body).to include('Single-site mode')
+
+    # Also covers create/destroy rendering branch in protect_single_site_mode
+    post admin_sites_path, params: { site: { name: 'X', title: 'Y', host: 'x.local', email: 'a@b.co' }, section: { title: 'Home' } }
+    expect(response).to have_http_status(:ok)
+    expect(response.body).to include('Single-site mode')
+
+    delete admin_site_path(site)
+    expect(response).to have_http_status(:ok)
+    expect(response.body).to include('Single-site mode')
   end
 end

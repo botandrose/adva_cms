@@ -23,11 +23,6 @@ module ContentHelper
     link.body
   end
 
-  def content_path(section, content, options={})
-    return article_path(section, content) if content.is_a? Article
-    link_path(section, content)
-  end
-
   def content_status(content)
     return "<span>&nbsp;</span>" unless content.respond_to?(:published?)
     klass = content.published? ? 'published' : 'pending'

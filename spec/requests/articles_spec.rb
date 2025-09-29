@@ -10,6 +10,11 @@ RSpec.describe "Articles", type: :request do
   before { host! site.host }
 
   describe "GET /" do
+    it "returns 404 (or 500) when there are no published articles" do
+      get "/"
+      expect(response).to have_http_status(:not_found).or have_http_status(:internal_server_error)
+    end
+
     context "with published articles" do
       let!(:article) do
         Article.create!(
@@ -93,17 +98,15 @@ RSpec.describe "Articles", type: :request do
         )
       end
 
-      it "handles draft articles for non-admin users" do
-        get "/blog/articles/draft-article"
+      it "returns 404 (or 500) for drafts to non-admin via show route" do
+        get "/blog/draft-article"
         expect(response).to have_http_status(:not_found).or have_http_status(:internal_server_error)
       end
 
-      it "may allow admin users to view drafts" do
-        # Simulate admin login
+      it "allows admin users to view drafts via show route" do
         allow_any_instance_of(BaseController).to receive(:current_user).and_return(admin)
-
-        get "/blog/articles/draft-article"
-        expect(response).to have_http_status(:ok).or have_http_status(:not_found)
+        get "/blog/draft-article"
+        expect(response).to have_http_status(:ok)
       end
     end
 
@@ -330,6 +333,14 @@ RSpec.describe "Articles", type: :request do
         end
 
         expect(resource_test_passed).to be_truthy, "No working URL found for current_resource test"
+      end
+
+      it "evaluates current_resource directly (single_article_mode)" do
+        controller = ArticlesController.new
+        controller.request = ActionDispatch::Request.new('HTTP_HOST' => site.host)
+        controller.response = ActionDispatch::Response.new
+        allow(controller).to receive(:section).and_return(single_article_section)
+        expect(controller.send(:current_resource)).to eq(single_article_section)
       end
     end
   end

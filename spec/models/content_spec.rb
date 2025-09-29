@@ -212,23 +212,6 @@ RSpec.describe Content, type: :model do
     end
   end
 
-  describe "#published_at=" do
-    let(:content) { Article.new(site: site, section: section, title: 'Test', body: 'Test content', author: user) }
-
-    it "sets published_at to nil when draft is '1'" do
-      content.draft = '1'
-      content.published_at = Time.current
-      expect(content.published_at).to be_nil
-    end
-
-    it "sets published_at normally when draft is not '1'" do
-      time = Time.current
-      content.draft = '0'
-      content.published_at = time
-      expect(content.published_at.to_i).to eq(time.to_i)
-    end
-  end
-
   describe "date helpers" do
     let(:content) do
       Article.create!(

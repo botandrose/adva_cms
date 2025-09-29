@@ -17,8 +17,8 @@ class Page < Section
   end
 
   def published_at=(published_at)
-    if single_article_mode && contents.first
-      contents.first.update_attribute(:published_at, published_at)
+    if single_article_mode && contents.reload.first
+      contents.first.update(published_at: published_at)
     else
       super
     end

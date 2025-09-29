@@ -61,4 +61,41 @@ RSpec.describe ResourceHelper, type: :helper do
     allow(self).to receive(:controller_path).and_return('admin/pages')
     expect(current_controller_namespace).to eq('admin')
   end
+
+  describe "#resource_owners" do
+    it "returns empty array for nil resource" do
+      expect(resource_owners(nil)).to eq([])
+    end
+
+    it "returns empty array for symbol resource" do
+      expect(resource_owners(:some_symbol)).to eq([])
+    end
+
+    it "includes section when resource responds to section" do
+      site = Site.create!(name: 'test', title: 't', host: 'section.local')
+      section = Page.create!(site: site, title: 'Section', permalink: 's')
+      resource = double("Resource", section: section)
+      allow(resource).to receive(:respond_to?).with(:owners).and_return(false)
+      allow(resource).to receive(:respond_to?).with(:section).and_return(true)
+      allow(resource).to receive(:respond_to?).with(:owner).and_return(false)
+      expect(resource_owners(resource)).to include(section, resource)
+    end
+
+    it "includes owner when resource responds to owner but not section" do
+      owner = double("Owner")
+      resource = double("Resource", owner: owner)
+      allow(resource).to receive(:respond_to?).with(:owners).and_return(false)
+      allow(resource).to receive(:respond_to?).with(:section).and_return(false)
+      allow(resource).to receive(:respond_to?).with(:owner).and_return(true)
+      expect(resource_owners(resource)).to include(owner, resource)
+    end
+
+    it "just includes resource when no section or owner" do
+      resource = double("Resource")
+      allow(resource).to receive(:respond_to?).with(:owners).and_return(false)
+      allow(resource).to receive(:respond_to?).with(:section).and_return(false)
+      allow(resource).to receive(:respond_to?).with(:owner).and_return(false)
+      expect(resource_owners(resource)).to eq([resource])
+    end
+  end
 end

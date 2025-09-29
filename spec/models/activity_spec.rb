@@ -149,4 +149,19 @@ RSpec.describe Activity, type: :model do
       expect(result.size).to eq(1) # Should be grouped
     end
   end
+
+  describe ".find_coinciding_grouped_by_dates" do
+    it "groups activities by given dates and appends the remainder" do
+      base = Time.zone.parse('2024-01-03 10:00:00')
+      a_today = Activity.create!(site: site, section: section, object: article, author: user, created_at: base)
+      a_yesterday = Activity.create!(site: site, section: section, object: article, author: user, created_at: base - 1.day)
+      a_two_days_ago = Activity.create!(site: site, section: section, object: article, author: user, created_at: base - 2.days)
+
+      groups = Activity.find_coinciding_grouped_by_dates(base.to_date, (base - 1.day).to_date)
+      expect(groups.size).to eq(3)
+      expect(groups[0]).to include(a_today)
+      expect(groups[1]).to include(a_yesterday)
+      expect(groups[2]).to include(a_two_days_ago)
+    end
+  end
 end

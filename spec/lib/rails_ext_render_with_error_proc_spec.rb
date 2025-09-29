@@ -31,5 +31,38 @@ RSpec.describe "RenderWithErrorProc", type: :request do
     expect(ctrl.send(:extract_error_proc_key, {})).to eq(:below_field)
     expect(ctrl.send(:extract_error_proc_key, errors: :above_field)).to eq(:above_field)
   end
-end
 
+  describe "field_error_procs" do
+    let(:instance) { double("instance", error_message: ["can't be blank"])}
+
+    describe ":above_field" do
+      let(:proc) { ActionController::Base.field_error_procs[:above_field] }
+
+      it "should render the error message before the field" do
+        html_tag = '<input type="text" />'.html_safe
+        expected = '<span class="error_message">can\'t be blank</span><input type="text" />'
+        expect(proc.call(html_tag, instance)).to eq(expected)
+      end
+
+      it "should not render the error message for a label" do
+        html_tag = '<label for="field">Field</label>'
+        expect(proc.call(html_tag, instance)).to eq(html_tag)
+      end
+    end
+
+    describe ":below_field" do
+      let(:proc) { ActionController::Base.field_error_procs[:below_field] }
+
+      it "should render the error message after the field" do
+        html_tag = '<input type="text" />'.html_safe
+        expected = '<input type="text" /><span class="error_message">can\'t be blank</span>'
+        expect(proc.call(html_tag, instance)).to eq(expected)
+      end
+
+      it "should not render the error message for a label" do
+        html_tag = '<label for="field">Field</label>'
+        expect(proc.call(html_tag, instance)).to eq(html_tag)
+      end
+    end
+  end
+end

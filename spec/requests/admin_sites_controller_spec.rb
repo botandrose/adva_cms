@@ -40,6 +40,24 @@ RSpec.describe "Admin::SitesController", type: :request do
       expect(response).to have_http_status(:ok)
       expect(response.body).to include('Test Site Title')
     end
+
+    it "shows site via singular route using host (set_site without :id)" do
+      # Hitting /admin/site exercises set_site branch that uses request.host
+      get "/admin/site"
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include('Test Site Title')
+    end
+
+    it "loads unapproved_comments when available" do
+      # Define method so partial double verification is satisfied
+      Site.class_eval do
+        def unapproved_comments
+          []
+        end
+      end
+      get "/admin/sites/#{site.id}"
+      expect(response).to have_http_status(:ok)
+    end
   end
 
   describe "GET /admin/sites/new" do
@@ -153,6 +171,11 @@ RSpec.describe "Admin::SitesController", type: :request do
         expect(response.body).to include('<form')
       end
     end
+
+    it "updates with no params (site_params empty)" do
+      patch "/admin/sites/#{site.id}", params: {}
+      expect(response).to redirect_to(edit_admin_site_url)
+    end
   end
 
   describe "DELETE /admin/sites/:id" do
@@ -167,6 +190,12 @@ RSpec.describe "Admin::SitesController", type: :request do
         }.to change(Site, :count).by(-1)
 
         expect(response).to redirect_to(admin_sites_url)
+      end
+
+      it "renders show on destroy failure" do
+        allow_any_instance_of(Site).to receive(:destroy).and_return(false)
+        delete "/admin/sites/#{site.id}"
+        expect(response).to have_http_status(:ok)
       end
     end
   end

@@ -3,10 +3,6 @@ class Site < ActiveRecord::Base
   serialize :spam_options, coder: YAML
 
   has_many :sections, :dependent => :destroy do
-    def paths
-      map(&:path)
-    end
-
     # FIXME can this be on the nested_set?
     def update_paths!
       paths = Hash[*roots.map { |r|

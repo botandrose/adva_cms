@@ -77,7 +77,8 @@ RSpec.describe Category, type: :model do
       c1 = Category.create!(section: section, title: 'duplicate')
       c2 = Category.create!(section: section, title: 'duplicate')
       expect(c1.permalink).not_to eq(c2.permalink)
-      expect(c2.permalink).to match(/duplicate-\d+/)
+      # FriendlyId now appends a UUID for uniqueness
+      expect(c2.permalink).to match(/\Aduplicate-[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}\z/)
     end
 
     it "generates permalink from title" do

@@ -85,25 +85,6 @@ RSpec.describe Content, type: :model do
     end
   end
 
-  describe "#published_at=" do
-    context "when draft is set to 1" do
-      it "sets published_at to nil" do
-        article.draft = '1'
-        article.published_at = Time.current
-        expect(article.published_at).to be_nil
-      end
-    end
-
-    context "when draft is not set to 1" do
-      it "sets published_at to the given value" do
-        time = Time.current
-        article.draft = '0'
-        article.published_at = time
-        expect(article.published_at.to_i).to eq(time.to_i)
-      end
-    end
-  end
-
   describe ".primary" do
     before { Content.delete_all }
 

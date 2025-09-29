@@ -10,8 +10,28 @@ RSpec.describe "Admin::Page::Articles extra coverage", type: :request do
   end
 
   it "index redirects to contents" do
+    section.update!(single_article_mode: false)
     get admin_page_articles_path(section)
     expect(response).to redirect_to(admin_page_contents_path(section))
+  end
+
+  it "redirects to new when single_article_mode with no articles" do
+    section.update!(single_article_mode: true)
+    section.articles.destroy_all
+    get admin_page_articles_path(section)
+    expect(response).to have_http_status(:found)
+    expect(response.location).to match(%r{/admin/.+/articles/new})
+    # Optional: ensure title param is passed
+    expect(URI.parse(response.location).query).to include("article%5Btitle%5D=")
+  end
+
+  it "redirects to edit when single_article_mode with an article" do
+    section.update!(single_article_mode: true)
+    user = User.find_by_email('admin@example.com')
+    article = section.articles.create!(title: 'Existing', body: 'b', author: user, permalink: 'existing')
+    get admin_page_articles_path(section)
+    expect(response).to have_http_status(:found)
+    expect(response.location).to match(%r{/admin/.+/articles/#{article.to_param}/edit})
   end
 
   it "show renders" do

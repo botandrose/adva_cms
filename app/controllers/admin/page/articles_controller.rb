@@ -1,8 +1,8 @@
 class Admin::Page::ArticlesController < Admin::BaseController
   default_param :article, :author_id, :only => [:create, :update], &lambda { |*| current_user.id }
 
-  before_action :protect_single_article_mode
   before_action :set_section
+  before_action :protect_single_article_mode
   before_action :set_article,    :only => [:show, :edit, :update, :destroy]
   before_action :set_categories, :only => [:new, :edit]
   before_action :optimistic_lock, :only => :update
@@ -81,19 +81,15 @@ class Admin::Page::ArticlesController < Admin::BaseController
     def protect_single_article_mode
       if params[:action] == 'index' && @section.try(:single_article_mode)
         redirect_to @section.articles.empty? ?
-          new_admin_article_url(@section, :article => { :title => @section.title }) :
-          edit_admin_article_url(@section, @section.articles.first)
+          new_admin_page_article_url(@section, :article => { :title => @section.title }) :
+          edit_admin_page_article_url(@section, @section.articles.first)
       end
     end
 
     def optimistic_lock
-      return unless params[:article]
+      return unless updated_at = params.dig(:article, :updated_at)
 
-      unless params[:article].key?(:updated_at)
-        raise "Can not update article: timestamp missing. Please make sure that your form has a hidden field: updated_at."
-      end
-
-      if @article.updated_at && (Time.zone.parse(params[:article][:updated_at].to_s) != Time.zone.parse(@article.updated_at.to_s))
+      if @article.updated_at && (Time.zone.parse(updated_at) != Time.zone.parse(@article.updated_at.to_s))
         flash.now.alert = "In the meantime this article has been updated by someone else. Please resolve any conflicts."
         render :action => :edit
       end

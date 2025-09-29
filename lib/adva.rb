@@ -2,16 +2,7 @@ require "rails"
 require "will_paginate"
 require "awesome_nested_set"
 require "nacelle"
-begin
-  require "actionpack/page_caching"
-rescue LoadError
-  warn "[adva] actionpack-page_caching not available; page caching tests may be skipped"
-end
-begin
-  require "rails-observers"
-rescue LoadError
-  warn "[adva] rails-observers not available"
-end
+require "actionpack/page_caching"
 
 require "rails_ext"
 

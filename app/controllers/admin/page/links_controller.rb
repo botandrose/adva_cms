@@ -2,7 +2,6 @@ class Admin::Page::LinksController < Admin::BaseController
   default_param :link, :author_id, :only => [:create, :update], &lambda { |*| current_user.id }
 
   before_action :set_section
-  before_action :set_links,   :only => [:index]
   before_action :set_link,    :only => [:show, :edit, :update, :destroy]
 
   def new
@@ -51,10 +50,6 @@ class Admin::Page::LinksController < Admin::BaseController
 
     def set_menu
       @menu = Menus::Admin::Links.new
-    end
-
-    def set_links
-      @links = @section.links.filtered params[:filters]
     end
 
     def set_link

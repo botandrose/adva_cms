@@ -1,5 +1,6 @@
 require "rails_helper"
 require "adva/authenticate_user"
+require "ostruct"
 
 RSpec.describe Adva::AuthenticateUser do
   let!(:site) { Site.find_by_host('test.example.com') || Site.create!(name: 'Test Site', title: 'Test Site', host: 'test.example.com') }
@@ -110,6 +111,119 @@ RSpec.describe Adva::AuthenticateUser do
 
     it "is not implemented yet" do
       expect(dummy_controller.send(:http_auth_login)).to be_nil
+    end
+  end
+
+  describe "#authenticated?" do
+    let(:dummy_controller) do
+      Class.new do
+        def self.helper_method(*methods); end
+        include Adva::AuthenticateUser
+        attr_accessor :current_user
+      end.new
+    end
+
+    it "returns true when user is not anonymous" do
+      user = double("User", anonymous?: false)
+      dummy_controller.current_user = user
+      expect(dummy_controller.authenticated?).to be true
+    end
+
+    it "returns false when user is anonymous" do
+      user = double("User", anonymous?: true)
+      dummy_controller.current_user = user
+      expect(dummy_controller.authenticated?).to be false
+    end
+  end
+
+  describe "#require_authentication" do
+    let(:dummy_controller) do
+      Class.new do
+        def self.helper_method(*methods); end
+        include Adva::AuthenticateUser
+
+        attr_accessor :controller_name, :action_name
+
+        def request
+          OpenStruct.new(url: "http://example.com/test")
+        end
+
+        def redirect_to(url)
+          @redirected_to = url
+        end
+
+        def login_url(options = {})
+          "/login?return_to=#{options[:return_to]}"
+        end
+      end.new
+    end
+
+    it "allows session/new action without authentication" do
+      dummy_controller.controller_name = "session"
+      dummy_controller.action_name = "new"
+      user = double("User", anonymous?: true)
+      allow(dummy_controller).to receive(:current_user).and_return(user)
+      expect(dummy_controller.send(:require_authentication)).to be_nil
+    end
+
+    it "allows password/create action without authentication" do
+      dummy_controller.controller_name = "password"
+      dummy_controller.action_name = "create"
+      user = double("User", anonymous?: true)
+      allow(dummy_controller).to receive(:current_user).and_return(user)
+      expect(dummy_controller.send(:require_authentication)).to be_nil
+    end
+
+    it "allows user/new action without authentication" do
+      dummy_controller.controller_name = "user"
+      dummy_controller.action_name = "new"
+      user = double("User", anonymous?: true)
+      allow(dummy_controller).to receive(:current_user).and_return(user)
+      expect(dummy_controller.send(:require_authentication)).to be_nil
+    end
+
+    it "redirects anonymous users to login" do
+      dummy_controller.controller_name = "test"
+      dummy_controller.action_name = "show"
+      user = double("User", anonymous?: true)
+      allow(dummy_controller).to receive(:current_user).and_return(user)
+      expect(dummy_controller).to receive(:redirect_to).and_return(nil)
+      result = dummy_controller.send(:require_authentication)
+      expect(result).to be_falsy
+    end
+  end
+
+  describe "#try_login" do
+    let(:dummy_controller) do
+      Class.new do
+        def self.helper_method(*methods); end
+        include Adva::AuthenticateUser
+
+        attr_accessor :session
+
+        def initialize
+          @session = {}
+        end
+
+        def http_auth_login
+          nil
+        end
+
+        def validation_login
+          nil
+        end
+
+        def remember_me_login
+          nil
+        end
+      end.new
+    end
+
+    it "sets session uid when login succeeds" do
+      user = double("User", id: 123)
+      allow(dummy_controller).to receive(:validation_login).and_return(user)
+      dummy_controller.send(:try_login)
+      expect(dummy_controller.session[:uid]).to eq(123)
     end
   end
 end

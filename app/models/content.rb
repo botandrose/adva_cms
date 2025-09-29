@@ -81,9 +81,8 @@ class Content < ActiveRecord::Base
   end
 
   attr_accessor :draft
-  def published_at=(published_at)
-    write_attribute(:published_at, draft.to_i == 1 ? nil : published_at)
-  end
+
+  before_validation :set_published_at_from_draft
 
   def author_id=(author_id)
     # FIXME this is only needed because belongs_to_cacheable can't be non-polymorphic, yet
@@ -143,20 +142,12 @@ class Content < ActiveRecord::Base
 
   protected
 
-    def set_site
-      self.site_id = section.site_id if section
+    def set_published_at_from_draft
+      self.published_at = nil if draft.to_i == 1
     end
 
-    def update_categories(category_ids)
-      category_ids = Array(category_ids).reject(&:blank?)
-      return if category_ids.empty?
-
-      categories.each do |category|
-        category_ids.delete(category.id.to_s) || categories.delete(category)
-      end
-      if category_ids.present?
-        categories << Category.find(:all, :conditions => ['id in (?)', category_ids])
-      end
+    def set_site
+      self.site_id = section.site_id if section
     end
 end
 

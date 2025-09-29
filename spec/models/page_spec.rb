@@ -64,9 +64,12 @@ RSpec.describe Page, type: :model do
       end
 
       describe "#published_at=" do
-        it "updates the first content's published_at when content exists" do
-          new_time = 2.hours.ago
-          expect { page.published_at = new_time }.not_to raise_error
+       it "updates the first content's published_at when content exists" do
+          new_time = Time.utc(2000, 1, 1, 12, 0, 0)
+          original_article_time = article.published_at
+          expect(original_article_time).not_to be_nil
+          page.update! published_at: new_time
+          expect(article.reload.published_at).to eq(new_time)
         end
 
         it "calls super when no contents" do
