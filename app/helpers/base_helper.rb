@@ -13,7 +13,8 @@ module BaseHelper
     # for some weird reasons Passenger and Mongrel behave differently when using Rails' capture method
     # with_output_buffer -> works, so we use it for now
     lines = (form_for(*args, &block) || '').split("\n")
-    content_for :form, lines.shift.html_safe
+    form_head = lines.shift
+    content_for :form, (form_head || '').html_safe
     lines.pop
 
     lines.join("\n").html_safe

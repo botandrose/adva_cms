@@ -40,5 +40,46 @@ RSpec.describe "Password", type: :request do
     put "/password", params: { user: { password: 'NewPass1122!!' } }
     expect(response).to redirect_to("/")
   end
+
+  it "update with invalid password renders form again" do
+    host! site.host
+    post "/session", params: { user: { email: user.email, password: 'AAbbcc1122!!' } }
+    expect(response).to be_redirect
+
+    put "/password", params: { user: { password: 'weak' } }
+    expect(response).to have_http_status(:ok)
+    expect(response.body).to include('name="user[password]"')
+  end
+
+  it "update without current user renders token form" do
+    host! site.host
+
+    put "/password", params: { user: { password: 'NewPass1122!!' }, token: 'invalid' }
+    expect(response).to have_http_status(:ok)
+    expect(response.body).to include('name="token"')
+  end
+
+  it "create redirects to edit form for valid user" do
+    host! site.host
+    post "/password", params: { user: { email: user.email } }
+
+    expect(response).to redirect_to(edit_password_url)
+  end
+
+  it "update triggers password updated event on success" do
+    host! site.host
+    post "/session", params: { user: { email: user.email, password: 'AAbbcc1122!!' } }
+
+    put "/password", params: { user: { password: 'NewPass1122!!' } }
+    expect(response).to redirect_to("/")
+  end
+
+  it "create saves user after assigning token" do
+    expect_any_instance_of(User).to receive(:save!)
+
+    host! site.host
+    post "/password", params: { user: { email: user.email } }
+    expect(response).to redirect_to(edit_password_url)
+  end
 end
 

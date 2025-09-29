@@ -25,7 +25,7 @@ module Admin::BaseHelper
 
   # FIXME: translations
   def page_cached_at(page)
-    if Time.current.to_date == page.updated_at.to_date
+    if page.updated_at >= Time.current.beginning_of_day
       if page.updated_at > Time.zone.now - 4.hours
         "#{time_ago_in_words(page.updated_at).gsub(/about /,'~ ')} ago"
       else

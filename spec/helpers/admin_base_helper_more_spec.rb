@@ -1,4 +1,5 @@
 require "rails_helper"
+require "timecop"
 
 RSpec.describe Admin::BaseHelper, type: :helper do
   include Admin::BaseHelper
@@ -18,14 +19,16 @@ RSpec.describe Admin::BaseHelper, type: :helper do
   end
 
   it "page_cached_at formats for within 4 hours, older today, and previous day" do
-    page = double("page", updated_at: 1.hour.ago)
-    expect(page_cached_at(page)).to include('ago').or include('Today')
+    Timecop.freeze(Time.current.change(hour: 12)) do
+      page = double("page", updated_at: 1.hour.ago)
+      expect(page_cached_at(page)).to include('ago')
 
-    page = double("page", updated_at: 6.hours.ago)
-    expect(page_cached_at(page)).to match(/Today, /)
+      page = double("page", updated_at: 6.hours.ago)
+      expect(page_cached_at(page)).to match(/Today, /)
 
-    page = double("page", updated_at: 1.day.ago)
-    expect(page_cached_at(page)).to match(/\w{3} \d{2}, \d{4}/)
+      page = double("page", updated_at: 1.day.ago)
+      expect(page_cached_at(page)).to match(/\w{3} \d{2}, \d{4}/)
+    end
   end
 
   it "editor_class_for returns css class" do
