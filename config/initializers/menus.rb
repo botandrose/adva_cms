@@ -1,13 +1,4 @@
-# require_relative "../../vendor/plugins/tags/init"
-
 module Menus
-  class Sections < Menu::Menu
-    define do
-      id :sections
-      @site.sections.select { |s| s.published?(true) }.each { |section| item section.title, :action => :show, :resource => section }
-    end
-  end
-
   module Admin
     class Sites < Menu::Group
       define do
