@@ -22,10 +22,13 @@
     = javascript_include_tag "admin"
 
     - unless Rails.env.test? # ckeditor screws up tests
-      = javascript_include_tag Ckeditor.cdn_url unless Rails.env.test?
+      = javascript_include_tag Ckeditor.cdn_url
 
     = javascript_tag "window._auth_token = #{form_authenticity_token.inspect}"
     = csrf_meta_tags
+
+    - if defined?(ImportmapRails)
+      = javascript_importmap_tags :importmap_admin
 
     = yield :js
 
