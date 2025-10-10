@@ -26,7 +26,7 @@ module Menus
       class Main < Menu::Group
         define do
           id :main
-          parent Sites.new.build(scope).find(:sites)
+          parent Sites.new.build(scope)
           menu :actions, :class => 'actions' do
             item :new, :action => :new, :resource => :site
           end
