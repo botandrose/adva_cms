@@ -1,0 +1,27 @@
+h2 Install Site
+
+p Welcome to adva-cms' less-than-one-minute installation process. Just fill in the information below and you're done.
+p Don't worry. You can always change these settings later.
+
+= form_for Site.new, url: admin_install_path do |f|
+  h3 Website
+  - f.field_set :site do
+    = fields_for @site do |site|
+      = site.text_field :name, label: true
+
+  h3 Home Section
+  - f.field_set :home_section do
+    = fields_for :section, @section do |section|
+      p
+        = section.text_field :title, label: true
+
+  h3 Admin Account
+  - f.field_set :admin_account do
+    = fields_for @user do |user|
+      p
+        = user.email_field :email, label: true
+      p
+        = user.password_field :password, label: true
+
+  - f.buttons do
+    = submit_tag "Create site and account"

@@ -1,0 +1,41 @@
+/ HACK: empty line must be here for split_form_for to work properly
+fieldset
+  .col
+    = hidden_field_tag 'cl', Article.locale
+
+    p
+      = f.text_field :title, class: 'big', label: "Title", style: "float: none"
+
+    input#toggle_excerpt type="checkbox" checked=@article.has_excerpt?
+
+    p.show-if-previous-checked
+      label for="article_excerpt"
+        | Excerpt
+        span<
+          | (
+          = link_to "Hide", '#', onclick: 'document.getElementById("toggle_excerpt").checked = false; return false'
+          | )
+      = f.text_area :excerpt, class: 'wysiwyg'
+
+    p.show-if-previous-unchecked
+      label for="article_body" style="display: inline"
+        | Body
+      span<
+        | (
+        = link_to "Add an excerpt", '#', onclick: 'document.getElementById("toggle_excerpt").checked = true; return false'
+        | )
+    p.show-if-previous-checked
+      label for="article_body" style="display: inline"
+        | Body
+
+    = f.text_area :body, class: editor_class_for(@article)
+
+= render 'options', f: f
+
+= content_for :sidebar do
+  = f.label :draft, "Save as Draft?"
+  = f.check_box :draft?, label: "Yes, save this article as a draft"
+
+  p.show-if-previous-unchecked
+    = f.label :published_at, "Publish on this date"
+    = f.datetime_select :published_at, start_year: (@article.published_at || Time.zone.now).year-1, end_year: (Time.zone.now.year + 5), order: [:month, :day, :year]

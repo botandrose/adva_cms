@@ -1,0 +1,14 @@
+#sidebar
+  - if @section and @section.categories.present?
+    h4 Topics
+    ul
+      - @section.categories.each do |category|
+        li
+          = link_to_category @section, category
+
+  - if @section and @section.tag_counts.present?
+    h4 Tags
+    ul
+      - @section.tag_counts.each do |tag|
+        li
+          = link_to_tag @section, tag

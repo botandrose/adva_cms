@@ -1,0 +1,3 @@
+= form_for [:admin, @site] do |form|
+  = render 'form', form: form, site: @site
+  - save_or_cancel_links(form, cancel_url: admin_site_path)

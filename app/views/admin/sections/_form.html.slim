@@ -1,0 +1,22 @@
+= content_for :sidebar do
+  p.hint.text_only.large.padded
+    | You can use the reorder button on the index page of sections to nest and reorder your sections, you can find further instructions for this on the index page help hints.
+
+h2 General Settings
+
+fieldset
+  .col
+    = f.text_area :title, :label => "Title"
+    p
+      label for="published"
+        | Publish option
+      span.hint for="published"
+        | Uncheck this if you don't want this section published.
+      = f.check_box :published, :label => true
+    p
+      = f.check_box :hidden_on_global_nav, :label => true
+
+  .col
+    = f.text_field :permalink, label: true, hint: "You can use normal letters and special letters like scandinavian letters but avoid special characters like $%&!"
+
+= render :partial => "admin/sections/settings/#{@section.type.underscore}", :locals => { :f => f }

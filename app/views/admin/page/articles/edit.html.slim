@@ -1,0 +1,11 @@
+h2 Edit Article
+
+= split_form_for @article, :url => [:admin, @section, @article], :html => {:multipart => true, :method => :put} do |f|
+  = f.hidden_field :updated_at, :value => @article.updated_at
+  = render :partial => 'form', :locals => {:f => f}
+
+  = content_for :sidebar do
+    #save
+      p.buttons
+        = submit_tag "Save", name: "save_revision"
+        =< link_to "Cancel", [:admin, @section, :articles]

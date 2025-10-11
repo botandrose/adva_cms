@@ -1,0 +1,22 @@
+h2 Create a new section
+
+= form_for @section, as: :section, url: admin_sections_path do |f|
+  fieldset
+    .col
+      = f.text_field :title, label: "Title"
+    .col
+      = f.collection_select :type, Section.types, :to_s, :to_s, {}, label: "Type"
+
+  - unless @site.sections.size < 2
+    fieldset
+      h3 Parent settings
+
+      = f.select :parent_id, @site.sections.collect {|s| s == @section ? nil : [ s.title, s.id ]}.compact, { include_blank: true, label: true }
+      span.hint for="section_parent_id"
+        | Choosing a parent for your section will nest this section under the chosen parent. Leave empty if you want to create this section as a root section.
+
+  p.buttons
+    = submit_tag "Save", id: 'commit'
+    =< submit_tag "Save and create another section", id: 'save_and_create_new'
+    |  or
+    =< link_to "Cancel", admin_sections_path

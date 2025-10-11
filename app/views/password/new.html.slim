@@ -1,0 +1,10 @@
+h2 New Password
+
+= form_tag password_path do
+  fieldset
+    p Please enter your email address. An email will be sent to you which will include a link to reset your password.
+    = label_tag 'user[email]', "Email"
+    = text_field_tag 'user[email]'
+
+  - buttons do
+    = submit_tag "Reset password"

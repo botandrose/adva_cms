@@ -1,0 +1,9 @@
+h2 New Link
+
+= split_form_for @link, :as => :link, :url => [:admin, @section, :links] do |f|
+  = render :partial => 'form', :locals => {:f => f}
+
+  = content_for :sidebar do
+    #save
+      = submit_tag "Save", :name => 'save_revision'
+      =< link_to "Cancel", [:admin, @section, :contents]

@@ -1,0 +1,17 @@
+= content_for :sidebar do
+  p.hint.text_only.large.padded
+    | Listed here are all the sections currently on your site. Whichever section is on top is the default homepage.
+  p.hint.text_only.large.padded
+    | You can use the reorder option to set your home root to different section and to reorder your sections. If you want to nest your sections you can drag the section to the right and its gets set as a child of the upper section.  Finish the reordering by clicking the reorder button. Please note that this option is only available when you have 2 or more sections.
+
+= table_for @sections, :collection_name => :sections, :class => 'sections list tree' do |t|
+  = t.column :section
+  = t.column :actions, :class => :actions
+
+  - t.row(:class => 'section') do |r, section|
+    - r.add_class "level_#{section.level}"
+    - r.cell content_status(section) + " " + link_to(section.title, [:admin, section, :contents], :class => section.state)
+    - r.cell link_to("Edit", [:edit, :admin, section], :class => "edit section") + link_to("Delete", [:admin, section], method: :delete, class: "delete section", data: { confirm: "Are you sure you want to delete this section?" })
+
+  - t.empty :p, :class => 'empty' do
+    = "There are no sections in the site.\n" + link_to(:'adva.sections.links.create_now', [:new, :admin, :section])

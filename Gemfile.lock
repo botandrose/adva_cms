@@ -8,6 +8,7 @@ PATH
       nacelle
       rails-observers
       sassc-rails
+      slim-rails
       will_paginate
 
 GEM
@@ -258,6 +259,13 @@ GEM
       simplecov_json_formatter (~> 0.1)
     simplecov-html (0.13.2)
     simplecov_json_formatter (0.1.4)
+    slim (5.2.1)
+      temple (~> 0.10.0)
+      tilt (>= 2.1.0)
+    slim-rails (3.7.0)
+      actionpack (>= 3.1)
+      railties (>= 3.1)
+      slim (>= 3.0, < 6.0, != 5.0.0)
     sprockets (4.2.2)
       concurrent-ruby (~> 1.0)
       logger

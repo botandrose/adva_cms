@@ -2,6 +2,7 @@ require "rails"
 require "will_paginate"
 require "awesome_nested_set"
 require "nacelle"
+require "slim-rails"
 require "actionpack/page_caching"
 
 require "rails_ext"

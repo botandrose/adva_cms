@@ -1,0 +1,19 @@
+/ HACK: empty line must be here for split_form_for to work properly
+fieldset
+  .col
+    = hidden_field_tag 'cl', Article.locale
+
+    = f.text_field :title, class: 'big', label: true
+
+    label for="link_body"
+      | Enter the link address
+    = f.text_field :body, class: 'big'
+
+    = f.label :draft, "Save as Draft?"
+    = f.check_box :draft?, label: "Yes, save this link as a draft"
+
+    p.show-if-previous-unchecked
+      = f.label :published_at, "Publish on this date"
+      = f.datetime_select :published_at, start_year: (@link.published_at || Time.zone.now).year-1, end_year: (Time.zone.now.year + 5), order: [:month, :day, :year]
+
+= render 'options', f: f

@@ -1,0 +1,15 @@
+.activities
+  h3
+    | Today
+    =< Date.current.to_fs(:short)
+  = render_activities activities[0], true
+
+  h3
+    | Yesterday
+    =< Date.current.yesterday.to_fs(:short)
+  = render_activities activities[1], true
+
+  h3
+    | Before
+    =< Date.current.yesterday.to_fs(:short)
+  = render_activities activities[2]

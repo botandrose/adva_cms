@@ -1,0 +1,6 @@
+h2 Edit User
+
+= form_for [:admin, @user] do |f|
+  = render :partial => 'form', :locals => {:f => f}
+
+= render :partial => 'sidebar'

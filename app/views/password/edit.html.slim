@@ -1,0 +1,17 @@
+h2 Edit Password
+
+p
+  - if params[:token].blank?
+    | Please enter the confirmation code you received via email and your new password.
+  - else
+    | Please enter your new password.
+
+= form_for 'user', :url => password_path, :html => { :method => :put } do |f|
+  - f.field_set do
+    - if current_user.anonymous?
+      = label_tag "Token"
+      = text_field_tag :token
+    = f.password_field :password, label: "New password"
+
+  - f.buttons do
+    = submit_tag "Save"

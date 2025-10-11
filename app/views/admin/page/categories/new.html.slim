@@ -1,0 +1,14 @@
+h2 New Category
+
+= form_for [:admin, @section, @category] do |f|
+  fieldset
+    .col
+      = f.text_field :title, label: true, hint: "Avoid names countaining only 4 or 2 digits!"
+
+    - unless @section.categories.size < 2
+      .col
+        = f.select :parent_id, @section.categories.collect {|p| [p.title, p.id] unless p == @category }.compact, { :include_blank => true, :label => true }
+        span.hint for="category_parent_id"
+          | Choosing a parent for your section will nest this section under the chosen parent. Leave empty if you want to create this section as a root section.
+
+  - save_or_cancel_links(f, cancel_url: [:admin, @section, :categories])

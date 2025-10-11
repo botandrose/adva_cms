@@ -1,0 +1,23 @@
+h2
+  = @user.name
+
+h3 Details
+p
+  | Email:
+  =< @user.email
+
+- if @user.homepage
+  p
+    | Homepage:
+    =< link_to @user.homepage, @user.homepage
+
+h3 Events
+p
+  | Created at:
+  =< @user.created_at
+
+p
+  | Updated at:
+  =< @user.updated_at
+
+= render :partial => 'sidebar'

@@ -1,0 +1,12 @@
+h2 General Settings
+
+fieldset
+  .col
+    = form.text_field :name, label: true
+    = form.text_field :title, label: true
+    = form.email_field :email, label: true
+
+  .col
+    = form.text_field :host, label: true
+    = form.text_field :subtitle, label: true
+    = form.time_zone_select :timezone, [ActiveSupport::TimeZone['UTC']], label: true

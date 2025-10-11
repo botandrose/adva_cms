@@ -1,0 +1,15 @@
+h3
+  | Sections
+  - if @site.sections.size > 1
+    =< link_to_function "Reorder", "sections_tree.toggle(this, 'Done reordering')", id: 'reorder_sections'
+    =< image_tag '/assets/adva_cms/indicator.gif', :id => 'sections_indicator', :style => 'display: none;'
+
+ul#sections
+  = render :partial => 'admin/shared/section', :collection => @site.sections.roots
+
+javascript:
+  var sections_tree = new SortableTree('sections', {
+    onDrop: function(drag, drop, event) {
+      #{remote_function(:url => admin_sections_path, :method => :put, :with => "drag.to_params()", :loading => "$('sections_indicator').show()", :complete => "$('sections_indicator').hide()" )}
+    }
+  });

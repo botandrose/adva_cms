@@ -1,6 +1,0 @@
-= form_for @section, :as => :section, :url => [:admin, @section] do |f|
-  = render :partial => 'form', :locals => {:f => f}
-
-  %p.buttons
-    = submit_tag "Save", :name => 'save_revision'
-    = link_to "Cancel", [:admin, :sections]

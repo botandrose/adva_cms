@@ -1,0 +1,17 @@
+li.activity class="#{activity_css_classes(activity)} #{cycle 'highlight', '', :name => 'activities'}"
+  p.meta
+    = link_to_activity_user(activity)
+    br
+  p.meta
+    = activity_datetime(activity, recent)
+
+  p
+    - type = activity.object_attributes['type'].tableize.singularize.titleize
+    - actions = activity.all_actions.to_sentence
+    - name = (activity.section ? link_to(activity.section.title, [:admin, activity.section, :contents]) : "Deleted Section").html_safe
+    = type
+    =< actions
+    |  in
+    =< name
+    | .
+  = link_to_if activity.section, activity.title, [:edit, :admin, activity.section, activity.object]

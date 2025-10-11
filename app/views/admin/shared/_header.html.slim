@@ -1,0 +1,16 @@
+#header
+  .main
+    = Breadcrumbs.new(menu.active.breadcrumbs).render if menu.active
+
+  .right
+    - if current_user.anonymous?
+      | You're not logged in
+      =< link_to "Log In", [:new, :session]
+    - else
+      = "Logged in as: #{link_to_profile(name: current_user.name)}".html_safe
+      |  &middot;
+      =< link_to "Logout", logout_path, method: :delete
+
+    - if @site
+      |  &middot;
+      =< link_to "Website »", "http://#{@site.host}", id: "go_to_website"

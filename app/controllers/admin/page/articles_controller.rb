@@ -15,7 +15,7 @@ class Admin::Page::ArticlesController < Admin::BaseController
 
   def show
     @article.revert_to(params[:version]) if params[:version]
-    render :template => "#{@section.type.tableize}/articles/show", :layout => 'default'
+    render :template => "#{@section.type.tableize}/articles/show", layout: 'application'
   end
 
   def new

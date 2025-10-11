@@ -1,8 +1,0 @@
-<h2>Email Notifications</h2>
-
-<% f.field_set :email_notification do %>
-  <% column do %>
-    <p class="hint text_only">If email notifications are activated, an email is sent to administrators every time content is created or updated. No emails are sent if notifications are deactivated.</p>
-    <%= f.check_box :email_notification, label: "Activate Email notifcations" %>
-  <% end %>
-<% end %>
