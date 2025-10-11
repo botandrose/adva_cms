@@ -20,6 +20,7 @@ require "table_builder"
 require "authentication"
 require "adva/event"
 require "adva/extensible_forms"
+require "adva/override"
 
 module Adva
   class Engine < Rails::Engine
