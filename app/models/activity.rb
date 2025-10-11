@@ -3,7 +3,7 @@ require "adva/belongs_to_author"
 class Activity < ActiveRecord::Base
   belongs_to :site
   belongs_to :section
-  belongs_to :object, :polymorphic => true
+  belongs_to :object, polymorphic: true
 
   prepend Module.new {
     def method_missing(name, *args)
@@ -26,7 +26,7 @@ class Activity < ActiveRecord::Base
   class << self
     def find_coinciding_grouped_by_dates(*dates)
       groups = (1..dates.size).collect{[]}
-      activities = find_coinciding #, :include => :user
+      activities = find_coinciding #, include: :user
 
       # collect activities for the given dates
       activities.each do |activity|

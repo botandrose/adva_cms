@@ -1,9 +1,9 @@
 require "rails_helper"
 
 RSpec.describe Link, type: :model do
-  let(:site) { Site.create!(name: 'test', host: 'test.example.com') }
-  let(:section) { Page.create!(site: site, title: 'Test Section') }
-  let(:user) { User.create!(first_name: 'John', email: 'john@example.com', password: 'AAbbcc1122!!') }
+  let(:site) { Site.create!(name: "test", host: "test.example.com") }
+  let(:section) { Page.create!(site: site, title: "Test Section") }
+  let(:user) { User.create!(first_name: "John", email: "john@example.com", password: "AAbbcc1122!!") }
 
   describe "inheritance" do
     it "inherits from Content" do
@@ -19,19 +19,19 @@ RSpec.describe Link, type: :model do
     end
 
     it "validates presence of body" do
-      link = Link.new(section: section, site: site, title: 'Test Link')
+      link = Link.new(section: section, site: site, title: "Test Link")
       expect(link).not_to be_valid
       expect(link.errors[:body]).to include("can't be blank")
     end
 
     it "is valid with title and body" do
-      link = Link.new(section: section, site: site, title: 'Test Link', body: 'http://example.com', author: user)
+      link = Link.new(section: section, site: site, title: "Test Link", body: "http://example.com", author: user)
       expect(link).to be_valid
     end
   end
 
   describe "content behavior" do
-    let(:link) { Link.create!(section: section, site: site, title: 'Test Link', body: 'http://example.com', author: user) }
+    let(:link) { Link.create!(section: section, site: site, title: "Test Link", body: "http://example.com", author: user) }
 
     it "inherits Content functionality" do
       expect(link).to respond_to(:published?)
@@ -45,7 +45,7 @@ RSpec.describe Link, type: :model do
     end
 
     it "can have categories" do
-      category = Category.create!(section: section, title: 'Test Category')
+      category = Category.create!(section: section, title: "Test Category")
       link.categories << category
       expect(link.categories).to include(category)
     end

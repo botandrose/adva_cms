@@ -1,13 +1,13 @@
 require "rails_helper"
 
 RSpec.describe "Admin::BaseController additional coverage", type: :request do
-  let!(:site) { Site.create!(name: 'Admin Base Coverage', title: 'Admin Base Coverage', host: 'admin-base-coverage.test', timezone: 'UTC') }
-  let!(:section) { Page.create!(site: site, title: 'Admin Section', permalink: 'admin-section', published_at: 1.hour.ago) }
+  let!(:site) { Site.create!(name: "Admin Base Coverage", title: "Admin Base Coverage", host: "admin-base-coverage.test", timezone: "UTC") }
+  let!(:section) { Page.create!(site: site, title: "Admin Section", permalink: "admin-section", published_at: 1.hour.ago) }
 
   describe "#current_resource fallback order" do
     it "prefers @section, then @site, then Site.new" do
       controller = Admin::BaseController.new
-      controller.request = ActionDispatch::Request.new('HTTP_HOST' => site.host)
+      controller.request = ActionDispatch::Request.new("HTTP_HOST" => site.host)
       controller.response = ActionDispatch::Response.new
 
       # 1) With @section present
@@ -31,10 +31,10 @@ RSpec.describe "Admin::BaseController additional coverage", type: :request do
   describe "#current_page caching and parsing" do
     it "parses page param and memoizes the value" do
       controller = Admin::BaseController.new
-      controller.request = ActionDispatch::Request.new('HTTP_HOST' => site.host)
+      controller.request = ActionDispatch::Request.new("HTTP_HOST" => site.host)
       controller.response = ActionDispatch::Response.new
 
-      allow(controller).to receive(:params).and_return({ page: '4' }.with_indifferent_access)
+      allow(controller).to receive(:params).and_return({ page: "4" }.with_indifferent_access)
 
       first = controller.send(:current_page)
       second = controller.send(:current_page)
@@ -44,7 +44,7 @@ RSpec.describe "Admin::BaseController additional coverage", type: :request do
       expect(controller.instance_variable_get(:@page)).to eq(4)
 
       # Change params to ensure memoized value is used
-      allow(controller).to receive(:params).and_return({ page: '2' }.with_indifferent_access)
+      allow(controller).to receive(:params).and_return({ page: "2" }.with_indifferent_access)
       expect(controller.send(:current_page)).to eq(4)
     end
   end
@@ -52,7 +52,7 @@ RSpec.describe "Admin::BaseController additional coverage", type: :request do
   describe "#update_role_context! triggers section resolution" do
     it "calls set_section when section_id present and @section is nil" do
       controller = Admin::BaseController.new
-      controller.request = ActionDispatch::Request.new('HTTP_HOST' => site.host)
+      controller.request = ActionDispatch::Request.new("HTTP_HOST" => site.host)
       controller.response = ActionDispatch::Response.new
 
       # Provide the site expected by set_section and seed params with section_id

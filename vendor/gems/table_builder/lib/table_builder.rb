@@ -16,9 +16,9 @@ require 'table_builder/table'
 
 module TableBuilder
   mattr_accessor :options
-  self.options = { 
-    :alternate_rows => true,
-    :i18n_scope => nil
+  self.options = {
+    alternate_rows: true,
+    i18n_scope: nil
   }
 
   def table_for(collection = [], options = {}, &block)

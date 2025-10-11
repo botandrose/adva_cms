@@ -11,7 +11,7 @@ h2 New Site
         = s.label :title
         = s.text_field :title
       - column do
-        = s.collection_select :type, Section.types, :to_s, :to_s, {}, :label => true, :tabindex => :section_title
+        = s.collection_select :type, Section.types, :to_s, :to_s, {}, label: true, tabindex: :section_title
 
   = render "form", form: form
 

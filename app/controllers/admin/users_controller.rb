@@ -1,5 +1,5 @@
 class Admin::UsersController < Admin::BaseController
-  before_action :set_user,  :only => [:show, :edit, :update, :destroy]
+  before_action :set_user,  only: [:show, :edit, :update, :destroy]
   before_action :authorize_access
 
   def index
@@ -16,7 +16,7 @@ class Admin::UsersController < Admin::BaseController
 
   def create
     @user = User.new(user_params)
-    @user.memberships.build(:site => @site) if @site and !@user.admin?
+    @user.memberships.build(site: @site) if @site and !@user.admin?
 
     if @user.save
       @user.verify! # TODO hu??
@@ -24,7 +24,7 @@ class Admin::UsersController < Admin::BaseController
       redirect_to [:admin, @user], notice: "The user has been created."
     else
       flash.now.alert = "The user could not be created."
-      render :action => :new
+      render action: :new
     end
   end
 
@@ -37,7 +37,7 @@ class Admin::UsersController < Admin::BaseController
       redirect_to [:admin, @user], notice: "The user has been updated."
     else
       flash.now.alert = "The user could not be updated."
-      render :action => :edit
+      render action: :edit
     end
   end
 
@@ -47,7 +47,7 @@ class Admin::UsersController < Admin::BaseController
       redirect_to [:admin, :users], notice: "The user has been deleted."
     else
       flash.now.alert = "The user could not be deleted."
-      render :action => :edit
+      render action: :edit
     end
   end
 

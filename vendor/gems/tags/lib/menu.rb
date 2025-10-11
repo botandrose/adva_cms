@@ -102,7 +102,7 @@ module Menu
     end
 
     def render
-      tag = Tags::Li.new(content, :class => 'item')
+      tag = Tags::Li.new(content, class: 'item')
       tag.add_class('active') if active
       tag.render
     end
@@ -112,7 +112,7 @@ module Menu
     end
 
     def content
-      @content ||= url ? Tags::A.new(text, :id => id, :href => url).render : Tags::Span.new(text).render
+      @content ||= url ? Tags::A.new(text, id: id, href: url).render : Tags::Span.new(text).render
     end
   end
 
@@ -124,11 +124,11 @@ module Menu
     self.tag_name = 'div'
 
     # attr_accessor :wrap
-    # 
+    #
     # def initialize(key = nil, options = {})
     #   @wrap = options[:wrap]
     # end
-    # 
+    #
     # def render
     # end
   end
@@ -143,7 +143,7 @@ module Menu
 
     def populate(scope)
       scope.instance_eval(&@options[:populate]).each do |s|
-        @sections << Base.new(s.title, :level => s.level, :url => scope.url_for([:admin, s, :contents])) unless s.new_record?
+        @sections << Base.new(s.title, level: s.level, url: scope.url_for([:admin, s, :contents])) unless s.new_record?
       end
     end
 
@@ -158,19 +158,19 @@ module Menu
     end
 
     def item
-      Item.new key, :text => @text, :content => @content, :url => @url
+      Item.new key, text: @text, content: @content, url: @url
     end
 
     def active_section
       section = sections.detect { |section| section.active }
-      section && Item.new(:section, :text => section.id, :url => @url)
+      section && Item.new(:section, text: section.id, url: @url)
     end
 
     def content
-      super + Tags::Ul.new(:id => 'sections_menu').render do |html|
+      super + Tags::Ul.new(id: 'sections_menu').render do |html|
         sections.each do |section|
           section.add_class("level_#{[section.level, 10].min}" + (section.active ? ' active' : ''))
-          link = Tags::A.new(section.id, :href => section.url, :class => section.options[:class])
+          link = Tags::A.new(section.id, href: section.url, class: section.options[:class])
           html << Tags::Li.new(link.render).render
         end
       end

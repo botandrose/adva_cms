@@ -1,5 +1,5 @@
 class Page < Section
-  has_option :single_article_mode, :default => true, :type => :boolean
+  has_option :single_article_mode, default: true, type: :boolean
 
   # avoid double destroy hook
   has_many :articles, -> { order(:lft) }, dependent: :destroy, foreign_key: :section_id

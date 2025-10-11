@@ -3,7 +3,7 @@ class SessionController < BaseController
 
   skip_before_action :verify_authenticity_token # disable forgery protection
 
-  layout 'login'
+  layout "login"
 
   def new
     @user = User.new
@@ -12,17 +12,17 @@ class SessionController < BaseController
   def create
     if authenticate_user(params[:user])
       remember_me! if params[:user][:remember_me]
-      redirect_to params[:return_to] || '/', notice: "Logged in successfully."
+      redirect_to params[:return_to] || "/", notice: "Logged in successfully."
     else
-      @user = User.new(:email => params[:user][:email])
+      @user = User.new(email: params[:user][:email])
       @remember_me = params[:user][:remember_me]
       flash.now.alert = "Could not login with this email and password."
-      render :action => 'new'
+      render action: "new"
     end
   end
 
   def destroy
     logout
-    redirect_to '/', notice: "Logged out successfully."
+    redirect_to "/", notice: "Logged out successfully."
   end
 end

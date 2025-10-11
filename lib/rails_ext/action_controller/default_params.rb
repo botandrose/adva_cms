@@ -1,7 +1,7 @@
 ActionController::Base.class_eval do
   class_attribute :default_param
   self.default_param = {}
-  
+
   class << self
     def default_param(*args, &block)
       before_action(args.extract_options!) do |controller|

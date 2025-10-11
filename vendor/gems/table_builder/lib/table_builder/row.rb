@@ -2,7 +2,7 @@ module TableBuilder
   class Row < Tag
     self.level = 2
     self.tag_name = :tr
-    
+
     def initialize(parent, record = nil, options = {}, &block)
       super(parent, options)
 
@@ -24,17 +24,17 @@ module TableBuilder
     def render
       super @cells.map(&:render).join
     end
-    
+
     protected
-    
+
       def alternate(options)
         options[:class] ||= ''
         options[:class] = options[:class].split(' ').push('alternate').join(' ')
       end
-      
+
       def current_column_class
         column = table.columns[@cells.size]
-        column && column.options[:class] || '' 
+        column && column.options[:class] || ''
       end
   end
 end

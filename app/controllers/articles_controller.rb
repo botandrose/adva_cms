@@ -42,7 +42,7 @@ class ArticlesController < BaseController
     return @tags if defined?(@tags)
     raw = params[:tags].to_s
     # Query strings encode spaces as '+', support both separators and normalize
-    names = raw.tr('+', ' ').split(/\s+/).reject(&:blank?).map { |n| n.downcase.strip }
+    names = raw.tr("+", " ").split(/\s+/).reject(&:blank?).map { |n| n.downcase.strip }
     @tags = Tag.where(name: names).pluck(:name)
     raise ActiveRecord::RecordNotFound if @tags.size != names.size
     @tags

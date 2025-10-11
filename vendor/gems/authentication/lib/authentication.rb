@@ -28,8 +28,8 @@ module Authentication
 
   mattr_accessor :default_scheme
   self.default_scheme = {
-      :authenticate_with => 'Authentication::SaltedHash',
-      :token_with => [
+      authenticate_with: 'Authentication::SaltedHash',
+      token_with: [
         'Authentication::RememberMe',
         'Authentication::SingleToken'
       ]
@@ -93,36 +93,36 @@ module Authentication
     # single module::
     #   In this case a single module name is provided to authenticate
     #   against. For example:
-    #     acts_as_authenticated_user :authenticate_with => 'Authentication::POP3'
+    #     acts_as_authenticated_user authenticate_with: 'Authentication::POP3'
     # chain of modules::
     #   In this case a list of modules will be used to authenticate
     #   against. If any of them are a success then the user
     #   authenticates. Otherwise the user will not successfully login.
     #   For example:
-    #     acts_as_authenticated_user :authenticate_with =>
+    #     acts_as_authenticated_user authenticate_with:
     #       ['Authentication::ActiveDirectory', 'Authentication::POP3']
     # module with arguments::
     #   In this case a single module is being used but it has arguments
     #   which are passed to the module when instantated. For example:
-    #     acts_as_authenticated_user :authenticate_with =>
+    #     acts_as_authenticated_user authenticate_with:
     #       {'Authentication::POP3' => ['pop3.example.org', 110]}
     #   In this case the code will call
     #   Authentication::POP3.new('pop3.example.org', 110) when
     #   instantionating the object. More than likely the authentication
     #   module will just have one argument which is an option hash. In
     #   this case you might initialize that module like the following:
-    #     acts_as_authenticated_user :authenticate_with =>
+    #     acts_as_authenticated_user authenticate_with:
     #       {'Authentication::POP3' =>
-    #       {:server => 'pop3.example.org', :port => 110}}
+    #       {server: 'pop3.example.org', port: 110}}
     # chain of modules with arguments::
     #   You can also chain modules and use arguments. In this case you
     #   just pass the method an array of hashes. For example:
-    #     acts_as_authenticated_user :authenticate_with =>
+    #     acts_as_authenticated_user authenticate_with:
     #       [
     #         {'Authentication::POP3' =>
-    #           {:server => 'pop3.example.com', :port => 5000}},
+    #           {server: 'pop3.example.com', port: 5000}},
     #         {'Autnentication::ActiveDirectory' =>
-    #           {:server => 'ad.example.com'}}
+    #           {server: 'ad.example.com'}}
     #       ]
     #
     # If you wish to provide a different scheme depending on the
@@ -132,8 +132,8 @@ module Authentication
     # For example:
     #
     #   Authentication.default_scheme = {
-    #     :authenticate_with => 'Authentication::POP3',
-    #     :token_with => []
+    #     authenticate_with: 'Authentication::POP3',
+    #     token_with: []
     #   }
     #
     # This would authenticate with POP3 and not provide any token
@@ -143,8 +143,8 @@ module Authentication
 
       # Process arguments and store in instantiated auth modules
       {
-        :authenticate_with => :authentication_modules,
-        :token_with => :token_modules,
+        authenticate_with: :authentication_modules,
+        token_with: :token_modules,
       }.each do |option, mod_type|
         mods = [options[option]].flatten.compact
         mods = mods.inject([]) do |memo, mod|

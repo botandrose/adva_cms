@@ -1,6 +1,6 @@
-require 'action_view'
-require 'action_view/helpers'
-require 'action_view/helpers/form_helper'
+require "action_view"
+require "action_view/helpers"
+require "action_view/helpers/form_helper"
 
 module ActionView
   module Helpers
@@ -32,13 +32,13 @@ end
 module Adva
   class ExtensibleFormBuilder < ActionView::Helpers::FormBuilder
     class_attribute :callbacks
-    self.callbacks = { :before => {}, :after => {} }
+    self.callbacks = { before: {}, after: {} }
 
     class_attribute :tabs
     self.tabs = []
 
     class_attribute :options
-    self.options = { :labels => false, :wrap => false, :default_class_names => {} }
+    self.options = { labels: false, wrap: false, default_class_names: {} }
 
     class << self
       [:labels, :wrap].each do |option|
@@ -84,10 +84,10 @@ module Adva
       name ||= :default_fields
 
       @template.concat with_callbacks(name) {
-        legend = options.delete(:legend) || ''
-        legend = @template.content_tag('legend', legend) unless legend.blank?
+        legend = options.delete(:legend) || ""
+        legend = @template.content_tag("legend", legend) unless legend.blank?
         @template.field_set(@object_name, name, nil, objectify_options(options)) do
-          legend.to_s + (block ? block.call.to_s : '')
+          legend.to_s + (block ? block.call.to_s : "")
         end
       }
     end
@@ -95,7 +95,7 @@ module Adva
     def tabs
       yield if block_given?
       assign_ivars!
-      @template.content_tag(:div, :class => 'tabs') {
+      @template.content_tag(:div, class: "tabs") {
         self.class.tabs.map.with_index { |(name, _), index|
           active = self.class.tabs.first.first == name
           %(<input type="radio" id="adva_current_tab_#{index}" name="adva_current_tab" #{"checked" if active}>)
@@ -104,15 +104,15 @@ module Adva
         @template.content_tag(:ul) {
           self.class.tabs.map.with_index { |(name, _), index|
             @template.content_tag(:li) {
-              title = I18n.t(name, :scope => :'adva.titles')
+              title = I18n.t(name, scope: :'adva.titles')
               %(<label for="adva_current_tab_#{index}">#{title}</label>).html_safe
             }
           }.join.html_safe
         } +
 
         self.class.tabs.map.with_index { |(name, block), index|
-          klass = self.class.tabs.first.first == name ? 'tab active' : 'tab'
-          @template.content_tag 'fieldset', block.call(self), id: "tab_#{name}", class: klass, for: "adva_current_tab_#{index}"
+          klass = self.class.tabs.first.first == name ? "tab active" : "tab"
+          @template.content_tag "fieldset", block.call(self), id: "tab_#{name}", class: klass, for: "adva_current_tab_#{index}"
         }.join.html_safe
       }.html_safe
     end
@@ -140,11 +140,11 @@ module Adva
     end
 
     def hint(tag, hint)
-      tag + @template.content_tag(:span, "", title: hint, class: 'hint', for: extract_id(tag))
+      tag + @template.content_tag(:span, "", title: hint, class: "hint", for: extract_id(tag))
     end
 
     def add_default_class_names(options, type)
-      options[:class] = (Array(options[:class]) + self.class.default_class_names(type)).join(' ')
+      options[:class] = (Array(options[:class]) + self.class.default_class_names(type)).join(" ")
       options.delete(:class) if options[:class].blank?
       options
     end
@@ -189,7 +189,7 @@ module Adva
     end
 
     def with_callbacks(method, &block)
-      result = ''
+      result = ""
       result += run_callbacks(:before, method) if method
       result += yield.to_s
       result += run_callbacks(:after, method) if method
@@ -198,7 +198,7 @@ module Adva
 
     def run_callbacks(stage, method)
       if callbacks = callbacks_for(stage, method.to_sym)
-        callbacks.inject('') do |result, callback|
+        callbacks.inject("") do |result, callback|
           result + case callback
             when Proc
               assign_ivars!
@@ -207,7 +207,7 @@ module Adva
               callback
           end.to_s
         end
-      end || ''
+      end || ""
     end
 
     def callbacks_for(stage, method)

@@ -1,10 +1,10 @@
 require "rails_helper"
 
 RSpec.describe "BaseController", type: :request do
-  let!(:site) { Site.find_by_host('base-test.com') || Site.create!(name: 'base test', title: 'Base Test Site', host: 'base-test.com', timezone: 'UTC') }
-  let!(:section) { Page.create!(site: site, title: 'Test Section', permalink: 'test-section', published_at: 1.hour.ago) }
-  let!(:user) { User.create!(first_name: 'Test', email: 'test@example.com', password: 'AAbbcc1122!!', verified_at: Time.now) }
-  let!(:admin) { User.create!(first_name: 'Admin', email: 'admin@example.com', password: 'AAbbcc1122!!', verified_at: Time.now, admin: true) }
+  let!(:site) { Site.find_by_host("base-test.com") || Site.create!(name: "base test", title: "Base Test Site", host: "base-test.com", timezone: "UTC") }
+  let!(:section) { Page.create!(site: site, title: "Test Section", permalink: "test-section", published_at: 1.hour.ago) }
+  let!(:user) { User.create!(first_name: "Test", email: "test@example.com", password: "AAbbcc1122!!", verified_at: Time.now) }
+  let!(:admin) { User.create!(first_name: "Admin", email: "admin@example.com", password: "AAbbcc1122!!", verified_at: Time.now, admin: true) }
 
   before { host! site.host }
 
@@ -14,18 +14,18 @@ RSpec.describe "BaseController", type: :request do
       Article.create!(
         site: site,
         section: section,
-        title: 'Test Article',
-        body: 'Test content',
+        title: "Test Article",
+        body: "Test content",
         author: user,
         published_at: 1.hour.ago,
-        permalink: 'test-article'
+        permalink: "test-article"
       )
       get "/"
       expect(response).to have_http_status(:success)
     end
 
     it "handles unknown host appropriately" do
-      host! 'unknown.com'
+      host! "unknown.com"
       get "/"
       # May raise an error or return a 404/500 status depending on error handling
       expect(response).to have_http_status(:not_found).or have_http_status(:internal_server_error)
@@ -39,11 +39,11 @@ RSpec.describe "BaseController", type: :request do
         Article.create!(
           site: site,
           section: section,
-          title: 'Section Permalink Article',
-          body: 'Section permalink content',
+          title: "Section Permalink Article",
+          body: "Section permalink content",
           author: user,
           published_at: 1.hour.ago,
-          permalink: 'section-permalink-article'
+          permalink: "section-permalink-article"
         )
         get "/test-section"
         expect(response).to have_http_status(:success)
@@ -57,18 +57,18 @@ RSpec.describe "BaseController", type: :request do
     end
 
     context "without section_permalink parameter" do
-      let!(:first_section) { Page.create!(site: site, title: 'First Section', permalink: 'first-section', published_at: 2.hours.ago) }
+      let!(:first_section) { Page.create!(site: site, title: "First Section", permalink: "first-section", published_at: 2.hours.ago) }
 
       it "uses the first section" do
         # Create an article so the index doesn't raise RecordNotFound
         Article.create!(
           site: site,
           section: first_section,
-          title: 'First Article',
-          body: 'First content',
+          title: "First Article",
+          body: "First content",
           author: user,
           published_at: 1.hour.ago,
-          permalink: 'first-article'
+          permalink: "first-article"
         )
         get "/"
         expect(response).to have_http_status(:success).or have_http_status(:not_found).or have_http_status(:internal_server_error)
@@ -76,7 +76,7 @@ RSpec.describe "BaseController", type: :request do
     end
 
     context "with unpublished section" do
-      let!(:unpublished_section) { Page.create!(site: site, title: 'Unpublished', permalink: 'unpublished', published_at: nil) }
+      let!(:unpublished_section) { Page.create!(site: site, title: "Unpublished", permalink: "unpublished", published_at: nil) }
 
       it "handles unpublished sections for non-admin users appropriately" do
         get "/unpublished"
@@ -89,11 +89,11 @@ RSpec.describe "BaseController", type: :request do
         Article.create!(
           site: site,
           section: unpublished_section,
-          title: 'Unpublished Article',
-          body: 'Unpublished content',
+          title: "Unpublished Article",
+          body: "Unpublished content",
           author: user,
           published_at: 1.hour.ago,
-          permalink: 'unpublished-article'
+          permalink: "unpublished-article"
         )
         allow_any_instance_of(BaseController).to receive(:current_user).and_return(admin)
         get "/unpublished"
@@ -103,19 +103,19 @@ RSpec.describe "BaseController", type: :request do
   end
 
   describe "timezone setting" do
-    let!(:tokyo_site) { Site.create!(name: 'tokyo', title: 'Tokyo Site', host: 'tokyo.example.com', timezone: 'Asia/Tokyo') }
+    let!(:tokyo_site) { Site.create!(name: "tokyo", title: "Tokyo Site", host: "tokyo.example.com", timezone: "Asia/Tokyo") }
 
     it "sets timezone from site" do
       # Create an article so the index doesn't raise RecordNotFound
-      tokyo_section = Page.create!(site: tokyo_site, title: 'Tokyo Section', published_at: 1.hour.ago)
+      tokyo_section = Page.create!(site: tokyo_site, title: "Tokyo Section", published_at: 1.hour.ago)
       Article.create!(
         site: tokyo_site,
         section: tokyo_section,
-        title: 'Tokyo Article',
-        body: 'Tokyo content',
+        title: "Tokyo Article",
+        body: "Tokyo content",
         author: user,
         published_at: 1.hour.ago,
-        permalink: 'tokyo-article'
+        permalink: "tokyo-article"
       )
       host! tokyo_site.host
       get "/"
@@ -130,11 +130,11 @@ RSpec.describe "BaseController", type: :request do
       Article.create!(
         site: site,
         section: section,
-        title: 'Page Test Article',
-        body: 'Page test content',
+        title: "Page Test Article",
+        body: "Page test content",
         author: user,
         published_at: 1.hour.ago,
-        permalink: 'page-test-article'
+        permalink: "page-test-article"
       )
       get "/"
       # The current_page method should return 1 by default
@@ -145,11 +145,11 @@ RSpec.describe "BaseController", type: :request do
       Article.create!(
         site: site,
         section: section,
-        title: 'Page Test Article',
-        body: 'Page test content',
+        title: "Page Test Article",
+        body: "Page test content",
         author: user,
         published_at: 1.hour.ago,
-        permalink: 'page-test-article'
+        permalink: "page-test-article"
       )
       get "/?page=2"
       # The current_page method should return 2
@@ -160,11 +160,11 @@ RSpec.describe "BaseController", type: :request do
       Article.create!(
         site: site,
         section: section,
-        title: 'Page Test Article',
-        body: 'Page test content',
+        title: "Page Test Article",
+        body: "Page test content",
         author: user,
         published_at: 1.hour.ago,
-        permalink: 'page-test-article'
+        permalink: "page-test-article"
       )
       get "/?page=0"
       # The current_page method should return 1 when page is 0
@@ -175,11 +175,11 @@ RSpec.describe "BaseController", type: :request do
       Article.create!(
         site: site,
         section: section,
-        title: 'Page Test Article',
-        body: 'Page test content',
+        title: "Page Test Article",
+        body: "Page test content",
         author: user,
         published_at: 1.hour.ago,
-        permalink: 'page-test-article'
+        permalink: "page-test-article"
       )
       get "/?page=invalid"
       # The current_page method should return 1 for invalid input
@@ -197,11 +197,11 @@ RSpec.describe "BaseController", type: :request do
         Article.create!(
           site: site,
           section: section,
-          title: 'Sections Test Article',
-          body: 'Sections test content',
+          title: "Sections Test Article",
+          body: "Sections test content",
           author: user,
           published_at: 1.hour.ago,
-          permalink: 'sections-test-article'
+          permalink: "sections-test-article"
         )
         get "/"
         expect(response).to have_http_status(:success)
@@ -215,11 +215,11 @@ RSpec.describe "BaseController", type: :request do
         Article.create!(
           site: site,
           section: section,
-          title: 'Resource Test Article',
-          body: 'Resource test content',
+          title: "Resource Test Article",
+          body: "Resource test content",
           author: user,
           published_at: 1.hour.ago,
-          permalink: 'resource-test-article'
+          permalink: "resource-test-article"
         )
         get "/"
         expect(response).to have_http_status(:success)
@@ -233,11 +233,11 @@ RSpec.describe "BaseController", type: :request do
       Article.create!(
         site: site,
         section: section,
-        title: 'Test Article',
-        body: 'Test content',
+        title: "Test Article",
+        body: "Test content",
         author: user,
         published_at: 1.hour.ago,
-        permalink: 'test-article'
+        permalink: "test-article"
       )
     end
 
@@ -254,11 +254,11 @@ RSpec.describe "BaseController", type: :request do
         Article.create!(
           site: site,
           section: section,
-          title: 'Draft Article',
-          body: 'Draft content',
+          title: "Draft Article",
+          body: "Draft content",
           author: user,
           published_at: nil,
-          permalink: 'draft-article'
+          permalink: "draft-article"
         )
       end
 
@@ -292,7 +292,7 @@ RSpec.describe "BaseController", type: :request do
   describe "helpers inclusion" do
     it "includes required helpers" do
       # Check that the BaseController includes the expected modules
-      expect(BaseController.included_modules.map(&:name)).to include('ContentHelper', 'ResourceHelper')
+      expect(BaseController.included_modules.map(&:name)).to include("ContentHelper", "ResourceHelper")
     end
 
     it "includes TableBuilder helper" do
@@ -308,11 +308,11 @@ RSpec.describe "BaseController", type: :request do
       Article.create!(
         site: site,
         section: section,
-        title: 'Site Test Article',
-        body: 'Site test content',
+        title: "Site Test Article",
+        body: "Site test content",
         author: user,
         published_at: 1.hour.ago,
-        permalink: 'site-test-article'
+        permalink: "site-test-article"
       )
       get "/"
       expect(response).to have_http_status(:success)
@@ -324,11 +324,11 @@ RSpec.describe "BaseController", type: :request do
       Article.create!(
         site: site,
         section: section,
-        title: 'Timezone Test Article',
-        body: 'Timezone test content',
+        title: "Timezone Test Article",
+        body: "Timezone test content",
         author: user,
         published_at: 1.hour.ago,
-        permalink: 'timezone-test-article'
+        permalink: "timezone-test-article"
       )
       get "/"
       expect(response).to have_http_status(:success)

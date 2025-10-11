@@ -80,10 +80,10 @@ apache multisite config http://www.appelsiini.net/2007/6/mephisto-multiple-site-
      current_user.act :create, :topic, params[:topic] (or something like that)
 
     this is what tentacle does:
-    create_table "monitorships", :force => true do |t|
+    create_table "monitorships", force: true do |t|
       t.integer  "profile_id"
       t.integer  "topic_id"
-      t.boolean  "active",     :default => true
+      t.boolean  "active",     default: true
       t.timestamps
     end
     
@@ -91,7 +91,7 @@ apache multisite config http://www.appelsiini.net/2007/6/mephisto-multiple-site-
 
     validation on has_many :through join tables:
       def uniqueness_of_relationship
-        if self.class.exists?(:profile_id => profile_id, :topic_id => topic_id, :active => true)
+        if self.class.exists?(profile_id: profile_id, topic_id: topic_id, active: true)
           errors.add_to_base("Cannot add duplicate profile/topic relation")
         end
       end
@@ -135,12 +135,12 @@ apache multisite config http://www.appelsiini.net/2007/6/mephisto-multiple-site-
         http://pastie.org/private/2vqi8gnfwfepjtb3mz6aa
         Lifo says Rails edge makes it easier
 
-    Role::Admin.new :object => nil seems to run into SystemStackError with:
-        class Role belongs_to :object, :polymorphic => true
+    Role::Admin.new object: nil seems to run into SystemStackError with:
+        class Role belongs_to :object, polymorphic: true
         class Role::Admin < Role
 
     force certain after_actions to be run even if the filter chain has been halted:
-        :after_action => :bla, :force => true
+        after_action: :bla, force: true
 
     section.articles.maximum(:position) returns nil when table is empty. shouldn't that be 0?
 
@@ -174,7 +174,7 @@ apache multisite config http://www.appelsiini.net/2007/6/mephisto-multiple-site-
     Spec::Rails::Example::ControllerExampleGroup.class_eval do
       def params_from(method, path, env = {})
         ensure_that_routes_are_loaded
-        env.merge!({:method => method})
+        env.merge!({method: method})
         ActionController::Routing::Routes.recognize_path(path, env)
       end
     end    
@@ -294,7 +294,7 @@ acts_as_spam_report_set
   attr :spaminess
   
   def add_spam_report(filter, result)
-    spam_reports << SpamReport.create! :priority => filter.priority, ...
+    spam_reports << SpamReport.create! priority: filter.priority, ...
   end
   
   def update_spaminess

@@ -4,8 +4,8 @@ class CreateSectionsTable < ActiveRecord::Migration[7.0]
       t.string      :type
       t.references  :site
       t.integer     :parent_id
-      t.integer     :lft, :null => false, :default => 0
-      t.integer     :rgt, :null => false, :default => 0
+      t.integer     :lft, null: false, default: 0
+      t.integer     :rgt, null: false, default: 0
       t.string      :path
       t.string      :permalink
       t.string      :title

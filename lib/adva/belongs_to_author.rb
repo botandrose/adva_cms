@@ -12,7 +12,7 @@ module Adva
         options = args.extract_options!
         args = (args.empty? ? [:user] : args)
         belongs_to_cacheable *args.dup << options # FIXME should not be polymorphic!
-        
+
         args.each do |name|
           class_eval <<-code, __FILE__, __LINE__
             def #{name}_ip

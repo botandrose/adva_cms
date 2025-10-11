@@ -6,11 +6,11 @@ module Admin::BaseHelper
     cancel_url  = options.delete(:cancel_url)
 
     save_options = options.delete(:save) || {}
-    save_options.reverse_merge!(:id => 'commit')
+    save_options.reverse_merge!(id: "commit")
     cancel_options = options.delete(:cancel) || {}
 
     builder.buttons do
-      ''.html_safe.tap do |buttons|
+      "".html_safe.tap do |buttons|
         buttons << submit_tag(save_text, save_options)
         buttons << " #{or_text} #{link_to(cancel_text, cancel_url, cancel_options)}".html_safe if cancel_url
       end

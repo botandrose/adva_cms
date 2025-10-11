@@ -67,7 +67,7 @@ class BaseController < ApplicationController
       redirect_to login_url(return_to: request.url), notice: notice
     end
 
-    
+
     def current_resource
       @section || @site
     end

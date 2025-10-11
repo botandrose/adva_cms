@@ -28,19 +28,19 @@ module TableBuilder
       @parent = parent
       @options = options
     end
-    
+
     def collection_class
       table.collection_class
     end
-    
+
     def collection_name
       table.collection_name
     end
-    
+
     def table
       is_a?(Table) ? self : parent.try(:table)
     end
-    
+
     def head?
       is_a?(Head) || !!parent.try(:head?)
     end
@@ -51,11 +51,11 @@ module TableBuilder
       content = content.respond_to?(:html_safe) ? content.html_safe : content.to_s
       content_tag(tag_name, content, options)
     end
-    
+
     def add_class(klass)
       add_class!(options, klass)
     end
-    
+
     protected
       def add_class!(options, klass)
         unless klass.blank?

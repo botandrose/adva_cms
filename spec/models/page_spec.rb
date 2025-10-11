@@ -1,8 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Page, type: :model do
-  let(:site) { Site.create!(name: 'test', host: 'test.example.com') }
-  let(:user) { User.create!(first_name: 'John', email: 'john@example.com', password: 'AAbbcc1122!!') }
+  let(:site) { Site.create!(name: "test", host: "test.example.com") }
+  let(:user) { User.create!(first_name: "John", email: "john@example.com", password: "AAbbcc1122!!") }
 
   describe "inheritance" do
     it "inherits from Section" do
@@ -33,13 +33,13 @@ RSpec.describe Page, type: :model do
   end
 
   describe "single article mode" do
-    let(:page) { Page.create!(site: site, title: 'Test Page') }
+    let(:page) { Page.create!(site: site, title: "Test Page") }
     let!(:article) do
       Article.create!(
         site: site,
         section: page,
-        title: 'Test Article',
-        body: 'Test content',
+        title: "Test Article",
+        body: "Test content",
         author: user,
         published_at: 1.hour.ago
       )
@@ -103,7 +103,7 @@ RSpec.describe Page, type: :model do
             page.articles.destroy_all
             page.reload
             # Ensure this page is not the root section
-            allow(page.site.sections).to receive(:root).and_return(double('root_section'))
+            allow(page.site.sections).to receive(:root).and_return(double("root_section"))
           end
 
           it "returns false" do
@@ -115,7 +115,7 @@ RSpec.describe Page, type: :model do
           before do
             article.update!(published_at: nil)
             # Ensure this page is not the root section
-            allow(page.site.sections).to receive(:root).and_return(double('root_section'))
+            allow(page.site.sections).to receive(:root).and_return(double("root_section"))
           end
 
           it "returns false" do
@@ -124,15 +124,15 @@ RSpec.describe Page, type: :model do
         end
 
         context "when checking parents and ancestors are unpublished" do
-          let(:parent_page) { Page.create!(site: site, title: 'Parent Page', published_at: nil) }
-          let(:child_page) { Page.create!(site: site, title: 'Child Page', parent: parent_page) }
+          let(:parent_page) { Page.create!(site: site, title: "Parent Page", published_at: nil) }
+          let(:child_page) { Page.create!(site: site, title: "Child Page", parent: parent_page) }
 
           before do
             Article.create!(
               site: site,
               section: child_page,
-              title: 'Child Article',
-              body: 'Child content',
+              title: "Child Article",
+              body: "Child content",
               author: user,
               published_at: 1.hour.ago
             )
@@ -177,18 +177,18 @@ RSpec.describe Page, type: :model do
   end
 
   describe "content ordering" do
-    let(:page) { Page.create!(site: site, title: 'Test Page') }
+    let(:page) { Page.create!(site: site, title: "Test Page") }
 
     it "orders articles by lft" do
-      article1 = Article.create!(site: site, section: page, title: 'Article 1', body: 'Article 1 content', author: user)
-      article2 = Article.create!(site: site, section: page, title: 'Article 2', body: 'Article 2 content', author: user)
+      article1 = Article.create!(site: site, section: page, title: "Article 1", body: "Article 1 content", author: user)
+      article2 = Article.create!(site: site, section: page, title: "Article 2", body: "Article 2 content", author: user)
 
       # The nested set should automatically assign lft/rgt values in order
       expect(page.articles.order(:lft)).to eq([article1, article2])
     end
 
     it "orders links by lft" do
-      link1 = Link.create!(site: site, section: page, title: 'Link 1', body: 'http://example.com', author: user)
+      link1 = Link.create!(site: site, section: page, title: "Link 1", body: "http://example.com", author: user)
 
       expect(page.links.order(:lft)).to eq([link1])
     end

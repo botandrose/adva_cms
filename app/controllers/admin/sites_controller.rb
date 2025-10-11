@@ -1,11 +1,11 @@
 class Admin::SitesController < Admin::BaseController
-  before_action :params_site, :only => [:new, :create]
-  before_action :params_section, :only => [:new, :create]
-  before_action :protect_single_site_mode, :only => [:index, :new, :create, :destroy]
+  before_action :params_site, only: [:new, :create]
+  before_action :params_section, only: [:new, :create]
+  before_action :protect_single_site_mode, only: [:index, :new, :create, :destroy]
   before_action :load_show_dependencies, only: [:show]
 
   def index
-    @sites = Site.paginate(:page => params[:page], :per_page => params[:per_page]).order(:id)
+    @sites = Site.paginate(page: params[:page], per_page: params[:per_page]).order(:id)
   end
 
   def show
@@ -56,9 +56,9 @@ class Admin::SitesController < Admin::BaseController
 
     def set_menu
       @menu = case params[:action]
-      when 'show'
+      when "show"
         Menus::Admin::Sites.new
-      when 'edit'
+      when "edit"
         Menus::Admin::Settings.new
       else
         Menus::Admin::Sites::Main.new
@@ -75,12 +75,12 @@ class Admin::SitesController < Admin::BaseController
       params[:site][:timezone]       ||= Time.zone.name
       params[:site][:host]           ||= request.host_with_port
       params[:site][:email]          ||= current_user.email
-      params[:site][:comment_filter] ||= 'smartypants_filter'
+      params[:site][:comment_filter] ||= "smartypants_filter"
     end
 
     def params_section
       params[:section] ||= {}
-      params[:section][:title] ||= 'Home'
+      params[:section][:title] ||= "Home"
       params[:section][:type]  ||= Section.types.first
     end
 
@@ -96,11 +96,11 @@ class Admin::SitesController < Admin::BaseController
 
     def protect_single_site_mode
       unless Site.multi_sites_enabled
-        if params[:action] == 'index'
+        if params[:action] == "index"
           site = Site.first
           redirect_to admin_site_url(site)
         else
-          render :action => :multi_sites_disabled, :layout => 'admin'
+          render action: :multi_sites_disabled, layout: "admin"
         end
       end
     end

@@ -1,15 +1,15 @@
 class Admin::SectionsController < Admin::BaseController
-  before_action :set_section, :only => [:edit, :update, :destroy]
-  before_action :normalize_params, :only => :update_all
+  before_action :set_section, only: [:edit, :update, :destroy]
+  before_action :normalize_params, only: :update_all
 
-  after_action :clear_static_cache, :only => [:create, :update, :update_all, :destroy]
+  after_action :clear_static_cache, only: [:create, :update, :update_all, :destroy]
 
   def index
     @sections = @site.sections
   end
 
   def new
-    @section = @site.sections.build(:type => Section.types.first)
+    @section = @site.sections.build(type: Section.types.first)
   end
 
   def create
@@ -21,7 +21,7 @@ class Admin::SectionsController < Admin::BaseController
         [:admin, @section, :articles])
     else
       flash.now.alert = "The section could not be created."
-      render :action => "new"
+      render action: "new"
     end
   end
 
@@ -33,7 +33,7 @@ class Admin::SectionsController < Admin::BaseController
       redirect_to [:edit, :admin, @section], notice: "The section has been updated."
     else
       flash.now.alert = "The section could not be updated."
-      render :action => 'edit'
+      render action: "edit"
     end
   end
 
@@ -42,7 +42,7 @@ class Admin::SectionsController < Admin::BaseController
       redirect_to [:new, :admin, :section], notice: "The section has been deleted."
     else
       flash.now.alert = "The section could not be deleted."
-      render :action => 'edit'
+      render action: "edit"
     end
   end
 
@@ -82,7 +82,7 @@ class Admin::SectionsController < Admin::BaseController
       hash.each do |key, value|
         if value.is_a? Hash
           hash[key] = normalize_params(value)
-        elsif value == 'null'
+        elsif value == "null"
           hash[key] = nil
         end
       end

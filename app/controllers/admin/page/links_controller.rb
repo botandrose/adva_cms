@@ -1,8 +1,8 @@
 class Admin::Page::LinksController < Admin::BaseController
-  default_param :link, :author_id, :only => [:create, :update], &lambda { |*| current_user.id }
+  default_param :link, :author_id, only: [:create, :update], &lambda { |*| current_user.id }
 
   before_action :set_section
-  before_action :set_link,    :only => [:show, :edit, :update, :destroy]
+  before_action :set_link,    only: [:show, :edit, :update, :destroy]
 
   def new
     @link = @section.links.build(link_params)
@@ -18,7 +18,7 @@ class Admin::Page::LinksController < Admin::BaseController
       redirect_to [:edit, :admin, @section, @link], notice: "The link has been created."
     else
       flash.now.alert = "The link could not be created." + current_resource_errors
-      render :action => 'new'
+      render action: "new"
     end
   end
 
@@ -28,7 +28,7 @@ class Admin::Page::LinksController < Admin::BaseController
       redirect_to [:edit, :admin, @section, @link], notice: "The link has been updated."
     else
       flash.now.alert = "The link could not be updated." + current_resource_errors
-      render :action => 'edit', :cl => content_locale
+      render action: "edit", cl: content_locale
     end
   end
 
@@ -38,7 +38,7 @@ class Admin::Page::LinksController < Admin::BaseController
       redirect_to [:admin, @section, :contents], notice: "The link has been deleted."
     else
       flash.now.alert = "The link could not be deleted." + current_resource_errors
-      render :action => 'edit'
+      render action: "edit"
     end
   end
 

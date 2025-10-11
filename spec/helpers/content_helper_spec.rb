@@ -8,7 +8,7 @@ RSpec.describe ContentHelper, type: :helper do
   end
 
   it "returns status span text based on published flag" do
-    expect(content_status(ContentDummy.new(true))).to include('Published')
-    expect(content_status(ContentDummy.new(false))).to include('Pending')
+    expect(content_status(ContentDummy.new(true))).to include("Published")
+    expect(content_status(ContentDummy.new(false))).to include("Pending")
   end
 end

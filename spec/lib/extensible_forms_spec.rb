@@ -67,7 +67,7 @@ RSpec.describe Adva::ExtensibleFormBuilder do
 
   describe "hint" do
     it "appends a hint span to the tag" do
-      allow(template).to receive(:content_tag).with(:span, "", title: "hint text", class: 'hint', for: "field_id").and_return('<span title="hint text" class="hint" for="field_id"></span>')
+      allow(template).to receive(:content_tag).with(:span, "", title: "hint text", class: "hint", for: "field_id").and_return('<span title="hint text" class="hint" for="field_id"></span>')
       tag = '<input id="field_id" type="text"/>'
       result = builder.send(:hint, tag, "hint text")
       expect(result).to include("field_id")

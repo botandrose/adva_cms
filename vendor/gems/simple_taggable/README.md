@@ -53,7 +53,7 @@ $ rake db:migrate
 Once a model is taggable, you can set its tags using the `tag_list` attribute:
 
 ```ruby
-post = Post.new(:title => "My first post")
+post = Post.new(title: "My first post")
 post.tag_list = "ruby, rails, web"
 post.save
 ```
@@ -80,10 +80,10 @@ Post.tagged("ruby")
 Post.tagged("ruby", "rails")
 
 # Find posts tagged with "ruby" and "rails"
-Post.tagged("ruby", "rails", :match_all => true)
+Post.tagged("ruby", "rails", match_all: true)
 
 # Find posts tagged with "ruby" but not "java"
-Post.tagged("ruby", :except => "java")
+Post.tagged("ruby", except: "java")
 ```
 
 ### Tag Counts
@@ -95,7 +95,7 @@ You can get the tag counts for a model using the `tag_counts` class method:
 Post.tag_counts
 
 # Get tag counts for a specific set of tags
-Post.tag_counts(:conditions => "tags.name IN ('ruby', 'rails')")
+Post.tag_counts(conditions: "tags.name IN ('ruby', 'rails')")
 ```
 
 ## Contributing

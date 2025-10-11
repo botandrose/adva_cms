@@ -3,8 +3,8 @@ class CreateCategoriesTable < ActiveRecord::Migration[7.0]
     create_table :categories do |t|
       t.references  :section
       t.integer     :parent_id
-      t.integer     :lft, :null => false, :default => 0
-      t.integer     :rgt, :null => false, :default => 0
+      t.integer     :lft, null: false, default: 0
+      t.integer     :rgt, null: false, default: 0
       t.string      :title
       t.string      :path
       t.string      :permalink

@@ -35,13 +35,13 @@ html
     = yield :head
 
   body
-    = menu.build(self).root.render(:id => 'top')
-    = render :partial => 'admin/shared/header'
+    = menu.build(self).root.render(id: 'top')
+    = render partial: 'admin/shared/header'
     #page
       = yield :form if content_for :form
       .main
-        = menu.root.find(:main).try(:render, :id => 'main_menu')
-        = render :partial => 'shared/flash'
+        = menu.root.find(:main).try(:render, id: 'main_menu')
+        = render partial: 'shared/flash'
         #content
           = yield
       #sidebar.right

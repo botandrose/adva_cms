@@ -12,7 +12,7 @@ module Adva
       def has_option(*names)
         definition = names.extract_options!
         names.each do |name|
-          self.option_definitions[name] = definition.reverse_update(:default => nil, :type => :text_field)
+          self.option_definitions[name] = definition.reverse_update(default: nil, type: :text_field)
           class_eval <<-src, __FILE__, __LINE__
             def #{name}
               #{name}_before_type_cast
@@ -33,7 +33,7 @@ module Adva
             end
           src
         end
-      
+
         def option_definition(name, key)
           option_definitions[name][key]
         rescue

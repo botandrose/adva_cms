@@ -7,13 +7,13 @@ class Ldap
 
   def initialize(options={})
     @options = options.reverse_merge(
-      :host => '127.0.0.1',
-      :port => LDAP::LDAP_PORT,
-      :base => "dc=example,dc=com",
-      :bind_dn => nil,
-      :bind_password => nil,
-      :uid_attribute => "uid",    # uid for ldap ; sAMAccountName for AD
-      :uid_column => 'name'
+      host: '127.0.0.1',
+      port: LDAP::LDAP_PORT,
+      base: "dc=example,dc=com",
+      bind_dn: nil,
+      bind_password: nil,
+      uid_attribute: "uid",    # uid for ldap ; sAMAccountName for AD
+      uid_column: 'name'
     )
   end
 
@@ -36,7 +36,7 @@ class Ldap
         conn.unbind
         conn = nil
         return true
-      rescue LDAP::ResultError => e
+      rescue LDAP:ResultError: e
         return false
       end
     end

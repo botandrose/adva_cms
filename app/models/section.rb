@@ -13,19 +13,19 @@ class Section < ActiveRecord::Base
   serialize :permissions, coder: YAML
 
   include Adva::HasOptions
-  has_option :contents_per_page, :default => 15
+  has_option :contents_per_page, default: 15
 
   include Adva::HasPermalink
-  has_permalink :title, :url_attribute => :permalink, :sync_url => true,
-    :only_when_blank => true, :scope => [ :site_id, :parent_id ]
+  has_permalink :title, url_attribute: :permalink, sync_url: true,
+    only_when_blank: true, scope: [ :site_id, :parent_id ]
 
-  acts_as_nested_set :scope => :site_id
+  acts_as_nested_set scope: :site_id
 
-  belongs_to :site, :touch => true
+  belongs_to :site, touch: true
   has_many :categories, -> { order(:lft) }, dependent: :destroy do
     def update_paths!
       paths = Hash[*roots.map { |r|
-        r.self_and_descendants.map { |n| [n.id, { 'path' => n.send(:build_path) }] } }.flatten]
+        r.self_and_descendants.map { |n| [n.id, { "path" => n.send(:build_path) }] } }.flatten]
       update(paths.keys, paths.values)
     end
   end
@@ -39,7 +39,7 @@ class Section < ActiveRecord::Base
 
   validates_presence_of :title # :site wtf ... this breaks install_controller#index
   validates_uniqueness_of :permalink, scope: :site_id, case_sensitive: true
-  validates_numericality_of :contents_per_page, :only_integer => true, :message => :only_integer
+  validates_numericality_of :contents_per_page, only_integer: true, message: :only_integer
 
   # Legacy UI field used in admin form; provide a virtual attribute so the form renders.
   attr_writer :hidden_on_global_nav
@@ -52,7 +52,7 @@ class Section < ActiveRecord::Base
   #   record.errors.add attr, 'may not start with a slahs' if value.index('.') # FIXME i18n
   # end
 
-  # TODO validates_inclusion_of :contents_per_page, :in => 1..30, :message => "can only be between 1 and 30."
+  # TODO validates_inclusion_of :contents_per_page, in: 1..30, message: "can only be between 1 and 30."
 
   def to_param
     permalink
@@ -67,11 +67,11 @@ class Section < ActiveRecord::Base
   end
 
   def type
-    read_attribute(:type) || 'Section'
+    read_attribute(:type) || "Section"
   end
 
   def tag_counts
-    Content.tag_counts :conditions => "section_id = #{id}"
+    Content.tag_counts conditions: "section_id = #{id}"
   end
 
   def root_section?
@@ -89,7 +89,7 @@ class Section < ActiveRecord::Base
       self.published_at = nil
     end
   end
-  
+
   def published?(parents = false)
     return true if self == site.sections.root # the root section is always published
     return false if parents && has_unpublished_ancestor?
@@ -103,11 +103,11 @@ class Section < ActiveRecord::Base
   end
 
   protected
-  
+
     def set_as_published
       self.published_at = published_at || Time.current
     end
-  
+
     def has_unpublished_ancestor?
       !ancestors.reject(&:published?).empty?
     end
@@ -123,7 +123,7 @@ class Section < ActiveRecord::Base
     end
 
     def build_path
-      self_and_ancestors.map(&:permalink).join('/')
+      self_and_ancestors.map(&:permalink).join("/")
     end
 
     def update_paths

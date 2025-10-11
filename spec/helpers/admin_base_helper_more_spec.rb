@@ -13,7 +13,7 @@ RSpec.describe Admin::BaseHelper, type: :helper do
   end
 
   it "link_to_profile links to current user" do
-    user = User.create!(first_name: 'U', email: 'u@e.co', password: 'AAbbcc1122!!', verified_at: Time.now)
+    user = User.create!(first_name: "U", email: "u@e.co", password: "AAbbcc1122!!", verified_at: Time.now)
     helper.singleton_class.send(:define_method, :current_user) { user }
     expect(helper.link_to_profile).to include(admin_user_path(user))
   end
@@ -21,7 +21,7 @@ RSpec.describe Admin::BaseHelper, type: :helper do
   it "page_cached_at formats for within 4 hours, older today, and previous day" do
     Timecop.freeze(Time.current.change(hour: 12)) do
       page = double("page", updated_at: 1.hour.ago)
-      expect(page_cached_at(page)).to include('ago')
+      expect(page_cached_at(page)).to include("ago")
 
       page = double("page", updated_at: 6.hours.ago)
       expect(page_cached_at(page)).to match(/Today, /)
@@ -32,6 +32,6 @@ RSpec.describe Admin::BaseHelper, type: :helper do
   end
 
   it "editor_class_for returns css class" do
-    expect(editor_class_for(double)).to eq('big wysiwyg')
+    expect(editor_class_for(double)).to eq("big wysiwyg")
   end
 end

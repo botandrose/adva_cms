@@ -1,25 +1,25 @@
 class CreateContentsTable < ActiveRecord::Migration[7.0]
   def self.up
-    create_table :contents, :force => true do |t|
+    create_table :contents, force: true do |t|
       t.references :site
       t.references :section
-      t.string     :type, :limit => 20
+      t.string     :type, limit: 20
       t.integer    :position
 
       t.string     :permalink
       t.text       :excerpt_html
       t.text       :body_html
 
-      t.references :author, :polymorphic => true
-      t.string     :author_name, :limit => 40
-      t.string     :author_email, :limit => 40
+      t.references :author, polymorphic: true
+      t.string     :author_name, limit: 40
+      t.string     :author_email, limit: 40
       t.string     :author_homepage
 
       t.integer    :version
       t.string     :filter
-      t.integer    :comment_age, :default => 0
+      t.integer    :comment_age, default: 0
       t.string     :cached_tag_list
-      t.integer    :assets_count, :default => 0
+      t.integer    :assets_count, default: 0
 
       t.datetime   :published_at
       t.timestamps

@@ -1,19 +1,19 @@
 class CreateActivitiesTable < ActiveRecord::Migration[7.0]
   def self.up
-    create_table :activities, :force => true do |t|
+    create_table :activities, force: true do |t|
       t.references :site
       t.references :section
 
-      t.references :author, :polymorphic => true
-      t.string     :author_name, :limit => 40
-      t.string     :author_email, :limit => 40
+      t.references :author, polymorphic: true
+      t.string     :author_name, limit: 40
+      t.string     :author_email, limit: 40
       t.string     :author_homepage
 
       t.string     :actions
       t.integer    :object_id
-      t.string     :object_type, :limit => 15
+      t.string     :object_type, limit: 15
       t.text       :object_attributes
-      t.datetime   :created_at, :null => false
+      t.datetime   :created_at, null: false
     end
   end
 

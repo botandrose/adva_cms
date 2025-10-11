@@ -9,7 +9,7 @@ class CreateSitesTable < ActiveRecord::Migration[7.0]
       t.string  :timezone
       t.string  :theme_names
       t.text    :ping_urls
-      t.string  :akismet_key, :limit => 100
+      t.string  :akismet_key, limit: 100
       t.string  :akismet_url
       t.boolean :approve_comments
       t.integer :comment_age

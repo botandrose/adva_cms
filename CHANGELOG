@@ -122,7 +122,7 @@
 		* reset default locale to :en for test environment - in case custom apps set it to something else
 		* the asset cache of the sites themes is also emptied when clearing the site cache
 		* controller actions are rescued with error pages on test environment
-		* expanded with testing plugin so it allows to specify an :if => :condition option for assertions
+		* expanded with testing plugin so it allows to specify an if: :condition option for assertions
 		* Theme#import accepts a pathname
 
 	Enhancements

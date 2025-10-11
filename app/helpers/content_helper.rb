@@ -2,12 +2,12 @@ module ContentHelper
   def published_at_formatted(article)
     unless article && article.published?
       if article.published_at&.future?
-        "Will publish on " + l(article.published_at, :format => (article.published_at.year == Time.now.year ? :short : :long))
+        "Will publish on " + l(article.published_at, format: (article.published_at.year == Time.now.year ? :short : :long))
       else
         "Draft"
       end
     else
-      l(article.published_at, :format => (article.published_at.year == Time.now.year ? :short : :long))
+      l(article.published_at, format: (article.published_at.year == Time.now.year ? :short : :long))
     end
   end
 
@@ -25,7 +25,7 @@ module ContentHelper
 
   def content_status(content)
     return "<span>&nbsp;</span>" unless content.respond_to?(:published?)
-    klass = content.published? ? 'published' : 'pending'
+    klass = content.published? ? "published" : "pending"
     text  = content.published? ? "Published" : "Pending"
 
     "<span title='#{text}' alt='#{text}' class='status #{klass}'>#{text}</span>"
@@ -36,9 +36,9 @@ module ContentHelper
     content, text = *args.reverse
 
     text ||= "Preview"
-    url = show_path(content, :cl => content.class.locale, :namespace => nil)
+    url = show_path(content, cl: content.class.locale, namespace: nil)
 
-    options.reverse_merge!(:url => url, :class => "preview #{content.class.name.underscore}")
+    options.reverse_merge!(url: url, class: "preview #{content.class.name.underscore}")
     link_to_show(text, content, options)
   end
 
@@ -93,6 +93,6 @@ module ContentHelper
     checked = content.categories.include?(category)
     name = "#{type}[category_ids][]"
     id = "#{type}_category_#{category.id}"
-    check_box_tag(name, category.id, checked, :id => id)
+    check_box_tag(name, category.id, checked, id: id)
   end
 end

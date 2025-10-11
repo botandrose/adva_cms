@@ -15,7 +15,7 @@ module TableBuilder
     end
 
     def tag_name
-      parent.head? ? :th : :td 
+      parent.head? ? :th : :td
     end
   end
 end

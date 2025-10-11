@@ -1,11 +1,11 @@
 require "rails_helper"
 
 RSpec.describe Categorization, type: :model do
-  let(:site) { Site.create!(name: 'test', host: 'test.example.com') }
-  let(:section) { Page.create!(site: site, title: 'Test Section') }
-  let(:category) { Category.create!(section: section, title: 'Test Category') }
-  let(:user) { User.create!(first_name: 'John', email: 'john@example.com', password: 'AAbbcc1122!!') }
-  let(:article) { Article.create!(site: site, section: section, title: 'Test Article', body: 'Test content', author: user) }
+  let(:site) { Site.create!(name: "test", host: "test.example.com") }
+  let(:section) { Page.create!(site: site, title: "Test Section") }
+  let(:category) { Category.create!(section: section, title: "Test Category") }
+  let(:user) { User.create!(first_name: "John", email: "john@example.com", password: "AAbbcc1122!!") }
+  let(:article) { Article.create!(site: site, section: section, title: "Test Article", body: "Test content", author: user) }
 
   describe "associations" do
     it "belongs to categorizable polymorphically" do
@@ -57,13 +57,13 @@ RSpec.describe Categorization, type: :model do
 
   describe "polymorphic relationships" do
     it "can link to different types of content" do
-      link = Link.create!(site: site, section: section, title: 'Test Link', body: 'http://example.com', author: user)
+      link = Link.create!(site: site, section: section, title: "Test Link", body: "http://example.com", author: user)
 
       article_categorization = Categorization.create!(category: category, categorizable: article)
       link_categorization = Categorization.create!(category: category, categorizable: link)
 
-      expect(article_categorization.categorizable_type).to eq('Content')
-      expect(link_categorization.categorizable_type).to eq('Content')
+      expect(article_categorization.categorizable_type).to eq("Content")
+      expect(link_categorization.categorizable_type).to eq("Content")
       expect(article_categorization.categorizable).to be_a(Article)
       expect(link_categorization.categorizable).to be_a(Link)
     end

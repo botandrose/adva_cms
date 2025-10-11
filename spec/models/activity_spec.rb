@@ -1,10 +1,10 @@
 require "rails_helper"
 
 RSpec.describe Activity, type: :model do
-  let(:site) { Site.create!(name: 'test', host: 'test.example.com') }
-  let(:section) { Page.create!(site: site, title: 'Test Section') }
-  let(:user) { User.create!(first_name: 'John', email: 'john@example.com', password: 'AAbbcc1122!!') }
-  let(:article) { Article.create!(site: site, section: section, title: 'Test Article', body: 'Test content', author: user) }
+  let(:site) { Site.create!(name: "test", host: "test.example.com") }
+  let(:section) { Page.create!(site: site, title: "Test Section") }
+  let(:user) { User.create!(first_name: "John", email: "john@example.com", password: "AAbbcc1122!!") }
+  let(:article) { Article.create!(site: site, section: section, title: "Test Article", body: "Test content", author: user) }
 
   describe "associations" do
     it "belongs to site" do
@@ -42,17 +42,17 @@ RSpec.describe Activity, type: :model do
     let(:activity) { Activity.create!(site: site, section: section, object: article, author: user) }
 
     it "serializes actions" do
-      activity.actions = ['created', 'published']
+      activity.actions = ["created", "published"]
       activity.save!
       activity.reload
-      expect(activity.actions).to eq(['created', 'published'])
+      expect(activity.actions).to eq(["created", "published"])
     end
 
     it "serializes object_attributes" do
-      activity.object_attributes = { 'title' => 'Test', 'status' => 'published' }
+      activity.object_attributes = { "title" => "Test", "status" => "published" }
       activity.save!
       activity.reload
-      expect(activity.object_attributes).to eq({ 'title' => 'Test', 'status' => 'published' })
+      expect(activity.object_attributes).to eq({ "title" => "Test", "status" => "published" })
     end
   end
 
@@ -63,12 +63,12 @@ RSpec.describe Activity, type: :model do
         section: section,
         object: article,
         author: user,
-        object_attributes: { 'custom_field' => 'test_value' }
+        object_attributes: { "custom_field" => "test_value" }
       )
     end
 
     it "returns value from object_attributes when key exists" do
-      expect(activity.custom_field).to eq('test_value')
+      expect(activity.custom_field).to eq("test_value")
     end
 
     it "calls super when key does not exist in object_attributes" do
@@ -95,16 +95,16 @@ RSpec.describe Activity, type: :model do
   end
 
   describe "#all_actions" do
-    let(:activity) { Activity.create!(site: site, section: section, object: article, author: user, actions: ['main_action']) }
+    let(:activity) { Activity.create!(site: site, section: section, object: article, author: user, actions: ["main_action"]) }
 
     before do
-      sibling1 = Activity.create!(site: site, section: section, object: article, author: user, actions: ['sibling1'])
-      sibling2 = Activity.create!(site: site, section: section, object: article, author: user, actions: ['sibling2'])
+      sibling1 = Activity.create!(site: site, section: section, object: article, author: user, actions: ["sibling1"])
+      sibling2 = Activity.create!(site: site, section: section, object: article, author: user, actions: ["sibling2"])
       activity.siblings = [sibling1, sibling2]
     end
 
     it "combines actions from siblings and self, removing duplicates" do
-      expect(activity.all_actions).to eq(['sibling2', 'sibling1', 'main_action'])
+      expect(activity.all_actions).to eq(["sibling2", "sibling1", "main_action"])
     end
   end
 
@@ -152,7 +152,7 @@ RSpec.describe Activity, type: :model do
 
   describe ".find_coinciding_grouped_by_dates" do
     it "groups activities by given dates and appends the remainder" do
-      base = Time.zone.parse('2024-01-03 10:00:00')
+      base = Time.zone.parse("2024-01-03 10:00:00")
       a_today = Activity.create!(site: site, section: section, object: article, author: user, created_at: base)
       a_yesterday = Activity.create!(site: site, section: section, object: article, author: user, created_at: base - 1.day)
       a_two_days_ago = Activity.create!(site: site, section: section, object: article, author: user, created_at: base - 2.days)

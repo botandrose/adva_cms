@@ -16,7 +16,7 @@ module TableBuilder
     end
 
     include RecordIdentifier
-    
+
     def row(options = {}, &block)
       table.collection.each_with_index do |record, ix|
         super(record, options_for_record(record, ix, options))
@@ -26,11 +26,11 @@ module TableBuilder
     protected
 
       def build
-        row do |row, record| 
+        row do |row, record|
           row.cell *table.columns.map { |column| record.send(column.attribute_name) }
         end if @rows.empty?
       end
-    
+
       def options_for_record(record, ix, options = {})
         options = options.dup
         options[:id] = dom_id(record) if record.respond_to?(:new_record?)

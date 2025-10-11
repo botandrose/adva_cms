@@ -1,16 +1,16 @@
 require "rails_helper"
 
 RSpec.describe BaseHelper, type: :helper do
-  let(:user) { User.create!(first_name: 'Test', email: 'test@example.com', password: 'AAbbcc1122!!', verified_at: Time.now) }
+  let(:user) { User.create!(first_name: "Test", email: "test@example.com", password: "AAbbcc1122!!", verified_at: Time.now) }
 
   before do
     # Mock FilteredColumn if it doesn't exist
     unless defined?(FilteredColumn)
       filter_struct = Struct.new(:filter_name)
-      stub_const('FilteredColumn', Class.new do
+      stub_const("FilteredColumn", Class.new do
         filter_class = filter_struct
         define_singleton_method(:filters) do
-          { test_filter: filter_class.new('Test Filter') }
+          { test_filter: filter_class.new("Test Filter") }
         end
       end)
     end
@@ -19,7 +19,7 @@ RSpec.describe BaseHelper, type: :helper do
     user_instance = user  # Capture user in closure
     helper.define_singleton_method(:current_user) { user_instance }
     helper.define_singleton_method(:l) do |time, options|
-      time.strftime('%Y-%m-%d')
+      time.strftime("%Y-%m-%d")
     end
   end
 
@@ -50,8 +50,8 @@ RSpec.describe BaseHelper, type: :helper do
 
   describe "#column and #buttons" do
     it "column and buttons helpers wrap content" do
-      expect(helper.column { 'X' }).to include('<div class="col">', 'X')
-      expect(helper.buttons { 'Y' }).to include('<p class="buttons">', 'Y')
+      expect(helper.column { "X" }).to include('<div class="col">', "X")
+      expect(helper.buttons { "Y" }).to include('<p class="buttons">', "Y")
     end
   end
 
@@ -60,38 +60,38 @@ RSpec.describe BaseHelper, type: :helper do
       helper.define_singleton_method(:form_for) { |*args, &block| "<form>\ncontent\n</form>" }
       helper.define_singleton_method(:content_for) { |*args| }
 
-      result = helper.split_form_for(user) { 'form content' }
+      result = helper.split_form_for(user) { "form content" }
       # Just verify it doesn't crash and returns reasonable output
       expect(result).to be_a(String)
     end
 
     it "handles empty form output" do
-      helper.define_singleton_method(:form_for) { |*args, &block| '' }
+      helper.define_singleton_method(:form_for) { |*args, &block| "" }
       helper.define_singleton_method(:content_for) { |*args| }
 
-      result = helper.split_form_for(user) { 'form content' }
-      expect(result).to eq('')
+      result = helper.split_form_for(user) { "form content" }
+      expect(result).to eq("")
     end
 
     it "handles nil form output" do
       helper.define_singleton_method(:form_for) { |*args, &block| nil }
       helper.define_singleton_method(:content_for) { |*args| }
 
-      result = helper.split_form_for(user) { 'form content' }
-      expect(result).to eq('')
+      result = helper.split_form_for(user) { "form content" }
+      expect(result).to eq("")
     end
   end
 
   describe "#filter_options" do
     it "returns filter options array" do
       options = helper.filter_options
-      expect(options).to include(['Plain HTML', ''])
-      expect(options).to include(['Test Filter', 'test_filter'])
+      expect(options).to include(["Plain HTML", ""])
+      expect(options).to include(["Test Filter", "test_filter"])
     end
   end
 
   describe "#author_options" do
-    let(:other_user) { User.create!(first_name: 'Other', email: 'other@example.com', password: 'AAbbcc1122!!', verified_at: Time.now) }
+    let(:other_user) { User.create!(first_name: "Other", email: "other@example.com", password: "AAbbcc1122!!", verified_at: Time.now) }
 
     it "returns current user plus provided users" do
       options = helper.author_options([other_user])
@@ -112,16 +112,16 @@ RSpec.describe BaseHelper, type: :helper do
     end
 
     it "returns current user id even with content provided" do
-      content = double('Content', author_id: 999)
+      content = double("Content", author_id: 999)
       expect(helper.author_selected(content)).to eq(user.id)
     end
   end
 
   describe "#link_path" do
     it "returns link body" do
-      link = double('Link', body: 'http://example.com')
-      section = double('Section')
-      expect(helper.link_path(section, link)).to eq('http://example.com')
+      link = double("Link", body: "http://example.com")
+      section = double("Section")
+      expect(helper.link_path(section, link)).to eq("http://example.com")
     end
   end
 end

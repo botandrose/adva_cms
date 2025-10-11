@@ -126,7 +126,7 @@ RSpec.describe SimpleTaggable do
     it 'works with match_all and include' do
       # TODO: This is a complicated test that needs review
       expect {
-        Post.tagged('nature', 'animal', :match_all => true, :include => :user)
+        Post.tagged('nature', 'animal', match_all: true, include: :user)
       }.not_to raise_error
     end
 

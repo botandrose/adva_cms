@@ -1,5 +1,5 @@
 class Admin::Page::CategoriesController < Admin::BaseController
-  before_action :set_category, :only => [:edit, :update, :destroy]
+  before_action :set_category, only: [:edit, :update, :destroy]
 
   def index
   end
@@ -14,7 +14,7 @@ class Admin::Page::CategoriesController < Admin::BaseController
       redirect_to [:admin, @section, :categories], notice: "The category has been created."
     else
       flash.now.alert = "The category could not be created." + current_resource_errors
-      render :action => "new"
+      render action: "new"
     end
   end
 
@@ -23,7 +23,7 @@ class Admin::Page::CategoriesController < Admin::BaseController
       redirect_to [:admin, @section, :categories], notice: "The category has been updated."
     else
       flash.now.alert = "The category could not be updated." + current_resource_errors
-      render :action => 'edit'
+      render action: "edit"
     end
   end
 
@@ -41,7 +41,7 @@ class Admin::Page::CategoriesController < Admin::BaseController
       redirect_to [:admin, @section, :categories], notice: "The category has been deleted."
     else
       flash.now.alert = "The category could not be deleted." + current_resource_errors
-      render :action => 'edit'
+      render action: "edit"
     end
   end
 

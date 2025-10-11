@@ -1,17 +1,17 @@
-require 'simplecov'
-require 'simplecov-html'
-require 'debug'
+require "simplecov"
+require "simplecov-html"
+require "debug"
 
-SimpleCov.start 'rails' do
-  add_filter '/spec/'
-  add_filter '/vendor/'
-  add_filter '/lib/adva/version.rb'
+SimpleCov.start "rails" do
+  add_filter "/spec/"
+  add_filter "/vendor/"
+  add_filter "/lib/adva/version.rb"
 
-  add_group 'Controllers', 'app/controllers'
-  add_group 'Models', 'app/models'
-  add_group 'Helpers', 'app/helpers'
-  add_group 'Observers', 'app/observers'
-  add_group 'Libraries', 'lib'
+  add_group "Controllers", "app/controllers"
+  add_group "Models", "app/models"
+  add_group "Helpers", "app/helpers"
+  add_group "Observers", "app/observers"
+  add_group "Libraries", "lib"
 
   formatter SimpleCov::Formatter::HTMLFormatter
 end

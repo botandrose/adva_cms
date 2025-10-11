@@ -3,8 +3,8 @@ require "adva/authenticate_user"
 require "ostruct"
 
 RSpec.describe Adva::AuthenticateUser do
-  let!(:site) { Site.find_by_host('test.example.com') || Site.create!(name: 'Test Site', title: 'Test Site', host: 'test.example.com') }
-  let!(:user) { User.create!(first_name: 'Test', email: 'test@example.com', password: 'AAbbcc1122!!', verified_at: Time.now) }
+  let!(:site) { Site.find_by_host("test.example.com") || Site.create!(name: "Test Site", title: "Test Site", host: "test.example.com") }
+  let!(:user) { User.create!(first_name: "Test", email: "test@example.com", password: "AAbbcc1122!!", verified_at: Time.now) }
 
   describe ".included" do
     it "extends target with ClassMethods" do
@@ -56,10 +56,10 @@ RSpec.describe Adva::AuthenticateUser do
     let(:dummy_class) do
       Class.new do
         def self.find_by_id(id)
-          if id == '123'
+          if id == "123"
             user = Struct.new(:id).new(123)
             def user.authenticate(token)
-              token == 'valid_token'
+              token == "valid_token"
             end
             user
           end
@@ -76,27 +76,27 @@ RSpec.describe Adva::AuthenticateUser do
 
     it "returns nil for blank token" do
       expect(dummy_controller.send(:validate_token, dummy_class, nil)).to be_nil
-      expect(dummy_controller.send(:validate_token, dummy_class, '')).to be_nil
-      expect(dummy_controller.send(:validate_token, dummy_class, '   ')).to be_nil
+      expect(dummy_controller.send(:validate_token, dummy_class, "")).to be_nil
+      expect(dummy_controller.send(:validate_token, dummy_class, "   ")).to be_nil
     end
 
     it "returns nil for token without semicolon" do
-      expect(dummy_controller.send(:validate_token, dummy_class, 'no_semicolon')).to be_nil
+      expect(dummy_controller.send(:validate_token, dummy_class, "no_semicolon")).to be_nil
     end
 
     it "returns user object when token is valid" do
-      result = dummy_controller.send(:validate_token, dummy_class, '123;valid_token')
+      result = dummy_controller.send(:validate_token, dummy_class, "123;valid_token")
       expect(result).not_to be_nil
       expect(result.id).to eq(123)
     end
 
     it "returns nil when token is invalid" do
-      result = dummy_controller.send(:validate_token, dummy_class, '123;invalid_token')
+      result = dummy_controller.send(:validate_token, dummy_class, "123;invalid_token")
       expect(result).to be_nil
     end
 
     it "returns nil when user is not found" do
-      result = dummy_controller.send(:validate_token, dummy_class, '999;valid_token')
+      result = dummy_controller.send(:validate_token, dummy_class, "999;valid_token")
       expect(result).to be_nil
     end
   end

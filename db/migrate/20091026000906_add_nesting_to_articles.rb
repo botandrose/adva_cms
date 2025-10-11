@@ -2,8 +2,8 @@ class AddNestingToArticles < ActiveRecord::Migration[7.0]
   def self.up
     remove_column :contents, :position
     add_column :contents, :parent_id, :integer
-    add_column :contents, :lft, :integer, :default => 0, :null => false
-    add_column :contents, :rgt, :integer, :default => 0, :null => false
+    add_column :contents, :lft, :integer, default: 0, null: false
+    add_column :contents, :rgt, :integer, default: 0, null: false
 
     # Removed data backfill using models. Keep migrations schema-only.
 

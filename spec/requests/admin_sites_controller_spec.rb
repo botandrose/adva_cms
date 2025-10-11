@@ -1,13 +1,13 @@
 require "rails_helper"
 
 RSpec.describe "Admin::SitesController", type: :request do
-  let!(:admin_user) { User.create!(first_name: 'Admin', email: 'admin@example.com', password: 'AAbbcc1122!!', verified_at: Time.now, admin: true) }
-  let!(:site) { Site.create!(name: 'Test Site', title: 'Test Site Title', host: 'test.example.com') }
+  let!(:admin_user) { User.create!(first_name: "Admin", email: "admin@example.com", password: "AAbbcc1122!!", verified_at: Time.now, admin: true) }
+  let!(:site) { Site.create!(name: "Test Site", title: "Test Site Title", host: "test.example.com") }
 
   before do
     # Set up admin session
     host! site.host
-    post "/session", params: { user: { email: admin_user.email, password: 'AAbbcc1122!!' } }
+    post "/session", params: { user: { email: admin_user.email, password: "AAbbcc1122!!" } }
     expect(response).to redirect_to(root_url)
   end
 
@@ -20,7 +20,7 @@ RSpec.describe "Admin::SitesController", type: :request do
       it "shows sites index" do
         get "/admin/sites"
         expect(response).to have_http_status(:ok)
-        expect(response.body).to include('Test Site')
+        expect(response.body).to include("Test Site")
       end
     end
 
@@ -38,14 +38,14 @@ RSpec.describe "Admin::SitesController", type: :request do
     it "shows site details" do
       get "/admin/sites/#{site.id}"
       expect(response).to have_http_status(:ok)
-      expect(response.body).to include('Test Site Title')
+      expect(response.body).to include("Test Site Title")
     end
 
     it "shows site via singular route using host (set_site without :id)" do
       # Hitting /admin/site exercises set_site branch that uses request.host
       get "/admin/site"
       expect(response).to have_http_status(:ok)
-      expect(response.body).to include('Test Site Title')
+      expect(response.body).to include("Test Site Title")
     end
 
     it "loads unapproved_comments when available" do
@@ -67,7 +67,7 @@ RSpec.describe "Admin::SitesController", type: :request do
       it "shows new site form" do
         get "/admin/sites/new"
         expect(response).to have_http_status(:ok)
-        expect(response.body).to include('<form')
+        expect(response.body).to include("<form")
       end
     end
 
@@ -77,7 +77,7 @@ RSpec.describe "Admin::SitesController", type: :request do
       it "shows multi-sites disabled message" do
         get "/admin/sites/new"
         expect(response).to have_http_status(:ok)
-        expect(response.body).to include('Multi-sites mode is not currently enabled')
+        expect(response.body).to include("Multi-sites mode is not currently enabled")
       end
     end
   end
@@ -90,15 +90,15 @@ RSpec.describe "Admin::SitesController", type: :request do
         let(:valid_params) do
           {
             site: {
-              name: 'New Site',
-              title: 'New Site Title',
-              host: 'new.example.com',
-              email: 'admin@example.com'
+              name: "New Site",
+              title: "New Site Title",
+              host: "new.example.com",
+              email: "admin@example.com"
             },
             section: {
-              title: 'Home',
-              permalink: 'home',
-              type: 'Page'
+              title: "Home",
+              permalink: "home",
+              type: "Page"
             }
           }
         end
@@ -109,7 +109,7 @@ RSpec.describe "Admin::SitesController", type: :request do
           }.to change(Site, :count).by(1)
 
           new_site = Site.last
-          expect(new_site.name).to eq('New Site')
+          expect(new_site.name).to eq("New Site")
           expect(response).to redirect_to(admin_site_url(new_site))
         end
       end
@@ -117,8 +117,8 @@ RSpec.describe "Admin::SitesController", type: :request do
       context "with invalid parameters" do
         let(:invalid_params) do
           {
-            site: { name: '', title: '', host: '' },
-            section: { title: 'Home' }
+            site: { name: "", title: "", host: "" },
+            section: { title: "Home" }
           }
         end
 
@@ -128,7 +128,7 @@ RSpec.describe "Admin::SitesController", type: :request do
           }.not_to change(Site, :count)
 
           expect(response).to have_http_status(:ok)
-          expect(response.body).to include('<form')
+          expect(response.body).to include("<form")
         end
       end
     end
@@ -138,28 +138,28 @@ RSpec.describe "Admin::SitesController", type: :request do
     it "shows edit form" do
       get "/admin/sites/#{site.id}/edit"
       expect(response).to have_http_status(:ok)
-      expect(response.body).to include('<form')
+      expect(response.body).to include("<form")
     end
   end
 
   describe "PATCH /admin/sites/:id" do
     context "with valid parameters" do
       let(:update_params) do
-        { site: { name: 'Updated Site Name', title: 'Updated Title' } }
+        { site: { name: "Updated Site Name", title: "Updated Title" } }
       end
 
       it "updates the site" do
         patch "/admin/sites/#{site.id}", params: update_params
         site.reload
-        expect(site.name).to eq('Updated Site Name')
-        expect(site.title).to eq('Updated Title')
+        expect(site.name).to eq("Updated Site Name")
+        expect(site.title).to eq("Updated Title")
         expect(response).to redirect_to(edit_admin_site_url)
       end
     end
 
     context "with invalid parameters" do
       let(:invalid_params) do
-        { site: { name: '', title: '' } }
+        { site: { name: "", title: "" } }
       end
 
       it "does not update and re-renders edit form" do
@@ -168,7 +168,7 @@ RSpec.describe "Admin::SitesController", type: :request do
         site.reload
         expect(site.name).to eq(original_name)
         expect(response).to have_http_status(:ok)
-        expect(response.body).to include('<form')
+        expect(response.body).to include("<form")
       end
     end
 
@@ -183,7 +183,7 @@ RSpec.describe "Admin::SitesController", type: :request do
       before { Site.multi_sites_enabled = true }
 
       it "destroys the site" do
-        site_to_delete = Site.create!(name: 'Delete Me', title: 'Delete Me', host: 'delete.example.com')
+        site_to_delete = Site.create!(name: "Delete Me", title: "Delete Me", host: "delete.example.com")
 
         expect {
           delete "/admin/sites/#{site_to_delete.id}"

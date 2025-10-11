@@ -8,7 +8,7 @@ RSpec.describe "AuthenticateUser cookies" do
 
     user = instance_double("User", id: 1, name: "Test User")
     allow(user).to receive(:anonymous?).and_return(false)
-    allow(user).to receive(:assign_token!).with('remember me').and_return('token')
+    allow(user).to receive(:assign_token!).with("remember me").and_return("token")
 
     allow(controller).to receive(:current_user).and_return(user)
 

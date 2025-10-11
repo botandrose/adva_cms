@@ -9,27 +9,27 @@ class Content < ActiveRecord::Base
     end
   end
 
-  acts_as_nested_set :scope => :section_id
+  acts_as_nested_set scope: :section_id
 
   acts_as_taggable
 
   include Adva::HasPermalink
-  has_permalink :title, :url_attribute => :permalink, :sync_url => true, :only_when_blank => true, :scope => :section_id
+  has_permalink :title, url_attribute: :permalink, sync_url: true, only_when_blank: true, scope: :section_id
 
 
   has_cells :body, :excerpt if respond_to?(:has_cells)
 
   belongs_to :site
-  belongs_to :section, :touch => true
+  belongs_to :section, touch: true
 
   include Adva::BelongsToAuthor
-  belongs_to_author :validate => true
+  belongs_to_author validate: true
 
-  has_many :asset_assignments # TODO :dependent => :delete_all?
-  has_many :assets, :through => :asset_assignments
+  has_many :asset_assignments # TODO dependent: :delete_all?
+  has_many :assets, through: :asset_assignments
   has_many :categorizations, -> { includes(:category) }, as: :categorizable, dependent: :destroy
-  has_many :categories, :through => :categorizations
-  has_many :activities, :as => :object
+  has_many :categories, through: :categorizations
+  has_many :activities, as: :object
 
   after_save do
     categories.each(&:touch)
@@ -38,7 +38,7 @@ class Content < ActiveRecord::Base
   before_validation :set_site
 
   scope :published, -> {
-    where(['contents.published_at IS NOT NULL AND contents.published_at <= ?', Time.zone.now])
+    where(["contents.published_at IS NOT NULL AND contents.published_at <= ?", Time.zone.now])
   }
 
   scope :drafts, -> {

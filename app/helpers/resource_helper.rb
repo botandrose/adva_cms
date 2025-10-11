@@ -5,7 +5,7 @@ module ResourceHelper
 
     namespace = resource_url_namespace(options)
     type = normalize_resource_type(action, type, resource)
-    options.reverse_merge!(:only_path => true)
+    options.reverse_merge!(only_path: true)
 
     args = resource_owners(resource) << options
     args.shift unless namespace.try(:to_sym) == :admin
@@ -55,7 +55,7 @@ module ResourceHelper
 
   def normalize_resource_type(action, type, resource)
     type ||= resource.is_a?(Symbol) ? resource : resource.class.name
-    type = 'section' if type.to_s.classify.constantize < Section
+    type = "section" if type.to_s.classify.constantize < Section
     type = type.to_s.tableize.gsub("/","_") if action == :index
     type = type.to_s.split("::").first == "Adva" ? type.to_s.underscore.gsub("/","_") : type.to_s.demodulize.underscore
     type
@@ -67,14 +67,14 @@ module ResourceHelper
 
   def current_controller_namespace
     path = respond_to?(:controller_path) ? controller_path : controller.controller_path
-    namespace = path.split('/')[0..-2].join('_')
+    namespace = path.split("/")[0..-2].join("_")
     namespace.present? ? namespace : nil
   end
 
   def resource_link_id(action, type, resource)
     id = [action, type]
     id << resource.id if resource.is_a?(ActiveRecord::Base) && !%i[index name].include?(action)
-    id.join('_')
+    id.join("_")
   end
 
   def resource_owners(resource)
@@ -94,10 +94,10 @@ module ResourceHelper
   def resource_url_method(namespace, action, type, options)
     method = [namespace, type].compact
 
-    method << (options.delete(:only_path) ? 'path' : 'url')
+    method << (options.delete(:only_path) ? "path" : "url")
     method.unshift(action) if [:new, :edit].include?(action.to_sym)
 
-    method.compact.join('_').gsub('/', '_')
+    method.compact.join("_").gsub("/", "_")
   end
 
   def normalize_resource_link_options(options, action, type, resource)
@@ -109,16 +109,16 @@ module ResourceHelper
   end
 
   def normalize_resource_link_text(text, action, type)
-    type = type.to_s.gsub('/', '_').pluralize
+    type = type.to_s.gsub("/", "_").pluralize
     text ||= action.capitalize
     text = t(text) if text.is_a?(Symbol)
     text
   end
 
   def resource_delete_options(type, options)
-    type = type.to_s.gsub('/', '_').pluralize
+    type = type.to_s.gsub("/", "_").pluralize
     message = options.delete(:confirm)
     message ||= "Are you sure you want to delete this #{type}?"
-    { :data => { :confirm => message }, :method => :delete }
+    { data: { confirm: message }, method: :delete }
   end
 end

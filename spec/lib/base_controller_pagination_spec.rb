@@ -8,7 +8,7 @@ RSpec.describe BaseController do
     expect(controller.send(:current_page)).to eq(1)
 
     controller.remove_instance_variable(:@page) rescue nil
-    allow(controller).to receive(:params).and_return({ page: 'abc' }.with_indifferent_access)
+    allow(controller).to receive(:params).and_return({ page: "abc" }.with_indifferent_access)
     expect(controller.send(:current_page)).to eq(1)
 
     controller.remove_instance_variable(:@page) rescue nil

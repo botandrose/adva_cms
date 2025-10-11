@@ -50,7 +50,7 @@ class Admin::BaseController < ApplicationController
     alias_method :set_menu, :menu
 
     def set_locale
-      params[:locale] =~ /^[\w]{2}$/ or raise 'invalid locale' if params[:locale]
+      params[:locale] =~ /^[\w]{2}$/ or raise "invalid locale" if params[:locale]
       I18n.locale = params[:locale] || I18n.default_locale
     end
 

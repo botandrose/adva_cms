@@ -8,5 +8,5 @@ if Site.count.zero?
   # keep a single site for simple host resolution in tests
 
   user = User.create!(first_name: "a user", email: "a-user@example.com", password: "AAbbcc1122!!", verified_at: Time.now)
-  Article.create!(site: site, section: page, title: "a page article", body: "body", author: user, published_at: Time.parse('2008-01-01 12:00:00'))
+  Article.create!(site: site, section: page, title: "a page article", body: "body", author: user, published_at: Time.parse("2008-01-01 12:00:00"))
 end

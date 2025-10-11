@@ -2,21 +2,21 @@ class Site < ActiveRecord::Base
   serialize :permissions, coder: YAML
   serialize :spam_options, coder: YAML
 
-  has_many :sections, :dependent => :destroy do
+  has_many :sections, dependent: :destroy do
     # FIXME can this be on the nested_set?
     def update_paths!
       paths = Hash[*roots.map { |r|
-        r.self_and_descendants.map { |n| [n.id, { 'path' => n.send(:build_path) }] } }.flatten]
+        r.self_and_descendants.map { |n| [n.id, { "path" => n.send(:build_path) }] } }.flatten]
       update paths.keys, paths.values
     end
   end
 
-  has_many :memberships, :dependent => :delete_all
-  has_many :users, :through => :memberships, :dependent => :destroy
+  has_many :memberships, dependent: :delete_all
+  has_many :users, through: :memberships, dependent: :destroy
   # Some deployments persist cached pages on disk only; guard the association
   # so missing model classes don't break basic admin flows.
   has_many :cached_pages, -> { order(updated_at: :desc) }, dependent: :destroy if defined?(CachedPage)
-  has_many :activities, :dependent => :destroy
+  has_many :activities, dependent: :destroy
 
   before_validation :downcase_host, :replace_host_spaces # c'mon, can't this be normalize_host or something?
   before_validation :populate_title
@@ -50,16 +50,16 @@ class Site < ActiveRecord::Base
   end
 
   def section_ids
-    types = Section.types.map { |type| "'#{type}'" }.join(', ')
+    types = Section.types.map { |type| "'#{type}'" }.join(", ")
     self.class.connection.select_values("SELECT id FROM contents WHERE type IN (#{types}) AND site_id = #{id}")
   end
 
   # def tag_counts
-  #   Content.tag_counts :conditions => "site_id = #{id}"
+  #   Content.tag_counts conditions: "site_id = #{id}"
   # end
 
   def perma_host
-    host.sub(':', '.')  # Needed to create valid directories in ms-win
+    host.sub(":", ".")  # Needed to create valid directories in ms-win
   end
 
   def grouped_activities
@@ -77,7 +77,7 @@ class Site < ActiveRecord::Base
     end
 
     def replace_host_spaces # err ... maybe name this a tad less implementation oriented?
-      self.host = host.to_s.gsub(/^\s+|\s+$/, '').gsub(/\s+/, '-')
+      self.host = host.to_s.gsub(/^\s+|\s+$/, "").gsub(/\s+/, "-")
     end
 
     def populate_title

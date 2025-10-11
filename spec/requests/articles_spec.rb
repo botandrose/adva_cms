@@ -1,11 +1,11 @@
 require "rails_helper"
 
 RSpec.describe "Articles", type: :request do
-  let!(:site) { Site.find_by_host('articles-test.com') || Site.create!(name: 'articles test', title: 'Articles Test Site', host: 'articles-test.com') }
-  let!(:section) { Page.create!(site: site, title: 'Blog', permalink: 'blog') }
-  let!(:user) { User.create!(first_name: 'Author', email: 'author@example.com', password: 'AAbbcc1122!!', verified_at: Time.now) }
-  let!(:admin) { User.create!(first_name: 'Admin', email: 'admin@example.com', password: 'AAbbcc1122!!', verified_at: Time.now, admin: true) }
-  let!(:category) { Category.create!(section: section, title: 'Tech') }
+  let!(:site) { Site.find_by_host("articles-test.com") || Site.create!(name: "articles test", title: "Articles Test Site", host: "articles-test.com") }
+  let!(:section) { Page.create!(site: site, title: "Blog", permalink: "blog") }
+  let!(:user) { User.create!(first_name: "Author", email: "author@example.com", password: "AAbbcc1122!!", verified_at: Time.now) }
+  let!(:admin) { User.create!(first_name: "Admin", email: "admin@example.com", password: "AAbbcc1122!!", verified_at: Time.now, admin: true) }
+  let!(:category) { Category.create!(section: section, title: "Tech") }
 
   before { host! site.host }
 
@@ -20,25 +20,25 @@ RSpec.describe "Articles", type: :request do
         Article.create!(
           site: site,
           section: section,
-          title: 'Published Article',
-          body: 'This is published content.',
+          title: "Published Article",
+          body: "This is published content.",
           author: user,
           published_at: 1.hour.ago,
-          permalink: 'published-article'
+          permalink: "published-article"
         )
       end
 
       it "shows the first article" do
         get "/"
         expect(response).to have_http_status(:ok)
-        expect(response.body).to include('Published Article')
-        expect(response.body).to include('This is published content.')
+        expect(response.body).to include("Published Article")
+        expect(response.body).to include("This is published content.")
       end
 
       it "responds successfully" do
         get "/"
         expect(response).to have_http_status(:ok)
-        expect(response.content_type).to include('text/html')
+        expect(response.content_type).to include("text/html")
       end
     end
 
@@ -50,11 +50,11 @@ RSpec.describe "Articles", type: :request do
       Article.create!(
         site: site,
         section: section,
-        title: 'Test Article',
-        body: 'Article content here.',
+        title: "Test Article",
+        body: "Article content here.",
         author: user,
         published_at: 1.hour.ago,
-        permalink: 'test-article'
+        permalink: "test-article"
       )
     end
 
@@ -71,7 +71,7 @@ RSpec.describe "Articles", type: :request do
       possible_urls.each do |url|
         get url
         if response.status == 200
-          expect(response.body).to include('Test Article')
+          expect(response.body).to include("Test Article")
           response_found = true
           break
         end
@@ -90,11 +90,11 @@ RSpec.describe "Articles", type: :request do
         Article.create!(
           site: site,
           section: section,
-          title: 'Draft Article',
-          body: 'Draft content.',
+          title: "Draft Article",
+          body: "Draft content.",
           author: user,
           published_at: nil,
-          permalink: 'draft-article'
+          permalink: "draft-article"
         )
       end
 
@@ -115,11 +115,11 @@ RSpec.describe "Articles", type: :request do
         Link.create!(
           site: site,
           section: section,
-          title: 'External Link',
-          body: 'http://example.com',
+          title: "External Link",
+          body: "http://example.com",
           author: user,
           published_at: 1.hour.ago,
-          permalink: 'external-link'
+          permalink: "external-link"
         )
       end
 
@@ -136,7 +136,7 @@ RSpec.describe "Articles", type: :request do
         possible_urls.each do |url|
           get url
           # Accept redirect to the link URL, or 404 if routing doesn't support links
-          if (response.status == 302 && response.location == 'http://example.com') ||
+          if (response.status == 302 && response.location == "http://example.com") ||
              response.status == 404 || response.status == 500
             handled_appropriately = true
             break
@@ -153,11 +153,11 @@ RSpec.describe "Articles", type: :request do
       article = Article.create!(
         site: site,
         section: section,
-        title: 'Tech Article',
-        body: 'Tech content.',
+        title: "Tech Article",
+        body: "Tech content.",
         author: user,
         published_at: 1.hour.ago,
-        permalink: 'tech-article'
+        permalink: "tech-article"
       )
       article.categories << category
       article
@@ -167,11 +167,11 @@ RSpec.describe "Articles", type: :request do
       Article.create!(
         site: site,
         section: section,
-        title: 'Other Article',
-        body: 'Other content.',
+        title: "Other Article",
+        body: "Other content.",
         author: user,
         published_at: 1.hour.ago,
-        permalink: 'other-article'
+        permalink: "other-article"
       )
     end
 
@@ -187,13 +187,13 @@ RSpec.describe "Articles", type: :request do
       article = Article.create!(
         site: site,
         section: section,
-        title: 'Tagged Article',
-        body: 'Tagged content.',
+        title: "Tagged Article",
+        body: "Tagged content.",
         author: user,
         published_at: 1.hour.ago,
-        permalink: 'tagged-article'
+        permalink: "tagged-article"
       )
-      article.tag_list = 'ruby, rails'
+      article.tag_list = "ruby, rails"
       article.save!
       article
     end
@@ -202,29 +202,29 @@ RSpec.describe "Articles", type: :request do
       Article.create!(
         site: site,
         section: section,
-        title: 'Untagged Article',
-        body: 'Untagged content.',
+        title: "Untagged Article",
+        body: "Untagged content.",
         author: user,
         published_at: 1.hour.ago,
-        permalink: 'untagged-article'
+        permalink: "untagged-article"
       )
     end
 
     it "filters articles by single tag" do
-      Tag.find_or_create_by!(name: 'ruby')
+      Tag.find_or_create_by!(name: "ruby")
       get "/?tags=ruby"
       expect(response).to have_http_status(:ok)
-      expect(response.body).to include('Tagged Article')
-      expect(response.body).not_to include('Untagged Article')
+      expect(response.body).to include("Tagged Article")
+      expect(response.body).not_to include("Untagged Article")
     end
 
     it "filters articles by multiple tags" do
-      Tag.find_or_create_by!(name: 'ruby')
-      Tag.find_or_create_by!(name: 'rails')
+      Tag.find_or_create_by!(name: "ruby")
+      Tag.find_or_create_by!(name: "rails")
       get "/?tags=ruby+rails"
       expect(response).to have_http_status(:ok)
-      expect(response.body).to include('Tagged Article')
-      expect(response.body).not_to include('Untagged Article')
+      expect(response.body).to include("Tagged Article")
+      expect(response.body).not_to include("Untagged Article")
     end
 
     it "handles non-existent tags" do
@@ -265,11 +265,11 @@ RSpec.describe "Articles", type: :request do
       Article.create!(
         site: site,
         section: section,
-        title: 'Cached Article',
-        body: 'Cached content.',
+        title: "Cached Article",
+        body: "Cached content.",
         author: user,
         published_at: 1.hour.ago,
-        permalink: 'cached-article'
+        permalink: "cached-article"
       )
     end
 
@@ -286,7 +286,7 @@ RSpec.describe "Articles", type: :request do
       possible_urls.each do |url|
         get url
         if response.status == 200
-          expect(response.headers['Cache-Control']).to include('public')
+          expect(response.headers["Cache-Control"]).to include("public")
           cache_test_passed = true
           break
         end
@@ -297,19 +297,19 @@ RSpec.describe "Articles", type: :request do
   end
 
   describe "current_resource helper" do
-    let!(:single_article_section) { Page.create!(site: site, title: 'Single Article Page', permalink: 'single', single_article_mode: true) }
-    let!(:multi_article_section) { Page.create!(site: site, title: 'Multi Article Page', permalink: 'multi', single_article_mode: false) }
+    let!(:single_article_section) { Page.create!(site: site, title: "Single Article Page", permalink: "single", single_article_mode: true) }
+    let!(:multi_article_section) { Page.create!(site: site, title: "Multi Article Page", permalink: "multi", single_article_mode: false) }
 
     context "with single article mode enabled" do
       let!(:article) do
         Article.create!(
           site: site,
           section: single_article_section,
-          title: 'Single Article',
-          body: 'Single content.',
+          title: "Single Article",
+          body: "Single content.",
           author: user,
           published_at: 1.hour.ago,
-          permalink: 'single-article'
+          permalink: "single-article"
         )
       end
 
@@ -337,7 +337,7 @@ RSpec.describe "Articles", type: :request do
 
       it "evaluates current_resource directly (single_article_mode)" do
         controller = ArticlesController.new
-        controller.request = ActionDispatch::Request.new('HTTP_HOST' => site.host)
+        controller.request = ActionDispatch::Request.new("HTTP_HOST" => site.host)
         controller.response = ActionDispatch::Response.new
         allow(controller).to receive(:section).and_return(single_article_section)
         expect(controller.send(:current_resource)).to eq(single_article_section)

@@ -1,8 +1,8 @@
 require "rails_helper"
 
 RSpec.describe "Password", type: :request do
-  let!(:site) { Site.find_by_host('site-with-pages.com') || Site.create!(name: 'site with pages', title: 'site with pages title', host: 'site-with-pages.com') }
-  let!(:user) { User.find_by_email('a-user@example.com') || User.create!(first_name: 'a user', email: 'a-user@example.com', password: 'AAbbcc1122!!', verified_at: Time.now) }
+  let!(:site) { Site.find_by_host("site-with-pages.com") || Site.create!(name: "site with pages", title: "site with pages title", host: "site-with-pages.com") }
+  let!(:user) { User.find_by_email("a-user@example.com") || User.create!(first_name: "a user", email: "a-user@example.com", password: "AAbbcc1122!!", verified_at: Time.now) }
 
   it "renders new" do
     host! site.host
@@ -19,7 +19,7 @@ RSpec.describe "Password", type: :request do
 
   it "create with unknown email re-renders new" do
     host! site.host
-    post "/password", params: { user: { email: 'nobody@example.com' } }
+    post "/password", params: { user: { email: "nobody@example.com" } }
     expect(response).to have_http_status(:ok)
     expect(response.body).to include('name="user[email]"')
   end
@@ -34,19 +34,19 @@ RSpec.describe "Password", type: :request do
 
   it "update changes password for logged in user" do
     host! site.host
-    post "/session", params: { user: { email: user.email, password: 'AAbbcc1122!!' } }
+    post "/session", params: { user: { email: user.email, password: "AAbbcc1122!!" } }
     expect(response).to be_redirect
 
-    put "/password", params: { user: { password: 'NewPass1122!!' } }
+    put "/password", params: { user: { password: "NewPass1122!!" } }
     expect(response).to redirect_to("/")
   end
 
   it "update with invalid password renders form again" do
     host! site.host
-    post "/session", params: { user: { email: user.email, password: 'AAbbcc1122!!' } }
+    post "/session", params: { user: { email: user.email, password: "AAbbcc1122!!" } }
     expect(response).to be_redirect
 
-    put "/password", params: { user: { password: 'weak' } }
+    put "/password", params: { user: { password: "weak" } }
     expect(response).to have_http_status(:ok)
     expect(response.body).to include('name="user[password]"')
   end
@@ -54,7 +54,7 @@ RSpec.describe "Password", type: :request do
   it "update without current user renders token form" do
     host! site.host
 
-    put "/password", params: { user: { password: 'NewPass1122!!' }, token: 'invalid' }
+    put "/password", params: { user: { password: "NewPass1122!!" }, token: "invalid" }
     expect(response).to have_http_status(:ok)
     expect(response.body).to include('name="token"')
   end
@@ -68,9 +68,9 @@ RSpec.describe "Password", type: :request do
 
   it "update triggers password updated event on success" do
     host! site.host
-    post "/session", params: { user: { email: user.email, password: 'AAbbcc1122!!' } }
+    post "/session", params: { user: { email: user.email, password: "AAbbcc1122!!" } }
 
-    put "/password", params: { user: { password: 'NewPass1122!!' } }
+    put "/password", params: { user: { password: "NewPass1122!!" } }
     expect(response).to redirect_to("/")
   end
 

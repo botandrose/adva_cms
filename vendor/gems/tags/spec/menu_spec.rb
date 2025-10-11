@@ -2,15 +2,15 @@ require 'spec_helper'
 
 module MenuTest
   class TopMenu < Menu::Group
-    define :id => 'top', :class => 'top' do |g|
-      breadcrumb :site, :content => '<a href="/path/to/site">Site</a>'
+    define id: 'top', class: 'top' do |g|
+      breadcrumb :site, content: '<a href="/path/to/site">Site</a>'
 
-      g.menu :left, :class => 'left' do |m|
-        m.item :sections, :url => '/path/to/sections'
+      g.menu :left, class: 'left' do |m|
+        m.item :sections, url: '/path/to/sections'
       end
 
-      g.menu :right, :class => 'right' do |m|
-        m.item :settings, :url => '/path/to/settings'
+      g.menu :right, class: 'right' do |m|
+        m.item :settings, url: '/path/to/settings'
       end
     end
   end
@@ -21,14 +21,14 @@ module MenuTest
       g.parent TopMenu.new.build.root[:'left.sections']
 
       g.menu :left do |m|
-        m.item :articles, :url => '/path/to/articles'
-        m.item :categories, :url => '/path/to/categories'
+        m.item :articles, url: '/path/to/articles'
+        m.item :categories, url: '/path/to/categories'
       end
 
       g.menu :right do |m|
         m.activates object.parent[:'left.articles']
-        m.item :new, :url => '/path/to/articles/new'
-        m.item :edit, :url => '/path/to/articles/edit'
+        m.item :new, url: '/path/to/articles/new'
+        m.item :edit, url: '/path/to/articles/edit'
       end
     end
   end
@@ -148,11 +148,11 @@ module MenuTest
     end
 
     it 'renders an a tag if url is set' do
-      assert_html Menu::Item.new('foo', :url => 'bar').render, 'li a[href="bar"]', 'foo'
+      assert_html Menu::Item.new('foo', url: 'bar').render, 'li a[href="bar"]', 'foo'
     end
 
     it 'uses a text option if given' do
-      item = Menu::Item.new('foo', :text => 'foo text')
+      item = Menu::Item.new('foo', text: 'foo text')
       assert_html item.render, 'span', 'foo text'
     end
   end
@@ -161,13 +161,13 @@ module MenuTest
     it 'renders a ul tag' do
       menu = Menu::Menu.new
       menu.children << Menu::Item.new('foo')
-      assert_html menu.render(:class => 'menu', :id => 'menu'), 'ul[id="menu"][class="menu"] li span', 'foo'
+      assert_html menu.render(class: 'menu', id: 'menu'), 'ul[id="menu"][class="menu"] li span', 'foo'
     end
 
     it 'renders id and class options' do
       menu = TopMenu.new.build
       assert_html menu.render, 'top_menu[id="top"][class="top"] ul[class="left"]'
-      assert_html menu.render(:id => 'top-2', :class => 'top-2'), 'top_menu[id="top-2"][class="top-2"] ul[class="left"]'
+      assert_html menu.render(id: 'top-2', class: 'top-2'), 'top_menu[id="top-2"][class="top-2"] ul[class="left"]'
     end
   end
 end

@@ -11,11 +11,11 @@ module TableBuilder
       @columns = []
       @collection_name = options.delete(:collection_name)
 
-      super(nil, options.reverse_merge(:id => collection_name, :class => "#{collection_name} list"))
-      
+      super(nil, options.reverse_merge(id: collection_name, class: "#{collection_name} list"))
+
       yield(self) if block_given?
     end
-    
+
     ['head', 'body', 'foot'].each do |name|
       class_eval <<-code
         def #{name}                                # def head
@@ -26,15 +26,15 @@ module TableBuilder
 
     def column(*names)
       options = names.last.is_a?(Hash) ? names.pop : {}
-      names.each do |name| 
+      names.each do |name|
         @columns << Column.new(self, name, options)
       end
     end
-    
+
     def empty(*args, &block)
       @empty = (args << block).compact
     end
-    
+
     def row(*args, &block)
       body.row(*args, &block)
     end
@@ -58,14 +58,14 @@ module TableBuilder
         end.html_safe
       end
     end
-    
+
     def render_empty
       @empty.insert(1, @empty.pop.call) if @empty.last.respond_to?(:call)
       content_tag(*@empty)
     end
 
     protected
-      
+
       def collection_attribute_names
         record = @collection.first
         names = record.respond_to?(:attribute_names) ? record.attribute_names : []

@@ -1,5 +1,5 @@
 class Article < Content
-  # default_scope :order => "#{self.table_name}.published_at DESC"
+  # default_scope order: "#{self.table_name}.published_at DESC"
 
   has_cells :body
 

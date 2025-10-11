@@ -1,8 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Membership, type: :model do
-  let(:site) { Site.create!(name: 'test', host: 'test.example.com') }
-  let(:user) { User.create!(first_name: 'John', email: 'john@example.com', password: 'AAbbcc1122!!') }
+  let(:site) { Site.create!(name: "test", host: "test.example.com") }
+  let(:user) { User.create!(first_name: "John", email: "john@example.com", password: "AAbbcc1122!!") }
 
   describe "associations" do
     it "belongs to site" do
@@ -24,7 +24,7 @@ RSpec.describe Membership, type: :model do
     end
 
     it "allows same user to have memberships in different sites" do
-      other_site = Site.create!(name: 'other', host: 'other.example.com')
+      other_site = Site.create!(name: "other", host: "other.example.com")
 
       membership1 = Membership.create!(site: site, user: user)
       membership2 = Membership.new(site: other_site, user: user)
@@ -34,7 +34,7 @@ RSpec.describe Membership, type: :model do
     end
 
     it "allows different users to have memberships in same site" do
-      other_user = User.create!(first_name: 'Jane', email: 'jane@example.com', password: 'AAbbcc1122!!')
+      other_user = User.create!(first_name: "Jane", email: "jane@example.com", password: "AAbbcc1122!!")
 
       membership1 = Membership.create!(site: site, user: user)
       membership2 = Membership.new(site: site, user: other_user)

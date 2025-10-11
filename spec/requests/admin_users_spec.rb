@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "Admin::Users", type: :request do
-  let!(:site) { Site.find_by_host('site-with-pages.com') || Site.create!(name: 'site with pages', title: 'site with pages title', host: 'site-with-pages.com') }
+  let!(:site) { Site.find_by_host("site-with-pages.com") || Site.create!(name: "site with pages", title: "site with pages title", host: "site-with-pages.com") }
 
   it "redirects anonymous users to login on index" do
     host! site.host
@@ -17,11 +17,11 @@ RSpec.describe "Admin::Users", type: :request do
 
     it "renders index and builds users list" do
       # ensure there is at least one site member and one admin in the system
-      site_member = User.create!(first_name: 'Site', email: 'site-member@example.com', password: 'AAbbcc1122!!', verified_at: Time.now)
+      site_member = User.create!(first_name: "Site", email: "site-member@example.com", password: "AAbbcc1122!!", verified_at: Time.now)
       site.memberships.create!(user: site_member)
 
       # an explicit admin record to populate User.admin scope
-      User.create!(first_name: 'Admin', email: 'another-admin@example.com', password: 'AAbbcc1122!!', verified_at: Time.now, admin: true)
+      User.create!(first_name: "Admin", email: "another-admin@example.com", password: "AAbbcc1122!!", verified_at: Time.now, admin: true)
 
       get admin_users_path
       expect(response).to have_http_status(:ok)

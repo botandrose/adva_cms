@@ -8,7 +8,7 @@ Content.class_eval do
     if params.has_key?(:year)
       params.merge self.full_permalink
     elsif params.has_key?(:permalink)
-      params.merge :permalink => self.permalink
+      params.merge permalink: self.permalink
     else
       params
     end

@@ -2,25 +2,25 @@ class User < ActiveRecord::Base
   acts_as_authenticated_user
 
   # TODO how do we work this in?
-  #  acts_as_authenticated_user :token_with => 'Authentication::SingleToken',
-  #                             :authenticate_with => nil
+  #  acts_as_authenticated_user token_with: 'Authentication::SingleToken',
+  #                             authenticate_with: nil
 
   scope :verified, -> { where.not(verified_at: nil) }
   scope :admin, -> { where(admin: true) }
 
-  has_many :memberships, :dependent => :delete_all
-  has_many :sites, :through => :memberships
+  has_many :memberships, dependent: :delete_all
+  has_many :sites, through: :memberships
 
   validates_presence_of     :first_name, :email
   validates_uniqueness_of   :email, case_sensitive: false
-  validates_length_of       :first_name, :within => 1..40
-  validates_length_of       :last_name, :allow_nil => true, :within => 0..40
-  validates_format_of       :email, :allow_nil => true,
-    :with => /(\A(\s*)\Z)|(\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z)/i
+  validates_length_of       :first_name, within: 1..40
+  validates_length_of       :last_name, allow_nil: true, within: 0..40
+  validates_format_of       :email, allow_nil: true,
+    with: /(\A(\s*)\Z)|(\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z)/i
 
-  validates_presence_of     :password,                         :if => :password_required?
-  validates_length_of       :password, :within => 12..128,     :if => :password_required?
-  validate                  :password_complexity,              :if => :password_required?
+  validates_presence_of     :password,                         if: :password_required?
+  validates_length_of       :password, within: 12..128,     if: :password_required?
+  validate                  :password_complexity,              if: :password_required?
 
   class << self
     def authenticate(credentials)
@@ -92,11 +92,11 @@ class User < ActiveRecord::Base
   def homepage
     return nil unless self[:homepage]
 
-    self[:homepage][0..6] == 'http://' ? self[:homepage] : 'http://' + self[:homepage]
+    self[:homepage][0..6] == "http://" ? self[:homepage] : "http://" + self[:homepage]
   end
 
   def first_name_from_email
-    self.first_name.blank? && self.email ? self.email.split('@').first : self.first_name
+    self.first_name.blank? && self.email ? self.email.split("@").first : self.first_name
   end
 
   protected
@@ -115,7 +115,7 @@ class User < ActiveRecord::Base
       character_types += 1 if password.match?(/[!@#$%^&*()_+\-=\[\]{}|;:,.<>?]/) # symbols
 
       if character_types < 3
-        errors.add(:password, 'must contain at least 3 of the following: lowercase letters, uppercase letters, numbers, or special characters')
+        errors.add(:password, "must contain at least 3 of the following: lowercase letters, uppercase letters, numbers, or special characters")
       end
     end
 end

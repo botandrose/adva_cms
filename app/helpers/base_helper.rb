@@ -1,10 +1,10 @@
 module BaseHelper
   def column(&block)
-    content_tag(:div, :class => 'col', &block)
+    content_tag(:div, class: "col", &block)
   end
 
   def buttons(&block)
-    content_tag(:p, :class => 'buttons', &block)
+    content_tag(:p, class: "buttons", &block)
   end
 
   # does exactly the same as the form_for helper does, but splits off the
@@ -12,9 +12,9 @@ module BaseHelper
   def split_form_for(*args, &block)
     # for some weird reasons Passenger and Mongrel behave differently when using Rails' capture method
     # with_output_buffer -> works, so we use it for now
-    lines = (form_for(*args, &block) || '').split("\n")
+    lines = (form_for(*args, &block) || "").split("\n")
     form_head = lines.shift
-    content_for :form, (form_head || '').html_safe
+    content_for :form, (form_head || "").html_safe
     lines.pop
 
     lines.join("\n").html_safe
@@ -27,7 +27,7 @@ module BaseHelper
     options[:type]   ||= :time
     # yuck ... use the localized_dates plugin as soon as we're on Rails 2.2?
     # formatted_datetime = options[:format].is_a?(Symbol) ? datetime.clone.in_time_zone.to_s(options[:format]) : datetime.clone.in_time_zone.strftime(options[:format])
-    formatted_datetime = l(datetime.in_time_zone.send(options[:type].to_sym == :time ? :to_time : :to_date), :format => options[:format])
+    formatted_datetime = l(datetime.in_time_zone.send(options[:type].to_sym == :time ? :to_time : :to_date), format: options[:format])
 
     %{<abbr class="datetime" title="#{datetime.utc.xmlschema}">#{formatted_datetime}</abbr>}.html_safe
   end
@@ -35,7 +35,7 @@ module BaseHelper
   def filter_options
     FilteredColumn.filters.keys.inject([]) do |arr, key|
       arr << [FilteredColumn.filters[key].filter_name, key.to_s]
-    end.unshift ["Plain HTML", '']
+    end.unshift ["Plain HTML", ""]
   end
 
   def author_options(users)

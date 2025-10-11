@@ -5,7 +5,7 @@ ActionController::Base.class_eval do
 
       case returning = options.delete(:return)
       when true, :here
-        options.reverse_merge! :return_to => params[:return_to] || request.request_uri
+        options.reverse_merge! return_to: params[:return_to] || request.request_uri
       end
       super(options)
     end

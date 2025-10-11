@@ -2,8 +2,8 @@ module ActivitiesHelper
   def render_activities(activities, recent = false)
     if activities.present?
       html = activities.collect do |activity|
-        render :partial => "admin/activities/#{activity.object_type.downcase}",
-               :locals => { :activity => activity, :recent => recent }
+        render partial: "admin/activities/#{activity.object_type.downcase}",
+               locals: { activity: activity, recent: recent }
       end.join
     else
       html = %(<li class="empty shade">Nothing happened.</li>)
@@ -12,7 +12,7 @@ module ActivitiesHelper
   end
 
   def activity_css_classes(activity)
-    type = activity.object_attributes['type'] || activity.object_type
+    type = activity.object_attributes["type"] || activity.object_type
     "#{type}_#{activity.all_actions.last}".downcase
     # activity.all_actions.collect {|action| "#{type}-#{action}".downcase }.uniq * ' '
   end
@@ -39,7 +39,7 @@ module ActivitiesHelper
     if activity.author.registered?
       link_to activity.author_name, admin_user_path(activity.author)
     else
-      activity.author_link(:include_email => true)
+      activity.author_link(include_email: true)
     end
   end
 end

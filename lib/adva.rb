@@ -33,7 +33,7 @@ module Adva
     end
 
     initializer "adva_user.init" do
-      Adva::Event.observers << 'PasswordMailer'
+      Adva::Event.observers << "PasswordMailer"
     end
   end
 end

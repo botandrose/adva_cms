@@ -4,7 +4,7 @@ module Authentication
   # Implements a token with expiration that is stored on the model
   # being authenticated. This is designed to implement the common
   # practice of having a token in the URL that will automatically
-  # authenticate the user. 
+  # authenticate the user.
   #
   # The model should implement the fields "token_key" (a 40 character
   # field) and "token_expiration" (a datetime field). If they are not

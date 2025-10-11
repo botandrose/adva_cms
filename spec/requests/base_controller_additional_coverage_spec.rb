@@ -1,10 +1,10 @@
 require "rails_helper"
 
 RSpec.describe "BaseController Additional Coverage", type: :request do
-  let!(:site) { Site.create!(name: 'coverage test', title: 'Coverage Test Site', host: 'coverage-test.com', timezone: 'America/New_York') }
-  let!(:section) { Page.create!(site: site, title: 'Test Section', permalink: 'test-section', published_at: 1.hour.ago) }
-  let!(:user) { User.create!(first_name: 'Test', email: 'test@example.com', password: 'AAbbcc1122!!', verified_at: Time.now) }
-  let!(:admin) { User.create!(first_name: 'Admin', email: 'admin@example.com', password: 'AAbbcc1122!!', verified_at: Time.now, admin: true) }
+  let!(:site) { Site.create!(name: "coverage test", title: "Coverage Test Site", host: "coverage-test.com", timezone: "America/New_York") }
+  let!(:section) { Page.create!(site: site, title: "Test Section", permalink: "test-section", published_at: 1.hour.ago) }
+  let!(:user) { User.create!(first_name: "Test", email: "test@example.com", password: "AAbbcc1122!!", verified_at: Time.now) }
+  let!(:admin) { User.create!(first_name: "Admin", email: "admin@example.com", password: "AAbbcc1122!!", verified_at: Time.now, admin: true) }
 
   before { host! site.host }
 
@@ -12,7 +12,7 @@ RSpec.describe "BaseController Additional Coverage", type: :request do
     let(:controller) { BaseController.new }
 
     before do
-      controller.request = ActionDispatch::Request.new('HTTP_HOST' => site.host)
+      controller.request = ActionDispatch::Request.new("HTTP_HOST" => site.host)
       controller.response = ActionDispatch::Response.new
       allow(controller).to receive(:site).and_return(site)
     end
@@ -32,11 +32,11 @@ RSpec.describe "BaseController Additional Coverage", type: :request do
         draft_article = Article.create!(
           site: site,
           section: section,
-          title: 'Draft',
-          body: 'Draft content',
+          title: "Draft",
+          body: "Draft content",
           author: user,
           published_at: nil,
-          permalink: 'draft'
+          permalink: "draft"
         )
         controller.instance_variable_set(:@article, draft_article)
         expect(controller.send(:skip_caching?)).to be_truthy
@@ -46,11 +46,11 @@ RSpec.describe "BaseController Additional Coverage", type: :request do
         published_article = Article.create!(
           site: site,
           section: section,
-          title: 'Published',
-          body: 'Published content',
+          title: "Published",
+          body: "Published content",
           author: user,
           published_at: 1.hour.ago,
-          permalink: 'published'
+          permalink: "published"
         )
         controller.instance_variable_set(:@article, published_article)
         expect(controller.send(:skip_caching?)).to be_falsy
@@ -74,7 +74,7 @@ RSpec.describe "BaseController Additional Coverage", type: :request do
     let(:controller) { BaseController.new }
 
     before do
-      controller.request = ActionDispatch::Request.new('HTTP_HOST' => site.host)
+      controller.request = ActionDispatch::Request.new("HTTP_HOST" => site.host)
       controller.response = ActionDispatch::Response.new
       allow(controller).to receive(:site).and_return(site)
     end
@@ -83,11 +83,11 @@ RSpec.describe "BaseController Additional Coverage", type: :request do
       article = Article.create!(
         site: site,
         section: section,
-        title: 'Article',
-        body: 'Content',
+        title: "Article",
+        body: "Content",
         author: user,
         published_at: 1.hour.ago,
-        permalink: 'article'
+        permalink: "article"
       )
       controller.instance_variable_set(:@article, article)
       controller.instance_variable_set(:@section, section)
@@ -123,10 +123,10 @@ RSpec.describe "BaseController Additional Coverage", type: :request do
     let(:controller) { BaseController.new }
 
     before do
-      controller.request = ActionDispatch::Request.new('HTTP_HOST' => site.host, 'REQUEST_URI' => '/test')
+      controller.request = ActionDispatch::Request.new("HTTP_HOST" => site.host, "REQUEST_URI" => "/test")
       controller.response = ActionDispatch::Response.new
       allow(controller).to receive(:site).and_return(site)
-      allow(controller).to receive(:login_url).and_return('/login')
+      allow(controller).to receive(:login_url).and_return("/login")
 
       # Create the mock class if it doesn't exist
       unless defined?(ActionController::RoleRequired)
@@ -157,25 +157,25 @@ RSpec.describe "BaseController Additional Coverage", type: :request do
 
     before do
       controller.request = ActionDispatch::Request.new(
-        'HTTP_HOST' => site.host,
-        'REQUEST_URI' => '/test-path',
-        'REQUEST_METHOD' => 'GET'
+        "HTTP_HOST" => site.host,
+        "REQUEST_URI" => "/test-path",
+        "REQUEST_METHOD" => "GET"
       )
       controller.response = ActionDispatch::Response.new
-      allow(controller).to receive(:login_url).and_return('/login')
+      allow(controller).to receive(:login_url).and_return("/login")
       allow(controller).to receive(:redirect_to)
     end
 
     it "redirects to login with return_to parameter" do
       controller.send(:redirect_to_login)
 
-      expect(controller).to have_received(:redirect_to).with('/login', notice: nil)
+      expect(controller).to have_received(:redirect_to).with("/login", notice: nil)
     end
 
     it "redirects to login with notice" do
       controller.send(:redirect_to_login, "Please log in")
 
-      expect(controller).to have_received(:redirect_to).with('/login', notice: "Please log in")
+      expect(controller).to have_received(:redirect_to).with("/login", notice: "Please log in")
     end
   end
 
@@ -183,7 +183,7 @@ RSpec.describe "BaseController Additional Coverage", type: :request do
     let(:controller) { BaseController.new }
 
     before do
-      controller.request = ActionDispatch::Request.new('HTTP_HOST' => site.host)
+      controller.request = ActionDispatch::Request.new("HTTP_HOST" => site.host)
       controller.response = ActionDispatch::Response.new
       allow(controller).to receive(:site).and_return(site)
     end
@@ -207,32 +207,32 @@ RSpec.describe "BaseController Additional Coverage", type: :request do
     let(:controller) { BaseController.new }
 
     before do
-      controller.request = ActionDispatch::Request.new('HTTP_HOST' => site.host)
+      controller.request = ActionDispatch::Request.new("HTTP_HOST" => site.host)
       controller.response = ActionDispatch::Response.new
       allow(controller).to receive(:site).and_return(site)
     end
 
     it "handles string page parameter" do
-      allow(controller).to receive(:params).and_return({ page: '5' })
+      allow(controller).to receive(:params).and_return({ page: "5" })
 
       expect(controller.send(:current_page)).to eq(5)
     end
 
     it "handles non-numeric page parameter" do
-      allow(controller).to receive(:params).and_return({ page: 'abc' })
+      allow(controller).to receive(:params).and_return({ page: "abc" })
 
       expect(controller.send(:current_page)).to eq(1)
     end
 
     it "handles negative page parameter" do
-      allow(controller).to receive(:params).and_return({ page: '-1' })
+      allow(controller).to receive(:params).and_return({ page: "-1" })
 
       # Based on the actual implementation, negative values pass through
       expect(controller.send(:current_page)).to eq(-1)
     end
 
     it "caches the page value" do
-      allow(controller).to receive(:params).and_return({ page: '3' })
+      allow(controller).to receive(:params).and_return({ page: "3" })
 
       # First call
       first_result = controller.send(:current_page)
@@ -249,7 +249,7 @@ RSpec.describe "BaseController Additional Coverage", type: :request do
     let(:controller) { BaseController.new }
 
     before do
-      controller.request = ActionDispatch::Request.new('HTTP_HOST' => site.host)
+      controller.request = ActionDispatch::Request.new("HTTP_HOST" => site.host)
       controller.response = ActionDispatch::Response.new
     end
 
@@ -267,7 +267,7 @@ RSpec.describe "BaseController Additional Coverage", type: :request do
 
       controller.send(:set_timezone)
 
-      expect(Time.zone.name).to eq('America/New_York')
+      expect(Time.zone.name).to eq("America/New_York")
     end
   end
 
@@ -275,7 +275,7 @@ RSpec.describe "BaseController Additional Coverage", type: :request do
     let(:controller) { BaseController.new }
 
     before do
-      controller.request = ActionDispatch::Request.new('HTTP_HOST' => site.host)
+      controller.request = ActionDispatch::Request.new("HTTP_HOST" => site.host)
       controller.response = ActionDispatch::Response.new
       allow(controller).to receive(:site).and_return(site)
     end

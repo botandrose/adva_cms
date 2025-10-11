@@ -35,7 +35,7 @@ module TableBuilder
     end
 
     it 'handles column html options' do
-      head = build_table(build_column('foo', :class => 'foo')).head
+      head = build_table(build_column('foo', class: 'foo')).head
       assert_html head.render, 'th[scope=col]', 'foo'
     end
 
@@ -47,7 +47,7 @@ module TableBuilder
 
     it 'handles head with total row' do
       head = build_table.head
-      head.row { |r| r.cell "foo", :colspan => :all }
+      head.row { |r| r.cell "foo", colspan: :all }
       assert_html head.render, 'thead tr th[colspan=2]', 'foo'
     end
   end
@@ -66,7 +66,7 @@ module TableBuilder
 
     it 'handles cell html options' do
       body = build_table.body
-      body.row { |row, record| row.cell(record, :class => 'baz') }
+      body.row { |row, record| row.cell(record, class: 'baz') }
       assert_html body.render, 'td.baz', 'foo'
     end
 
@@ -140,7 +140,7 @@ module TableBuilder
 
     it 'inherits column html class to tbody cells' do
       table = Table.new(nil, %w(a)) do |table|
-        table.column 'a', :class => 'foo'
+        table.column 'a', class: 'foo'
         table.row { |row, record, index| row.cell 'bar' }
       end
       assert_html table.render, 'tbody tr td.foo', 'bar'
@@ -208,10 +208,10 @@ module TableBuilder
     before do
       articles = [Record.new(1, 'foo'), Record.new(2, 'bar')]
       templates_path = File.expand_path('support/fixtures/templates', __dir__)
-      @view = TestView.new(templates_path, { :articles => articles })
+      @view = TestView.new(templates_path, { articles: articles })
       TableBuilder.options[:i18n_scope] = :test
       I18n.backend.store_translations(
-        :en, :test => { :'table_builder_records' => { :columns => { :id => 'ID', :title => 'Title' } } }
+        :en, test: { :'table_builder_records' => { columns: { id: 'ID', title: 'Title' } } }
       )
     end
 
@@ -286,7 +286,7 @@ module TableBuilder
 
     it 'renders all with empty collection' do
       templates_path = File.expand_path('support/fixtures/templates', __dir__)
-      view = TestView.new(templates_path, { :articles => [] })
+      view = TestView.new(templates_path, { articles: [] })
       html = view.render(file: 'table_all')
       assert_html html, 'p[class=empty]', 'no records!'
     end

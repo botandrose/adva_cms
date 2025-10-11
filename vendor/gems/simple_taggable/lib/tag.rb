@@ -1,6 +1,6 @@
 class Tag < ActiveRecord::Base
   has_many :taggings
-  has_many :taggables, :through => :taggings, :source_type => "Content"
+  has_many :taggables, through: :taggings, source_type: "Content"
 
   before_validation do
     self.name = name.to_s.downcase.strip if attribute_present?('name') || !name.nil?
@@ -11,7 +11,7 @@ class Tag < ActiveRecord::Base
 
   cattr_accessor :destroy_unused
   self.destroy_unused = true
-  
+
   class << self
     def find_or_create_by_name(name)
       normalized = name.to_s.downcase.strip

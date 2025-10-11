@@ -113,7 +113,7 @@ module Adva
       # If we cannot get the current user store the requested page
       # and send them to the login page.
       if current_user.anonymous?
-        redirect_to login_url(:return_to => request.url) and false
+        redirect_to login_url(return_to: request.url) and false
       end
     end
 
@@ -129,8 +129,8 @@ module Adva
     end
 
     def remember_me!
-      token = current_user.assign_token!('remember me')
-      cookies[:remember_me] = { :value => "#{current_user.id};#{token}", :expires => 10.years.from_now }
+      token = current_user.assign_token!("remember me")
+      cookies[:remember_me] = { value: "#{current_user.id};#{token}", expires: 10.years.from_now }
     end
 
     def set_user_cookie!(user = current_user)
@@ -178,7 +178,7 @@ module Adva
       return nil if token.blank?
       return nil unless token =~ /\;/
 
-      uid, token = token.split ';'
+      uid, token = token.split ";"
       if object = klass.find_by_id(uid)
         return object if object.authenticate(token)
       end

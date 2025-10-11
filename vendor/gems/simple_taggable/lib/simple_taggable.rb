@@ -18,7 +18,7 @@ module ActiveRecord
           extend ActiveRecord::Acts::Taggable::ClassMethods
 
           has_many :taggings, -> { includes(:tag) }, as: :taggable, dependent: :destroy
-          has_many :tags, :through => :taggings
+          has_many :tags, through: :taggings
 
           before_save :cache_tag_list
           after_save :save_tags
@@ -56,10 +56,10 @@ module ActiveRecord
           group_by  = "tags.id, tags.name HAVING count(*) > 0"
           group_by << " AND #{having}" unless having.blank?
 
-          options.merge! :select     => "tags.*, COUNT(*) AS count",
-                         :conditions => conditions.compact.join(' AND '),
-                         :joins      => joins.compact.join(' '),
-                         :group      => group_by
+          options.merge! select: "tags.*, COUNT(*) AS count",
+                         conditions: conditions.compact.join(' AND '),
+                         joins: joins.compact.join(' '),
+                         group: group_by
 
           Tag.select(options[:select])
             .where(options[:conditions])

@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "Session", type: :request do
-  let!(:site) { Site.find_by_host('site-with-pages.com') || Site.create!(name: 'site with pages', title: 'site with pages title', host: 'site-with-pages.com') }
+  let!(:site) { Site.find_by_host("site-with-pages.com") || Site.create!(name: "site with pages", title: "site with pages title", host: "site-with-pages.com") }
 
   describe "GET /login" do
     it "renders the login form" do
@@ -14,7 +14,7 @@ RSpec.describe "Session", type: :request do
   end
 
   describe "POST /session" do
-    let!(:user) { User.find_by_email('a-user@example.com') || User.create!(first_name: 'a user', email: 'a-user@example.com', password: 'AAbbcc1122!!', verified_at: Time.now) }
+    let!(:user) { User.find_by_email("a-user@example.com") || User.create!(first_name: "a user", email: "a-user@example.com", password: "AAbbcc1122!!", verified_at: Time.now) }
 
     it "fails with wrong credentials" do
       host! site.host
@@ -36,51 +36,51 @@ RSpec.describe "Session", type: :request do
 
     it "succeeds with valid credentials" do
       host! site.host
-      post "/session", params: { user: { email: user.email, password: 'AAbbcc1122!!' }, return_to: '/' }
+      post "/session", params: { user: { email: user.email, password: "AAbbcc1122!!" }, return_to: "/" }
       expect(response).to redirect_to("/")
     end
 
     it "redirects to default path when no return_to specified" do
       host! site.host
-      post "/session", params: { user: { email: user.email, password: 'AAbbcc1122!!' } }
+      post "/session", params: { user: { email: user.email, password: "AAbbcc1122!!" } }
       expect(response).to redirect_to("/")
     end
 
     it "redirects to return_to path when specified" do
       host! site.host
-      post "/session", params: { user: { email: user.email, password: 'AAbbcc1122!!' }, return_to: '/special-page' }
+      post "/session", params: { user: { email: user.email, password: "AAbbcc1122!!" }, return_to: "/special-page" }
       expect(response).to redirect_to("/special-page")
     end
 
     it "sets remember me when requested" do
       host! site.host
-      post "/session", params: { user: { email: user.email, password: 'AAbbcc1122!!', remember_me: '1' } }
+      post "/session", params: { user: { email: user.email, password: "AAbbcc1122!!", remember_me: "1" } }
       expect(response).to redirect_to("/")
-      expect(response.cookies['remember_me']).to be_present
+      expect(response.cookies["remember_me"]).to be_present
     end
 
     it "does not set remember me when not requested" do
       host! site.host
-      post "/session", params: { user: { email: user.email, password: 'AAbbcc1122!!' } }
+      post "/session", params: { user: { email: user.email, password: "AAbbcc1122!!" } }
       expect(response).to redirect_to("/")
-      expect(response.cookies['remember_me']).to be_blank
+      expect(response.cookies["remember_me"]).to be_blank
     end
 
     it "preserves remember_me value on failed login" do
       host! site.host
-      post "/session", params: { user: { email: user.email, password: 'wrong', remember_me: '1' } }
+      post "/session", params: { user: { email: user.email, password: "wrong", remember_me: "1" } }
       expect(response).to have_http_status(:ok)
-      expect(response.body).to include('checked')
+      expect(response.body).to include("checked")
     end
   end
 
   describe "DELETE /session" do
-    let!(:user) { User.find_by_email('a-user@example.com') || User.create!(first_name: 'a user', email: 'a-user@example.com', password: 'AAbbcc1122!!', verified_at: Time.now) }
+    let!(:user) { User.find_by_email("a-user@example.com") || User.create!(first_name: "a user", email: "a-user@example.com", password: "AAbbcc1122!!", verified_at: Time.now) }
 
     it "logs out the user" do
       host! site.host
       # First log in
-      post "/session", params: { user: { email: user.email, password: 'AAbbcc1122!!' } }
+      post "/session", params: { user: { email: user.email, password: "AAbbcc1122!!" } }
       expect(response).to redirect_to("/")
 
       # Then log out

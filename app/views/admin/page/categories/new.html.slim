@@ -7,7 +7,7 @@ h2 New Category
 
     - unless @section.categories.size < 2
       .col
-        = f.select :parent_id, @section.categories.collect {|p| [p.title, p.id] unless p == @category }.compact, { :include_blank => true, :label => true }
+        = f.select :parent_id, @section.categories.collect {|p| [p.title, p.id] unless p == @category }.compact, { include_blank: true, label: true }
         span.hint for="category_parent_id"
           | Choosing a parent for your section will nest this section under the chosen parent. Leave empty if you want to create this section as a root section.
 

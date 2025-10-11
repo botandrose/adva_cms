@@ -41,7 +41,7 @@ module TableTestHelper
   end
 
   def build_column(name, options = {})
-    OpenStruct.new(:name => name, :options => options)
+    OpenStruct.new(name: name, options: options)
   end
 
   def build_body_row
