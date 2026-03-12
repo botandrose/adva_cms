@@ -138,6 +138,8 @@ RSpec.describe Activity, type: :model do
 
   describe ".find_coinciding" do
     before do
+      article # trigger lazy creation
+      Activity.delete_all
       # Create activities for the same object at different times
       Activity.create!(site: site, section: section, object: article, author: user, created_at: 1.hour.ago)
       Activity.create!(site: site, section: section, object: article, author: user, created_at: 30.minutes.ago)
@@ -152,6 +154,8 @@ RSpec.describe Activity, type: :model do
 
   describe ".find_coinciding_grouped_by_dates" do
     it "groups activities by given dates and appends the remainder" do
+      article # trigger lazy creation
+      Activity.delete_all
       base = Time.zone.parse("2024-01-03 10:00:00")
       a_today = Activity.create!(site: site, section: section, object: article, author: user, created_at: base)
       a_yesterday = Activity.create!(site: site, section: section, object: article, author: user, created_at: base - 1.day)

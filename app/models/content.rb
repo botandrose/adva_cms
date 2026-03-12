@@ -35,6 +35,10 @@ class Content < ActiveRecord::Base
     categories.each(&:touch)
   end
 
+  before_save :prepare_activity
+  after_save :log_activity
+  after_destroy :log_destroy_activity
+
   before_validation :set_site
 
   scope :published, -> {
@@ -148,6 +152,54 @@ class Content < ActiveRecord::Base
 
     def set_site
       self.site_id = section.site_id if section
+    end
+
+  private
+
+    def activity_actions
+      actions = []
+      if new_record?
+        actions << "created"
+      else
+        actions << "revised" if changed?
+        if published_at_changed?
+          actions << (published? ? "published" : "unpublished")
+        end
+      end
+      actions
+    end
+
+    def activity_object_attributes
+      { "title" => title, "type" => self.class.name }
+    end
+
+    def prepare_activity
+      actions = activity_actions
+      @pending_activity = actions.any? ? { actions: actions, object_attributes: activity_object_attributes } : nil
+    end
+
+    def log_activity
+      return unless @pending_activity
+      Activity.create!(
+        site: site,
+        section: section,
+        object: self,
+        author: (author if respond_to?(:author)),
+        actions: @pending_activity[:actions],
+        object_attributes: @pending_activity[:object_attributes],
+      )
+      @pending_activity = nil
+    end
+
+    def log_destroy_activity
+      Activity.create!(
+        site: site,
+        section: section,
+        object: self,
+        author: (author if respond_to?(:author)),
+        actions: ["deleted"],
+        object_attributes: activity_object_attributes,
+      )
     end
 end
 
