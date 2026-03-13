@@ -7,17 +7,15 @@ module BaseHelper
     content_tag(:p, class: "buttons", &block)
   end
 
-  # does exactly the same as the form_for helper does, but splits off the
-  # form head tag and captures it to the content_for :form collector
-  def split_form_for(*args, &block)
-    # for some weird reasons Passenger and Mongrel behave differently when using Rails' capture method
-    # with_output_buffer -> works, so we use it for now
-    lines = (form_for(*args, &block) || "").split("\n")
-    form_head = lines.shift
-    content_for :form, (form_head || "").html_safe
-    lines.pop
-
-    lines.join("\n").html_safe
+  def split_form_for(record, options = {}, &block)
+    html_options = options.delete(:html) || {}
+    url = options.delete(:url) || polymorphic_path(record)
+    as = options.delete(:as)
+    method = html_options.delete(:method) || (record.respond_to?(:persisted?) && record.persisted? ? :patch : :post)
+    multipart = html_options.delete(:multipart)
+    html_options[:enctype] = "multipart/form-data" if multipart
+    content_for :form, form_tag(url, html_options.merge(method: method)).html_safe
+    fields_for(as || record, record, options, &block)
   end
 
   def datetime_with_microformat(datetime, options={})

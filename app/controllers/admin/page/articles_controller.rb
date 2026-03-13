@@ -101,7 +101,11 @@ class Admin::Page::ArticlesController < Admin::BaseController
 
     def article_params
       return {} unless params[:article]
-      params.require(:article).permit(:title, :body, :author_id, :published_at, :draft, :excerpt, :filter, :tag_list, :updated_at, :permalink)
+      params.require(:article).permit(*permitted_article_params)
+    end
+
+    def permitted_article_params
+      [:title, :body, :author_id, :published_at, :draft, :excerpt, :filter, :tag_list, :updated_at, :permalink]
     end
 
 end

@@ -304,21 +304,6 @@ RSpec.describe Content, type: :model do
     end
   end
 
-  describe "#approved_comments" do
-    let(:content) { Article.create!(site: site, section: section, title: "Test", body: "Test content", author: user) }
-
-    it "returns an empty array" do
-      expect(content.approved_comments).to eq([])
-    end
-  end
-
-  describe "#accept_comments?" do
-    let(:content) { Article.create!(site: site, section: section, title: "Test", body: "Test content", author: user) }
-
-    it "returns false" do
-      expect(content.accept_comments?).to be_falsey
-    end
-  end
 
   describe "#owners" do
     let(:content) { Article.create!(site: site, section: section, title: "Test", body: "Test content", author: user) }

@@ -74,7 +74,7 @@ class Admin::SectionsController < Admin::BaseController
 
     def section_params
       return {} unless params[:section]
-      params.require(:section).permit(:title, :permalink, :type)
+      params.require(:section).permit(:title, :permalink, :type, :published, :hidden_on_global_nav, :single_article_mode, :parent_id)
     end
 
     def normalize_params(hash = nil)

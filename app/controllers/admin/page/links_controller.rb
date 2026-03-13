@@ -58,6 +58,6 @@ class Admin::Page::LinksController < Admin::BaseController
 
     def link_params
       return {} unless params[:link]
-      params.require(:link).permit(:title, :body, :author_id, :permalink)
+      params.require(:link).permit(:title, :body, :author_id, :permalink, :published_at, :draft, :tag_list)
     end
 end

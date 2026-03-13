@@ -56,29 +56,13 @@ RSpec.describe BaseHelper, type: :helper do
   end
 
   describe "#split_form_for" do
-    it "splits form and captures head to content_for" do
-      helper.define_singleton_method(:form_for) { |*args, &block| "<form>\ncontent\n</form>" }
-      helper.define_singleton_method(:content_for) { |*args| }
+    it "stores form tag in content_for :form and renders fields" do
+      stored_form_tag = nil
+      helper.define_singleton_method(:content_for) { |name, content = nil| stored_form_tag = content if name == :form }
 
-      result = helper.split_form_for(user) { "form content" }
-      # Just verify it doesn't crash and returns reasonable output
-      expect(result).to be_a(String)
-    end
-
-    it "handles empty form output" do
-      helper.define_singleton_method(:form_for) { |*args, &block| "" }
-      helper.define_singleton_method(:content_for) { |*args| }
-
-      result = helper.split_form_for(user) { "form content" }
-      expect(result).to eq("")
-    end
-
-    it "handles nil form output" do
-      helper.define_singleton_method(:form_for) { |*args, &block| nil }
-      helper.define_singleton_method(:content_for) { |*args| }
-
-      result = helper.split_form_for(user) { "form content" }
-      expect(result).to eq("")
+      result = helper.split_form_for(user, url: "/users/1", html: {method: :put}) { |f| "" }
+      expect(stored_form_tag).to include("<form")
+      expect(stored_form_tag).to include("/users/1")
     end
   end
 

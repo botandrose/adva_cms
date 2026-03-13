@@ -1,11 +1,11 @@
 module Adva
   module Override
     class << self
-      def call(controller: nil, model: nil, &block)
+      def call(controller: nil, model: nil, gem: "adva", &block)
         if controller
-          override_class("app/controllers/#{controller}_controller.rb", &block)
+          override_class("app/controllers/#{controller}_controller.rb", gem: gem, &block)
         elsif model
-          override_class("app/models/#{model}.rb", &block)
+          override_class("app/models/#{model}.rb", gem: gem, &block)
         else
           raise ArgumentError, "Must specify either controller: or model:"
         end
@@ -20,8 +20,8 @@ module Adva
 
       private
 
-      def override_class(class_path, &block)
-        require_dependency File.expand_path(class_path, Gem.loaded_specs['adva'].full_gem_path)
+      def override_class(class_path, gem:, &block)
+        require_dependency File.expand_path(class_path, Gem.loaded_specs[gem].full_gem_path)
         class_name = path_to_class_name(class_path)
         mod = Module.new(&block)
         (@override_modules ||= []) << mod

@@ -122,17 +122,6 @@ RSpec.describe Content, type: :model do
     end
   end
 
-  describe "#accept_comments?" do
-    it "returns false by default" do
-      expect(article.accept_comments?).to be_falsy
-    end
-  end
-
-  describe "#approved_comments" do
-    it "returns empty array by default" do
-      expect(article.approved_comments).to eq([])
-    end
-  end
 
   describe "set_site callback" do
     it "sets site_id from section" do

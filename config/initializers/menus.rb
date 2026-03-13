@@ -60,6 +60,7 @@ module Menus
       end
 
       class Content < Menu::Menu
+        self.tag_name = :ul
         define do
           item :section,    content: content_tag(:h4, "#{@section.title}:")
           item :contents,   content: link_to("Contents", [:admin, @section, :contents])
