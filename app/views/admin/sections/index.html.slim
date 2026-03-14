@@ -5,8 +5,8 @@
     | You can use the reorder option to set your home root to different section and to reorder your sections. If you want to nest your sections you can drag the section to the right and its gets set as a child of the upper section.  Finish the reordering by clicking the reorder button. Please note that this option is only available when you have 2 or more sections.
 
 = table_for @sections, collection_name: :sections, class: 'sections list tree' do |t|
-  = t.column :section
-  = t.column :actions, class: :actions
+  - t.column :section
+  - t.column :actions, class: :actions
 
   - t.row(class: 'section') do |r, section|
     - r.add_class "level_#{section.level}"

@@ -4,7 +4,7 @@
   - columns << :comments if defined?(Comment)
   - columns += [:published, :actions]
 
-  = t.column *columns
+  - t.column *columns
 
   - t.row do |r, content|
     - r.add_class "level_#{content.level}"
