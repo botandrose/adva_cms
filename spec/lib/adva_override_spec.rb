@@ -119,6 +119,47 @@ RSpec.describe Adva::Override do
     end
   end
 
+  describe "class_methods" do
+    it "adds class methods via singleton_class.prepend" do
+      Adva.override(model: "site") do
+        class_methods do
+          def custom_class_method
+            "from override"
+          end
+        end
+      end
+
+      expect(Site.custom_class_method).to eq("from override")
+    end
+
+    it "allows calling super to access original class method" do
+      Adva.override(model: "site") do
+        class_methods do
+          def find_or_initialize_by(*)
+            result = super
+            result.name ||= "default"
+            result
+          end
+        end
+      end
+
+      site = Site.find_or_initialize_by(host: "nonexistent.local")
+      expect(site.name).to eq("default")
+    end
+  end
+
+  describe "included" do
+    it "evaluates block in class context" do
+      Adva.override(model: "site") do
+        included do
+          has_many :categories, through: :sections
+        end
+      end
+
+      expect(Site.reflect_on_association(:categories)).to be_present
+    end
+  end
+
   describe "prepend behavior" do
     it "maintains method chain order" do
       # Use a class variable to track calls across the module boundary

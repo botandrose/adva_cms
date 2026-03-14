@@ -23,9 +23,17 @@ module Adva
       def override_class(class_path, gem:, &block)
         require_dependency File.expand_path(class_path, Gem.loaded_specs[gem].full_gem_path)
         class_name = path_to_class_name(class_path)
-        mod = Module.new(&block)
+        klass = class_name.constantize
+
+        mod = Module.new do
+          extend ActiveSupport::Concern
+          module_eval(&block)
+        end
         (@override_modules ||= []) << mod
-        class_name.constantize.prepend(mod)
+
+        klass.prepend(mod)
+        klass.singleton_class.prepend(mod::ClassMethods) if mod.const_defined?(:ClassMethods, false)
+        klass.class_eval(&mod.instance_variable_get(:@_included_block)) if mod.instance_variable_defined?(:@_included_block)
       end
 
       def path_to_class_name(path)
