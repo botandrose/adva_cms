@@ -69,8 +69,7 @@ RSpec.describe Section, type: :model do
   describe "#has_unpublished_ancestor? (protected)" do
     it "returns true when any non-root ancestor is unpublished" do
       root = Page.create!(site: site, title: "root", permalink: "root", published_at: 1.hour.ago)
-      parent = Page.create!(site: site, title: "parent", permalink: "parent", parent_id: root.id)
-      parent.update_column(:published_at, nil)
+      parent = Page.create!(site: site, title: "parent", permalink: "parent", parent_id: root.id, published_at: nil)
       child = Page.create!(site: site, title: "child", permalink: "child", parent_id: parent.id, published_at: 1.hour.ago)
       expect(child.send(:has_unpublished_ancestor?)).to be_truthy
     end

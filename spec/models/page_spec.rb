@@ -45,10 +45,9 @@ RSpec.describe Page, type: :model do
       )
     end
 
-    context "when single_article_mode is enabled" do
+    context "when single_article_mode is enabled (default)" do
       before do
         page.single_article_mode = true
-        page.save!
       end
 
       describe "#published_at" do
@@ -125,7 +124,7 @@ RSpec.describe Page, type: :model do
         end
 
         context "when checking parents and ancestors are unpublished" do
-          let(:parent_page) { Page.create!(site: site, title: "Parent Page").tap { |p| p.update_column(:published_at, nil) } }
+          let(:parent_page) { Page.create!(site: site, title: "Parent Page", published_at: nil) }
           let(:child_page) { Page.create!(site: site, title: "Child Page", parent: parent_page) }
 
           before do
