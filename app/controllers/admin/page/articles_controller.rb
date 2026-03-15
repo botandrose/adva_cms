@@ -2,7 +2,6 @@ class Admin::Page::ArticlesController < Admin::BaseController
   default_param :article, :author_id, only: [:create, :update], &lambda { |*| current_user.id }
 
   before_action :set_section
-  before_action :protect_single_article_mode
   before_action :set_article,    only: [:show, :edit, :update, :destroy]
   before_action :set_categories, only: [:new, :edit]
   before_action :optimistic_lock, only: :update
@@ -76,14 +75,6 @@ class Admin::Page::ArticlesController < Admin::BaseController
 
     def set_categories
       @categories = @section.categories.roots
-    end
-
-    def protect_single_article_mode
-      if params[:action] == "index" && @section.try(:single_article_mode)
-        redirect_to @section.articles.empty? ?
-          new_admin_page_article_url(@section, article: { title: @section.title }) :
-          edit_admin_page_article_url(@section, @section.articles.first)
-      end
     end
 
     def optimistic_lock
