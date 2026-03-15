@@ -11,11 +11,12 @@ module BaseHelper
     html_options = options.delete(:html) || {}
     url = options.delete(:url) || polymorphic_path(record)
     as = options.delete(:as)
-    method = html_options.delete(:method) || (record.respond_to?(:persisted?) && record.persisted? ? :patch : :post)
+    model = record.is_a?(Array) ? record.last : record
+    method = html_options.delete(:method) || (model.respond_to?(:persisted?) && model.persisted? ? :patch : :post)
     multipart = html_options.delete(:multipart)
     html_options[:enctype] = "multipart/form-data" if multipart
     content_for :form, form_tag(url, html_options.merge(method: method)).html_safe
-    fields_for(as || record, record, options, &block)
+    fields_for(as || model, model, options, &block)
   end
 
   def datetime_with_microformat(datetime, options={})

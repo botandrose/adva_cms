@@ -64,6 +64,15 @@ RSpec.describe BaseHelper, type: :helper do
       expect(stored_form_tag).to include("<form")
       expect(stored_form_tag).to include("/users/1")
     end
+
+    it "handles array records by extracting the model" do
+      stored_form_tag = nil
+      helper.define_singleton_method(:content_for) { |name, content = nil| stored_form_tag = content if name == :form }
+
+      result = helper.split_form_for([:admin, user], url: "/admin/users/#{user.id}", html: {method: :put}) { |f| "" }
+      expect(stored_form_tag).to include("<form")
+      expect(stored_form_tag).to include("/admin/users/#{user.id}")
+    end
   end
 
   describe "#filter_options" do
