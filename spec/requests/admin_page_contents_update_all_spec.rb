@@ -25,16 +25,4 @@ RSpec.describe "Admin::Page::Contents", type: :request do
     expect(response).to have_http_status(:ok)
   end
 
-  it "redirects in single_article_mode on index" do
-    section.update!(single_article_mode: true)
-    section.articles.destroy_all
-    get admin_page_contents_path(section)
-    expect(response).to have_http_status(:found)
-    expect(response.location).to match(%r{/admin/.+/articles/new})
-
-    article = section.articles.create!(title: "T", body: "B", author: User.create!(first_name: "A", email: "a@b.co", password: "AAbbcc1122!!", verified_at: Time.now), published_at: 1.hour.ago, permalink: "t")
-    get admin_page_contents_path(section)
-    expect(response).to have_http_status(:found)
-    expect(response.location).to match(%r{/admin/.+/articles/.+/edit})
-  end
 end

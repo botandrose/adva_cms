@@ -2,7 +2,6 @@ class Admin::Page::ContentsController < Admin::BaseController
   default_param :content, :author_id, only: [:create, :update], &lambda { |*| current_user.id }
 
   before_action :set_section
-  before_action :protect_single_content_mode
   before_action :set_categories, only: [:new, :edit]
 
   def index
@@ -39,12 +38,4 @@ class Admin::Page::ContentsController < Admin::BaseController
       @categories = @section.categories.roots
     end
 
-    def protect_single_content_mode
-      if params[:action] == "index" && @section.try(:single_article_mode)
-        first_content = @section.contents.first
-        redirect_to first_content ?
-          edit_admin_page_article_url(@section, first_content) :
-          new_admin_page_article_url(@section, content: { title: @section.title })
-      end
-    end
 end

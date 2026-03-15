@@ -48,21 +48,6 @@ RSpec.describe "Admin::Page::ContentsController", type: :request do
     end
   end
 
-  describe "protect_single_content_mode redirects" do
-    it "redirects to new article when single_article_mode and no contents" do
-      allow_any_instance_of(Page).to receive(:single_article_mode).and_return(true)
-      section.articles.destroy_all
-      get "/admin/pages/#{section.permalink}/contents"
-      expect(response).to redirect_to(new_admin_page_article_url(section, content: { title: section.title }))
-    end
-
-    it "redirects to edit first article when single_article_mode and contents exist" do
-      allow_any_instance_of(Page).to receive(:single_article_mode).and_return(true)
-      first_article = Article.create!(site: site, section: section, title: "First", body: "b", author: admin_user, published_at: 1.hour.ago, permalink: "first")
-      get "/admin/pages/#{section.permalink}/contents"
-      expect(response).to redirect_to(edit_admin_page_article_url(section, first_article))
-    end
-  end
 
   describe "protected helpers" do
     it "current_resource returns @content or @section" do
