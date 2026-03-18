@@ -29,10 +29,10 @@ module Authentication
     def authenticate(user, password)
       return false unless valid_model?(user)
 
-      password_hash = hash_string password, user.password_salt
-      conditions = ['id = ? AND password_hash = ?', user.id, password_hash]
-      conditions[0] << ' AND verified_at IS NOT NULL' if user.respond_to? :verified_at
-      0 < user.class.where(conditions).count
+      password_hash = hash_string(password, user.password_salt)
+      scope = user.class.where(id: user.id, password_hash: password_hash)
+      scope = scope.where.not(verified_at: nil) if user.respond_to?(:verified_at)
+      scope.exists?
     end
 
     # Will assign a new password for the given user.

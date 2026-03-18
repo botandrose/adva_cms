@@ -46,7 +46,7 @@ module TableBuilder
     end
 
     def render(content = nil)
-      content = '' if content.nil?
+      content = String.new if content.nil?
       yield(content) if content.empty? && block_given?
       content = content.respond_to?(:html_safe) ? content.html_safe : content.to_s
       content_tag(tag_name, content, options)

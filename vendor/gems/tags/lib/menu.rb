@@ -21,7 +21,7 @@ module Menu
       @key = key || self.class.name.demodulize.underscore.sub('_menu', '').to_sym
       @breadcrumbs = []
       [:id, :content, :text, :url].each { |key| instance_variable_set(:"@#{key}", options.delete(key)) }
-      @url.sub!(/\?.*/, '') if @url
+      @url = @url.sub(/\?.*/, '') if @url
     end
 
     def find(key)

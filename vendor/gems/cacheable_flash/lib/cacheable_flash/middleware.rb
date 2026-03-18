@@ -8,7 +8,7 @@ module CacheableFlash
       status, headers, body = @app.call env
       return [status, headers, body] unless headers["Content-Type"].try(:include?, "text/html")
 
-      new_body = ""
+      new_body = String.new
       body.each { |part| new_body << part }
       process! new_body
       headers.delete("Content-Length")
