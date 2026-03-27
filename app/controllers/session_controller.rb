@@ -21,6 +21,17 @@ class SessionController < BaseController
     end
   end
 
+  def token_login
+    user_id = Rails.application.message_verifier("login_as").verified(params[:token])
+    if user_id && (user = User.find_by(id: user_id))
+      session[:uid] = user.id
+      set_user_cookie!(user)
+      redirect_to "/admin", notice: "You are now logged in as #{user.name}."
+    else
+      redirect_to "/login", alert: "Invalid or expired login token."
+    end
+  end
+
   def destroy
     logout
     redirect_to "/", notice: "Logged out successfully."

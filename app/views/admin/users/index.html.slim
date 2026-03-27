@@ -9,3 +9,5 @@ ul#users
       p.actions
         = link_to "Edit", [:edit, :admin, user], class: 'edit'
         =< link_to "Delete", [:admin, user], method: :delete, class: 'delete', data: { confirm: "Are you sure you want to delete this user?" }
+        - if current_user.admin? && user != current_user
+          =< link_to "Login as", token_login_path(token: Rails.application.message_verifier("login_as").generate(user.id, expires_in: 5.minutes)), data: { turbo_confirm: "This will log you out and log you in as #{user.name}. Continue?" }

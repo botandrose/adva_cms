@@ -51,6 +51,7 @@ Rails.application.routes.draw do
 
   get "login" => "session#new"
   delete "logout" => "session#destroy"
+  get "token_login" => "session#token_login"
 
   resource :session,     controller: "session"
   resource :password,    controller: "password"
