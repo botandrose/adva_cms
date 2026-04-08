@@ -4,6 +4,8 @@ require "awesome_nested_set"
 require "nacelle"
 require "slim-rails"
 require "actionpack/page_caching"
+require "acts-as-taggable-on"
+require "bard/tag_field"
 
 require "rails_ext"
 
@@ -14,7 +16,6 @@ end
 
 require "belongs_to_cacheable"
 require "cacheable_flash"
-require "simple_taggable"
 require "tags"
 require "table_builder"
 require "authentication"

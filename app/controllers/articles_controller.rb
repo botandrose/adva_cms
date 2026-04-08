@@ -25,7 +25,7 @@ class ArticlesController < BaseController
   helper_method def articles
     @articles ||= begin
       scope = category ? category.all_contents : section.contents
-      scope = scope.tagged(tags) if tags.any?
+      scope = scope.tagged_with(tags, any: true) if tags.any?
       scope = scope.published
       scope.paginate(page: current_page).limit(section.contents_per_page.to_i)
     end

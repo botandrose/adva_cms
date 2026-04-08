@@ -9,8 +9,8 @@ RSpec.describe "Articles tags and categories", type: :request do
 
   it "filters by tags and renders index" do
     a = Article.create!(site: site, section: section, title: "Tagged", body: "b", author: user, published_at: 1.hour.ago, permalink: "t1")
-    a.tags << Tag.find_or_create_by_name("foo")
-    a.tags << Tag.find_or_create_by_name("bar")
+    a.tag_list = "foo, bar"
+    a.save!
 
     get page_tag_path(section, tags: "foo,bar")
     expect(response).to have_http_status(:ok)

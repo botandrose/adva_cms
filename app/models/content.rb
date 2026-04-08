@@ -11,7 +11,7 @@ class Content < ActiveRecord::Base
 
   acts_as_nested_set scope: :section_id
 
-  acts_as_taggable
+  acts_as_taggable_on :tags
 
   include Adva::HasPermalink
   has_permalink :title, url_attribute: :permalink, sync_url: true, only_when_blank: true, scope: :section_id

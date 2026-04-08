@@ -73,12 +73,13 @@ module ContentHelper
     tag = args.pop
     section = args.pop
     route_name = :"#{section.class.name.downcase}_tag_path"
+    tag_name = tag.respond_to?(:name) ? tag.name : tag.to_s
 
     if block_given?
-      link_to(send(route_name, section_permalink: section.permalink, tags: tag), &block)
+      link_to(send(route_name, section_permalink: section.permalink, tags: tag_name), &block)
     else
-      text = args.pop || tag.name
-      link_to(text, send(route_name, section_permalink: section.permalink, tags: tag))
+      text = args.pop || tag_name
+      link_to(text, send(route_name, section_permalink: section.permalink, tags: tag_name))
     end
   end
 

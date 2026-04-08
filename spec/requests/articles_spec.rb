@@ -211,7 +211,6 @@ RSpec.describe "Articles", type: :request do
     end
 
     it "filters articles by single tag" do
-      Tag.find_or_create_by!(name: "ruby")
       get "/?tags=ruby"
       expect(response).to have_http_status(:ok)
       expect(response.body).to include("Tagged Article")
@@ -219,8 +218,6 @@ RSpec.describe "Articles", type: :request do
     end
 
     it "filters articles by multiple tags" do
-      Tag.find_or_create_by!(name: "ruby")
-      Tag.find_or_create_by!(name: "rails")
       get "/?tags=ruby,rails"
       expect(response).to have_http_status(:ok)
       expect(response.body).to include("Tagged Article")

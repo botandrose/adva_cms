@@ -96,7 +96,7 @@ class Admin::Page::ArticlesController < Admin::BaseController
     end
 
     def permitted_article_params
-      [:title, :body, :author_id, :published_at, :draft, :excerpt, :filter, :tag_list, :updated_at, :permalink]
+      [:title, :body, :author_id, :published_at, :draft, :excerpt, :filter, :updated_at, :permalink, tag_list: []]
     end
 
 end

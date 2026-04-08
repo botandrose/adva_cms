@@ -9,7 +9,7 @@ RSpec.describe Tag, type: :model do
 
     it "can be found" do
       Tag.create(name: "test")
-      tag = Tag.find_by_name("test")
+      tag = Tag.find_by(name: "test")
       expect(tag).to_not be_nil
     end
   end

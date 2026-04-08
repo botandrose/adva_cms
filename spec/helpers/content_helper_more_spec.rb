@@ -79,7 +79,7 @@ RSpec.describe ContentHelper, type: :helper do
     end
 
     it "link_to_tag builds links with and without block" do
-      tag = Tag.find_or_create_by_name("blue")
+      tag = Tag.find_or_create_by(name: "blue")
       # without block
       html = helper.link_to_tag(section, tag)
       expect(html).to include("/p/tags/blue")
@@ -92,9 +92,8 @@ RSpec.describe ContentHelper, type: :helper do
 
     it "links_to_content_tags renders joined tag links" do
       a = Article.create!(site: site, section: section, title: "a", body: "b", author: user, published_at: 1.hour.ago, permalink: "a5")
-      t1 = Tag.find_or_create_by_name("red")
-      t2 = Tag.find_or_create_by_name("green")
-      a.tags << [t1, t2]
+      a.tag_list = "red, green"
+      a.save!
 
       html = helper.links_to_content_tags(a)
       expect(html).to include("tagged:")
