@@ -221,7 +221,7 @@ RSpec.describe "Articles", type: :request do
     it "filters articles by multiple tags" do
       Tag.find_or_create_by!(name: "ruby")
       Tag.find_or_create_by!(name: "rails")
-      get "/?tags=ruby+rails"
+      get "/?tags=ruby,rails"
       expect(response).to have_http_status(:ok)
       expect(response.body).to include("Tagged Article")
       expect(response.body).not_to include("Untagged Article")

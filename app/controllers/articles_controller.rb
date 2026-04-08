@@ -40,7 +40,7 @@ class ArticlesController < BaseController
 
   helper_method def tags
     return @tags if defined?(@tags)
-    names = params[:tags].to_s.split("+").reject(&:blank?).map { |n| n.downcase.strip }
+    names = params[:tags].to_s.split(",").reject(&:blank?).map { |n| n.downcase.strip }
     @tags = Tag.where(name: names).pluck(:name)
     raise ActiveRecord::RecordNotFound if @tags.size != names.size
     @tags

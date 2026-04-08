@@ -12,7 +12,7 @@ RSpec.describe "Articles tags and categories", type: :request do
     a.tags << Tag.find_or_create_by_name("foo")
     a.tags << Tag.find_or_create_by_name("bar")
 
-    get page_tag_path(section, tags: "foo+bar")
+    get page_tag_path(section, tags: "foo,bar")
     expect(response).to have_http_status(:ok)
     expect(response.body).to include("Tagged")
   end
