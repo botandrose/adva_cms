@@ -3,7 +3,9 @@ PATH
   specs:
     adva (0.3.3)
       actionpack-page_caching
+      acts-as-taggable-on (>= 10.0)
       awesome_nested_set
+      bard-tag_field
       friendly_id (>= 5.4)
       nacelle
       rails-observers
@@ -87,12 +89,17 @@ GEM
       securerandom (>= 0.3)
       tzinfo (~> 2.0, >= 2.0.5)
       uri (>= 0.13.1)
+    acts-as-taggable-on (13.0.0)
+      activerecord (>= 7.1, < 8.2)
+      zeitwerk (>= 2.4, < 3.0)
     appraisal (2.5.0)
       bundler
       rake
       thor (>= 0.14.0)
     awesome_nested_set (3.8.0)
       activerecord (>= 4.0.0, < 8.1)
+    bard-tag_field (0.5.3)
+      rails (>= 7.1)
     base64 (0.3.0)
     benchmark (0.4.1)
     bigdecimal (3.2.3)
