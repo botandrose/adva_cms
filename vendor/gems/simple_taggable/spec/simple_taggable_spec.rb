@@ -138,6 +138,12 @@ RSpec.describe SimpleTaggable do
       assert_equivalent [flowers_post], Post.tagged('great', except: blue_sky)
     end
 
+    it 'finds records tagged with multi-word tags' do
+      blue_sky.tag_list = '"great nature" sucks'
+      blue_sky.save!
+      assert_equivalent [blue_sky], Post.tagged("great nature")
+    end
+
     it 'is plurality-insensitive' do
       expect(Post.tagged('natures')).to eq(Post.tagged('nature'))
     end

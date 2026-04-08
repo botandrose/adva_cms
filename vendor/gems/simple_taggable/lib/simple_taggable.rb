@@ -71,9 +71,12 @@ module ActiveRecord
 
         def tagged *tags
           options = tags.extract_options!
-          tags = TagList.from(tags)
+          tags = tags.flatten
           original_unique_count = tags.map { |t| t.to_s.downcase }.uniq.size
-          tags.cover_pluralities!
+          tag_list = TagList.new
+          tag_list.push(*tags)
+          tag_list.cover_pluralities!
+          tags = tag_list
           except = options[:except]
 
           conditions = Array(options[:conditions])
