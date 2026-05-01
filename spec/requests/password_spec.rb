@@ -81,5 +81,39 @@ RSpec.describe "Password", type: :request do
     post "/password", params: { user: { email: user.email } }
     expect(response).to redirect_to(edit_password_url)
   end
+
+  it "edit pre-fills token field from URL param when not logged in" do
+    host! site.host
+    get "/password/edit", params: { token: "1;abc" }
+    expect(response).to have_http_status(:ok)
+    expect(response.body).to include('value="1;abc"')
+  end
+
+  it "edit renders token as hidden field when authenticated via URL token" do
+    token = user.assign_token("password")
+    user.save!
+
+    host! site.host
+    get "/password/edit", params: { token: "#{user.id};#{token}" }
+    expect(response).to have_http_status(:ok)
+    expect(response.body).to include(%(type="hidden" name="token" id="token" value="#{user.id};#{token}"))
+  end
+
+  it "update succeeds with token in form when session is lost" do
+    token = user.assign_token("password")
+    user.save!
+
+    host! site.host
+    put "/password", params: { user: { password: "NewPass1122!!" }, token: "#{user.id};#{token}" }
+    expect(response).to redirect_to("/")
+    expect(user.reload.authenticate("NewPass1122!!")).to be_truthy
+  end
+
+  it "update with invalid token in form re-renders edit" do
+    host! site.host
+    put "/password", params: { user: { password: "NewPass1122!!" }, token: "999;bogus" }
+    expect(response).to have_http_status(:ok)
+    expect(response.body).to include('name="token"')
+  end
 end
 

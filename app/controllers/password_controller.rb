@@ -2,6 +2,8 @@ class PasswordController < BaseController
   renders_with_error_proc :below_field
   layout "login"
 
+  skip_forgery_protection only: :update
+
   def new
   end
 

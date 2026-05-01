@@ -10,7 +10,9 @@ p
   - f.field_set do
     - if current_user.anonymous?
       = label_tag "Token"
-      = text_field_tag :token
+      = text_field_tag :token, params[:token]
+    - elsif params[:token].present?
+      = hidden_field_tag :token, params[:token]
     = f.password_field :password, label: "New password"
 
   - f.buttons do
