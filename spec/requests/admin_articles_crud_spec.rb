@@ -35,6 +35,23 @@ RSpec.describe "Admin::Articles CRUD", type: :request do
     expect(article.reload.title).to eq("t2")
   end
 
+  it "assigns categories to an article on create and update" do
+    user = User.find_by_email("admin@example.com")
+    cat_a = Category.create!(section: section, title: "Cat A")
+    cat_b = Category.create!(section: section, title: "Cat B")
+
+    post admin_page_articles_path(section), params: {
+      article: { title: "c", body: "b", author_id: user.id, category_ids: [cat_a.id] },
+    }
+    article = section.articles.order(:created_at).last
+    expect(article.categories).to eq([cat_a])
+
+    put admin_page_article_path(section, article), params: {
+      article: { updated_at: article.updated_at.to_s, category_ids: [cat_b.id] },
+    }
+    expect(article.reload.categories).to eq([cat_b])
+  end
+
   it "destroys an article and redirects to contents" do
     user = User.find_by_email("admin@example.com")
     article = section.articles.create!(title: "td", body: "bd", author: user)
