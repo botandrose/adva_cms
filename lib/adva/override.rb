@@ -21,7 +21,10 @@ module Adva
       private
 
       def override_class(class_path, gem:, &block)
-        require_dependency File.expand_path(class_path, Gem.loaded_specs[gem].full_gem_path)
+        # load, not require_dependency: on a Zeitwerk reload the constant is unloaded
+        # but the file stays in $LOADED_FEATURES, so require would no-op and leave the
+        # base class undefined until a server restart.
+        load File.expand_path(class_path, Gem.loaded_specs[gem].full_gem_path)
         class_name = path_to_class_name(class_path)
         klass = class_name.constantize
 
