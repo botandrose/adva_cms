@@ -35,7 +35,8 @@ if defined?(Ckeditor)
 
   # Override parent controller CKEditor inherits from
   # By default: 'ApplicationController'
-  # config.parent_controller = 'MyController'
+  # Gate uploads and asset browsing behind admin auth for every host app.
+  config.parent_controller = "Admin::CkeditorController"
 
   # Asset model classes
   # config.picture_model { Ckeditor::Picture }
