@@ -14,6 +14,14 @@ RSpec.describe Authentication::SingleToken do
     expect(user.token_expiration.to_date).to eq(3.days.from_now.to_date)
   end
 
+  it 'generates a random 40-character token, unique across calls' do
+    first  = tokener.assign_token(user, 'standard', 3.days.from_now)
+    second = tokener.assign_token(user, 'standard', 3.days.from_now)
+    expect(first).to match(/\A[0-9a-f]{40}\z/)
+    expect(second).to match(/\A[0-9a-f]{40}\z/)
+    expect(first).not_to eq(second)
+  end
+
   it 'authenticates valid token and rejects invalid' do
     key = tokener.assign_token(user, 'standard', 3.days.from_now)
     user.save!

@@ -13,6 +13,14 @@ RSpec.describe Authentication::RememberMe do
     expect(user.remember_me).to eq(hash_string(key))
   end
 
+  it 'generates a random 40-character token, unique across calls' do
+    first  = tokener.assign_token(user, 'remember me')
+    second = tokener.assign_token(user, 'remember me')
+    expect(first).to match(/\A[0-9a-f]{40}\z/)
+    expect(second).to match(/\A[0-9a-f]{40}\z/)
+    expect(first).not_to eq(second)
+  end
+
   it 'authenticates with the token and not with invalid' do
     key = tokener.assign_token(user, 'remember me')
     user.save!

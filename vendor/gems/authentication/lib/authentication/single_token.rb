@@ -1,3 +1,4 @@
+require 'securerandom'
 require 'authentication/hash_helper'
 
 module Authentication
@@ -39,7 +40,7 @@ module Authentication
       return nil unless valid_model? user
 
       user.token_expiration = expire
-      token = hash_string "token-#{Time.zone.now}"
+      token = SecureRandom.hex(20)
       user.token_key = hash_string token
       token
     end

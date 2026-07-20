@@ -1,3 +1,4 @@
+require 'securerandom'
 require 'authentication/hash_helper'
 
 module Authentication
@@ -37,7 +38,7 @@ module Authentication
       return nil unless valid_model? user
       return nil unless name =~ /remember.?me/i
 
-      token = hash_string "remember-me-#{Time.zone.now}"
+      token = SecureRandom.hex(20)
       user.remember_me = hash_string token
       token
     end
