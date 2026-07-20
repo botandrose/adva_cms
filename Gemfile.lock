@@ -6,6 +6,7 @@ PATH
       acts-as-taggable-on (>= 10.0)
       awesome_nested_set
       bard-tag_field
+      bcrypt (~> 3.1)
       friendly_id (>= 5.4)
       nacelle
       rails-observers
@@ -101,6 +102,7 @@ GEM
     bard-tag_field (0.5.3)
       rails (>= 7.1)
     base64 (0.3.0)
+    bcrypt (3.1.22)
     benchmark (0.4.1)
     bigdecimal (3.2.3)
     builder (3.3.0)
@@ -341,6 +343,7 @@ CHECKSUMS
   awesome_nested_set (3.8.0) sha256=469daff411d80291dbb80d1973133e498048a7afc2519c545f62d2cdebc60eda
   bard-tag_field (0.5.3) sha256=b903ba527ccb88c8fa4334cbd021ee239fb06d253e7065847efa74225b189476
   base64 (0.3.0) sha256=27337aeabad6ffae05c265c450490628ef3ebd4b67be58257393227588f5a97b
+  bcrypt (3.1.22) sha256=1f0072e88c2d705d94aff7f2c5cb02eb3f1ec4b8368671e19112527489f29032
   benchmark (0.4.1) sha256=d4ef40037bba27f03b28013e219b950b82bace296549ec15a78016552f8d2cce
   bigdecimal (3.2.3) sha256=ffd11d1ac67a0d3b2f44aec0a6487210b3f813f363dd11f1fcccf5ba00da4e1b
   builder (3.3.0) sha256=497918d2f9dca528fdca4b88d84e4ef4387256d984b8154e9d5d3fe5a9c8835f

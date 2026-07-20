@@ -8,7 +8,7 @@ class CreateUsersTable < ActiveRecord::Migration[7.0]
       t.string     :about
       t.string     :signature
 
-      t.string     :password_hash,    limit: 40
+      t.string     :password_hash
       t.string     :password_salt,    limit: 40
 
       t.string     :ip

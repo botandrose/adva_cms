@@ -27,6 +27,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency "slim-rails"
   gem.add_dependency "acts-as-taggable-on", ">= 10.0"
   gem.add_dependency "bard-tag_field"
+  gem.add_dependency "bcrypt", "~> 3.1"
 
   gem.add_development_dependency "appraisal"
   gem.add_development_dependency "rspec-rails", "~> 6.1"

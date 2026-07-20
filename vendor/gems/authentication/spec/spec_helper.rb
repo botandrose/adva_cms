@@ -9,6 +9,10 @@ require 'active_support/all'
 require 'active_record'
 require 'rspec'
 require 'authentication'
+require 'bcrypt'
+
+# Keep bcrypt cheap in the test suite.
+BCrypt::Engine.cost = BCrypt::Engine::MIN_COST
 
 # Provide a fixed site salt to avoid relying on Rails.root
 AUTHENTICATION_SALT = 'test-salt'
@@ -32,7 +36,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.column :name, :string
     t.column :first_name, :string
     t.column :last_name, :string
-    t.column :password_hash, :string, limit: 40
+    t.column :password_hash, :string
     t.column :password_salt, :string, limit: 40
     t.column :token_key, :string, limit: 40
     t.column :token_expiration, :datetime

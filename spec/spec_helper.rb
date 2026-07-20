@@ -1,6 +1,10 @@
 require "simplecov"
 require "simplecov-html"
 require "debug"
+require "bcrypt"
+
+# Keep bcrypt cheap in the test suite.
+BCrypt::Engine.cost = BCrypt::Engine::MIN_COST
 
 SimpleCov.start "rails" do
   add_filter "/spec/"

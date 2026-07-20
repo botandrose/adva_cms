@@ -17,6 +17,7 @@ Gem::Specification.new do |gem|
 
   gem.add_dependency "activerecord"
   gem.add_dependency "activesupport"
+  gem.add_dependency "bcrypt", "~> 3.1"
 
   gem.add_development_dependency "rake"
   gem.add_development_dependency "rspec", "~>3.0"
