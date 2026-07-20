@@ -130,7 +130,13 @@ module Adva
 
     def remember_me!
       token = current_user.assign_token!("remember me")
-      cookies[:remember_me] = { value: "#{current_user.id};#{token}", expires: 10.years.from_now }
+      cookies[:remember_me] = {
+        value: "#{current_user.id};#{token}",
+        expires: 2.weeks.from_now,
+        httponly: true,
+        secure: true,
+        same_site: :lax,
+      }
     end
 
     def set_user_cookie!(user = current_user)

@@ -66,6 +66,20 @@ RSpec.describe "Session", type: :request do
       expect(response.cookies["remember_me"]).to be_blank
     end
 
+    it "hardens the remember_me cookie with httponly, secure, and same_site=lax" do
+      host! site.host
+      post "/session", params: { user: { email: user.email, password: "AAbbcc1122!!", remember_me: "1" } }
+      expect(response.cookies["remember_me"]).to be_present
+
+      set_cookie = Array(response.headers["Set-Cookie"]).join("\n").split("\n").find do |line|
+        line.start_with?("remember_me=")
+      end
+      expect(set_cookie).to be_present
+      expect(set_cookie).to match(/;\s*httponly/i)
+      expect(set_cookie).to match(/;\s*secure/i)
+      expect(set_cookie).to match(/;\s*samesite=lax/i)
+    end
+
     it "preserves remember_me value on failed login" do
       host! site.host
       post "/session", params: { user: { email: user.email, password: "wrong", remember_me: "1" } }
@@ -92,6 +106,16 @@ RSpec.describe "Session", type: :request do
       host! site.host
       delete "/session"
       expect(response).to redirect_to("/")
+    end
+
+    it "clears the remember_me cookie on logout" do
+      host! site.host
+      post "/session", params: { user: { email: user.email, password: "AAbbcc1122!!", remember_me: "1" } }
+      expect(response.cookies["remember_me"]).to be_present
+
+      delete "/session"
+      expect(response).to redirect_to("/")
+      expect(response.cookies["remember_me"]).to be_blank
     end
   end
 end
