@@ -4,6 +4,7 @@ PATH
     adva (0.3.3)
       actionpack-page_caching
       acts-as-taggable-on (>= 10.0)
+      authlogic (~> 6.6)
       awesome_nested_set
       bard-tag_field
       bcrypt (~> 3.1)
@@ -97,6 +98,11 @@ GEM
       bundler
       rake
       thor (>= 0.14.0)
+    authlogic (6.6.0)
+      activemodel (>= 7.2, < 8.2)
+      activerecord (>= 7.2, < 8.2)
+      activesupport (>= 7.2, < 8.2)
+      request_store (~> 1.0)
     awesome_nested_set (3.8.0)
       activerecord (>= 4.0.0, < 8.1)
     bard-tag_field (0.5.3)
@@ -236,6 +242,8 @@ GEM
       psych (>= 4.0.0)
     reline (0.6.2)
       io-console (~> 0.5)
+    request_store (1.7.0)
+      rack (>= 1.4)
     rspec-core (3.13.5)
       rspec-support (~> 3.13.0)
     rspec-expectations (3.13.5)
@@ -340,6 +348,7 @@ CHECKSUMS
   acts-as-taggable-on (13.0.0) sha256=dca776c6ddebc458d175b57554ad692488e283f27047117e01ed871f1cba6135
   adva (0.3.3)
   appraisal (2.5.0) sha256=36989221be127913b0dba8d114da2001e6b2dceea7bd4951200eaba764eed3ce
+  authlogic (6.6.0) sha256=42525315fccbfcff40cbd62fd068ddee9d13516243e1a1c143f559fc314e85a4
   awesome_nested_set (3.8.0) sha256=469daff411d80291dbb80d1973133e498048a7afc2519c545f62d2cdebc60eda
   bard-tag_field (0.5.3) sha256=b903ba527ccb88c8fa4334cbd021ee239fb06d253e7065847efa74225b189476
   base64 (0.3.0) sha256=27337aeabad6ffae05c265c450490628ef3ebd4b67be58257393227588f5a97b
@@ -408,6 +417,7 @@ CHECKSUMS
   rake (13.3.0) sha256=96f5092d786ff412c62fde76f793cc0541bd84d2eb579caa529aa8a059934493
   rdoc (6.14.2) sha256=9fdd44df130f856ae70cc9a264dfd659b9b40de369b16581f4ab746e42439226
   reline (0.6.2) sha256=1dad26a6008872d59c8e05244b119347c9f2ddaf4a53dce97856cd5f30a02846
+  request_store (1.7.0) sha256=e1b75d5346a315f452242a68c937ef8e48b215b9453a77a6c0acdca2934c88cb
   rspec-core (3.13.5) sha256=ab3f682897c6131c67f9a17cfee5022a597f283aebe654d329a565f9937a4fa3
   rspec-expectations (3.13.5) sha256=33a4d3a1d95060aea4c94e9f237030a8f9eae5615e9bd85718fe3a09e4b58836
   rspec-mocks (3.13.5) sha256=e4338a6f285ada9fe56f5893f5457783af8194f5d08884d17a87321d5195ea81

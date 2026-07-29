@@ -74,12 +74,15 @@ RSpec.describe "Password", type: :request do
     expect(response).to redirect_to("/")
   end
 
-  it "create saves user after assigning token" do
-    expect_any_instance_of(User).to receive(:save!)
+  it "create persists a fresh perishable token" do
+    was = user.perishable_token
 
     host! site.host
     post "/password", params: { user: { email: user.email } }
     expect(response).to redirect_to(edit_password_url)
+
+    expect(user.reload.perishable_token).to be_present
+    expect(user.perishable_token).not_to eq(was)
   end
 
   it "edit pre-fills token field from URL param when not logged in" do
@@ -90,23 +93,34 @@ RSpec.describe "Password", type: :request do
   end
 
   it "edit renders token as hidden field when authenticated via URL token" do
-    token = user.assign_token("password")
-    user.save!
+    user.reset_perishable_token!
+    token = user.perishable_token
 
     host! site.host
-    get "/password/edit", params: { token: "#{user.id};#{token}" }
+    get "/password/edit", params: { token: token }
     expect(response).to have_http_status(:ok)
-    expect(response.body).to include(%(type="hidden" name="token" id="token" value="#{user.id};#{token}"))
+    expect(response.body).to include(%(type="hidden" name="token" id="token" value="#{token}"))
   end
 
   it "update succeeds with token in form when session is lost" do
-    token = user.assign_token("password")
-    user.save!
+    user.reset_perishable_token!
 
     host! site.host
-    put "/password", params: { user: { password: "NewPass1122!!" }, token: "#{user.id};#{token}" }
+    put "/password", params: { user: { password: "NewPass1122!!" }, token: user.perishable_token }
     expect(response).to redirect_to("/")
-    expect(user.reload.authenticate("NewPass1122!!")).to be_truthy
+    expect(user.reload.valid_password?("NewPass1122!!")).to be_truthy
+  end
+
+  it "update rejects a perishable token older than the reset window" do
+    user.reset_perishable_token!
+    token = user.perishable_token
+    user.update_column(:updated_at, 4.days.ago)
+
+    host! site.host
+    put "/password", params: { user: { password: "NewPass1122!!" }, token: token }
+    expect(response).to have_http_status(:ok)
+    expect(response.body).to include('name="token"')
+    expect(user.reload.valid_password?("NewPass1122!!")).to be_falsey
   end
 
   it "update with invalid token in form re-renders edit" do

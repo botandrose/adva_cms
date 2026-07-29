@@ -36,41 +36,43 @@ module Adva
       end
     end
 
+    # Logs in with an email/password pair, returning the user on success and
+    # false otherwise. Pass :remember_me to outlive the browser session.
     def authenticate_user(credentials)
-      User.authenticate(credentials).tap do |user|
-        if user
-          # prevent session hijacking - unnecessary according to http://dev.rubyonrails.org/ticket/10108
-          # reset_session_except :return_location
-          session[:uid] = user.id
-          set_user_cookie!(user)
-        end
-      end
+      credentials = credentials.to_unsafe_h if credentials.respond_to?(:to_unsafe_h)
+      credentials = credentials.symbolize_keys
+
+      user_session = UserSession.new(
+        email: credentials[:email].to_s,
+        password: credentials[:password].to_s,
+        remember_me: credentials[:remember_me].present?,
+      )
+      return false unless user_session.save
+
+      @current_user = user_session.user
+      set_user_cookie!(@current_user)
+      @current_user
     end
 
-    # Will retrieve the current_user. Will not force a login but
-    # simply load the current user if a person is logged in. If
-    # you need the user object loaded with extra options (such as
-    # eager loading) then create a private method called
-    # "user_find_options" on your controller that returns a hash
-    # of the find options you want.
+    # Establishes a session for an already-trusted user, skipping password
+    # verification, for flows that authenticate by some other means such as a
+    # signed token.
+    def login_user!(user)
+      UserSession.create(user)
+      @current_user = user
+      set_user_cookie!(user)
+      user
+    end
+
+    # Will retrieve the current_user. Will not force a login but simply load
+    # the current user if a person is logged in.
     #
-    # This method will also inform the models of the current user
-    # if the current user is logged in and the "User" class responds
-    # to the class method current_user=. This is a nice way to
-    # communciate the current user down to the model level for
-    # model-level security. This means you will want to call this
-    # method at least once before using the model-level security.
-    # Usually you will call it in a before filter. This method is
-    # called automatically when authentication_required is applied to
-    # an action.
+    # Returns an unsaved anonymous User rather than nil when nobody is logged
+    # in, so callers can always talk to a user object.
     def current_user
       @current_user ||= begin
-        # Check for session[:uid] here? That would mean that for token auth the
-        # user always needs to be logged out (e.g. in UserController#create).
-        # Looks a bit more robust this way:
-        try_login
-        if session && session[:uid]
-          user = find_current_user
+        user = UserSession.find&.user || login_with_perishable_token
+        if user
           set_user_cookie!(user)
           user
         else
@@ -83,17 +85,6 @@ module Adva
       !current_user.anonymous?
     end
     alias :logged_in? :authenticated?
-
-    # killed this because it's just the wrong way to do it
-    #
-    # # Will store the current params so that we can return here on
-    # # successful login. If you want to redirect to the login yourself
-    # # (perhaps you are applying your own security instead of just
-    # # determining if the user is logged in) then you will want to
-    # # call this before issuing your redirect to the login screen.
-    # def store_return_location
-    #   session[:return_location] = params
-    # end
 
     private
 
@@ -118,6 +109,7 @@ module Adva
     end
 
     def logout
+      UserSession.find&.destroy
       reset_session
       forget_me!
     end
@@ -128,17 +120,6 @@ module Adva
       cookies[:uname] = nil
     end
 
-    def remember_me!
-      token = current_user.assign_token!("remember me")
-      cookies[:remember_me] = {
-        value: "#{current_user.id};#{token}",
-        expires: 2.weeks.from_now,
-        httponly: true,
-        secure: true,
-        same_site: :lax,
-      }
-    end
-
     def set_user_cookie!(user = current_user)
       unless user.anonymous?
         cookies[:uid] = user.id.to_s
@@ -146,54 +127,17 @@ module Adva
       end
     end
 
-    # There are a few ways that a user can login without going through
-    # a login screen. These methods all rely on authenticating with
-    # the information given in the request. If any of these methods
-    # are successful then session[:uid] will be set with the current
-    # user id and current_user will return the current user
-    def try_login
-      if user = http_auth_login || validation_login || remember_me_login
-        session[:uid] = user.id
-      end
-    end
-
-    # Will attempt to authenticate with HTTP Auth. HTTP Auth will not
-    # be required. We are just checking if it is provided mainly for
-    # RESTful requests.
-    def http_auth_login
-      # FIXME: Implement
-    end
-
-    # Will use the URL param :token to see if we can do a token
-    # authentication.
-    def validation_login
-      validate_token User, params[:token]
-    end
-
-    # Will check for a :remember_me cookie for a token that will
-    # authenticate the user.
-    def remember_me_login
-      validate_token User, cookies[:remember_me]
-    end
-
-    # The tokens are stored in various places as id;token. This method
-    # will split that out and validate it. If everything is successful
-    # then the user object is returned. Otherwise nil is returned.
-    # The full token should be passed in.
-    def validate_token(klass, token, options = {})
+    # A password reset link carries a perishable token in the URL. Consuming it
+    # logs the user in so they can set a new password.
+    def login_with_perishable_token
+      token = params[:token] if respond_to?(:params, true)
       return nil if token.blank?
-      return nil unless token =~ /\;/
 
-      uid, token = token.split ";"
-      if object = klass.find_by_id(uid)
-        return object if object.authenticate(token)
-      end
-      nil
-    end
+      user = User.find_using_perishable_token(token)
+      return nil unless user
 
-    def find_current_user
-      User.find_by_id(session[:uid])
+      UserSession.create(user)
+      user
     end
   end
 end
-

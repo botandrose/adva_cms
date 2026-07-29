@@ -41,7 +41,6 @@ jobs:
           "belongs_to_cacheable",
           "tags",
           "table_builder",
-          "authentication",
           "cacheable_flash"
         ]
 

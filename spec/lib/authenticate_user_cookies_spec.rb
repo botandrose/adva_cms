@@ -1,54 +1,40 @@
 require "rails_helper"
 
+# The credentials cookie itself belongs to authlogic and is asserted end-to-end
+# in spec/requests/session_spec.rb. These are adva's own convenience cookies,
+# which apps read to greet the user without hitting the database.
 RSpec.describe "AuthenticateUser cookies" do
-  it "remember_me! sets cookies and forget_me! clears them" do
-    controller = BaseController.new
-    request = ActionDispatch::TestRequest.create
-    controller.set_request!(request)
-
-    user = instance_double("User", id: 1, name: "Test User")
-    allow(user).to receive(:anonymous?).and_return(false)
-    allow(user).to receive(:assign_token!).with("remember me").and_return("token")
-
-    allow(controller).to receive(:current_user).and_return(user)
-
-    controller.send(:remember_me!)
-    ck = controller.send(:cookies)
-    expect(ck[:remember_me]).to be_present
-    # set_user_cookie! writes uid/uname separately
-    controller.send(:set_user_cookie!, user)
-    ck = controller.send(:cookies)
-    expect(ck[:uid]).to eq("1")
-    expect(ck[:uname]).to eq("Test User")
-
-    controller.send(:forget_me!)
-    ck = controller.send(:cookies)
-    expect(ck[:remember_me]).to be_nil
-    expect(ck[:uid]).to be_nil
-    expect(ck[:uname]).to be_nil
+  let(:controller) do
+    BaseController.new.tap do |c|
+      c.set_request!(ActionDispatch::TestRequest.create)
+    end
   end
 
-  it "remember_me! hardens the cookie with httponly, secure, same_site, and a short expiry" do
-    controller = BaseController.new
-    request = ActionDispatch::TestRequest.create
-    controller.set_request!(request)
+  let(:user) do
+    instance_double("User", id: 1, name: "Test User", anonymous?: false)
+  end
 
-    user = instance_double("User", id: 1, name: "Test User")
-    allow(user).to receive(:anonymous?).and_return(false)
-    allow(user).to receive(:assign_token!).with("remember me").and_return("token")
-    allow(controller).to receive(:current_user).and_return(user)
+  it "set_user_cookie! writes uid and uname" do
+    controller.send(:set_user_cookie!, user)
 
-    captured = {}
-    allow(controller).to receive(:cookies).and_return(captured)
+    expect(controller.send(:cookies)[:uid]).to eq("1")
+    expect(controller.send(:cookies)[:uname]).to eq("Test User")
+  end
 
-    controller.send(:remember_me!)
+  it "set_user_cookie! writes nothing for an anonymous user" do
+    controller.send(:set_user_cookie!, User.anonymous)
 
-    opts = captured[:remember_me]
-    expect(opts[:value]).to eq("1;token")
-    expect(opts[:httponly]).to be(true)
-    expect(opts[:secure]).to be(true)
-    expect(opts[:same_site]).to eq(:lax)
-    expect(opts[:expires]).to be_within(1.hour).of(2.weeks.from_now)
-    expect(opts[:expires]).to be < 1.year.from_now
+    expect(controller.send(:cookies)[:uid]).to be_nil
+    expect(controller.send(:cookies)[:uname]).to be_nil
+  end
+
+  it "forget_me! clears them, along with any legacy remember_me cookie" do
+    controller.send(:set_user_cookie!, user)
+
+    controller.send(:forget_me!)
+
+    expect(controller.send(:cookies)[:uid]).to be_nil
+    expect(controller.send(:cookies)[:uname]).to be_nil
+    expect(controller.send(:cookies)[:remember_me]).to be_nil
   end
 end

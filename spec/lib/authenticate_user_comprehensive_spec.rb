@@ -52,68 +52,6 @@ RSpec.describe Adva::AuthenticateUser do
     end
   end
 
-  describe "#validate_token" do
-    let(:dummy_class) do
-      Class.new do
-        def self.find_by_id(id)
-          if id == "123"
-            user = Struct.new(:id).new(123)
-            def user.authenticate(token)
-              token == "valid_token"
-            end
-            user
-          end
-        end
-      end
-    end
-
-    let(:dummy_controller) do
-      Class.new do
-        def self.helper_method(*methods); end
-        include Adva::AuthenticateUser
-      end.new
-    end
-
-    it "returns nil for blank token" do
-      expect(dummy_controller.send(:validate_token, dummy_class, nil)).to be_nil
-      expect(dummy_controller.send(:validate_token, dummy_class, "")).to be_nil
-      expect(dummy_controller.send(:validate_token, dummy_class, "   ")).to be_nil
-    end
-
-    it "returns nil for token without semicolon" do
-      expect(dummy_controller.send(:validate_token, dummy_class, "no_semicolon")).to be_nil
-    end
-
-    it "returns user object when token is valid" do
-      result = dummy_controller.send(:validate_token, dummy_class, "123;valid_token")
-      expect(result).not_to be_nil
-      expect(result.id).to eq(123)
-    end
-
-    it "returns nil when token is invalid" do
-      result = dummy_controller.send(:validate_token, dummy_class, "123;invalid_token")
-      expect(result).to be_nil
-    end
-
-    it "returns nil when user is not found" do
-      result = dummy_controller.send(:validate_token, dummy_class, "999;valid_token")
-      expect(result).to be_nil
-    end
-  end
-
-  describe "#http_auth_login" do
-    let(:dummy_controller) do
-      Class.new do
-        def self.helper_method(*methods); end
-        include Adva::AuthenticateUser
-      end.new
-    end
-
-    it "is not implemented yet" do
-      expect(dummy_controller.send(:http_auth_login)).to be_nil
-    end
-  end
-
   describe "#authenticated?" do
     let(:dummy_controller) do
       Class.new do
@@ -190,40 +128,6 @@ RSpec.describe Adva::AuthenticateUser do
       expect(dummy_controller).to receive(:redirect_to).and_return(nil)
       result = dummy_controller.send(:require_authentication)
       expect(result).to be_falsy
-    end
-  end
-
-  describe "#try_login" do
-    let(:dummy_controller) do
-      Class.new do
-        def self.helper_method(*methods); end
-        include Adva::AuthenticateUser
-
-        attr_accessor :session
-
-        def initialize
-          @session = {}
-        end
-
-        def http_auth_login
-          nil
-        end
-
-        def validation_login
-          nil
-        end
-
-        def remember_me_login
-          nil
-        end
-      end.new
-    end
-
-    it "sets session uid when login succeeds" do
-      user = double("User", id: 123)
-      allow(dummy_controller).to receive(:validation_login).and_return(user)
-      dummy_controller.send(:try_login)
-      expect(dummy_controller.session[:uid]).to eq(123)
     end
   end
 end

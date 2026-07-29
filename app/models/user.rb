@@ -1,9 +1,10 @@
 class User < ActiveRecord::Base
-  acts_as_authenticated_user
-
-  # TODO how do we work this in?
-  #  acts_as_authenticated_user token_with: 'Authentication::SingleToken',
-  #                             authenticate_with: nil
+  acts_as_authentic do |c|
+    c.crypted_password_field = :password_hash
+    c.crypto_provider = Adva::CryptoProviders::BCrypt
+    c.transition_from_crypto_providers = [Adva::CryptoProviders::LegacySaltedSha1]
+    c.perishable_token_valid_for = 3.days
+  end
 
   scope :verified, -> { where.not(verified_at: nil) }
   scope :admin, -> { where(admin: true) }
@@ -24,8 +25,9 @@ class User < ActiveRecord::Base
 
   class << self
     def authenticate(credentials)
-      return false unless user = User.find_by(email: credentials[:email])
-      user.authenticate(credentials[:password]) ? user : false
+      user = find_by_smart_case_login_field(credentials[:email].to_s)
+      return false unless user&.verified?
+      user.valid_password?(credentials[:password]) ? user : false
     end
 
     def anonymous(attributes = {}) # FIXME rename to build_anonymous

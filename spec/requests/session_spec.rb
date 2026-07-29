@@ -52,32 +52,80 @@ RSpec.describe "Session", type: :request do
       expect(response).to redirect_to("/special-page")
     end
 
-    it "sets remember me when requested" do
+    def credentials_set_cookie
+      Array(response.headers["Set-Cookie"]).join("\n").split("\n").find do |line|
+        line.start_with?("user_credentials=")
+      end
+    end
+
+    it "outlives the browser session when remember me is requested" do
       host! site.host
       post "/session", params: { user: { email: user.email, password: "AAbbcc1122!!", remember_me: "1" } }
       expect(response).to redirect_to("/")
-      expect(response.cookies["remember_me"]).to be_present
+      expect(response.cookies["user_credentials"]).to be_present
+
+      expires = credentials_set_cookie[/;\s*expires=([^;]+)/i, 1]
+      expect(expires).to be_present
+      expect(Time.parse(expires)).to be_within(1.hour).of(2.weeks.from_now)
     end
 
-    it "does not set remember me when not requested" do
+    it "expires with the browser session when remember me is not requested" do
       host! site.host
       post "/session", params: { user: { email: user.email, password: "AAbbcc1122!!" } }
       expect(response).to redirect_to("/")
-      expect(response.cookies["remember_me"]).to be_blank
+      # Authlogic always persists the session by cookie; without remember me it
+      # simply carries no expiry.
+      expect(response.cookies["user_credentials"]).to be_present
+      expect(credentials_set_cookie).not_to match(/;\s*expires=/i)
     end
 
-    it "hardens the remember_me cookie with httponly, secure, and same_site=lax" do
+    it "hardens the credentials cookie with httponly, secure, and same_site=lax" do
       host! site.host
       post "/session", params: { user: { email: user.email, password: "AAbbcc1122!!", remember_me: "1" } }
-      expect(response.cookies["remember_me"]).to be_present
+      expect(response.cookies["user_credentials"]).to be_present
 
-      set_cookie = Array(response.headers["Set-Cookie"]).join("\n").split("\n").find do |line|
-        line.start_with?("remember_me=")
-      end
+      set_cookie = credentials_set_cookie
       expect(set_cookie).to be_present
       expect(set_cookie).to match(/;\s*httponly/i)
       expect(set_cookie).to match(/;\s*secure/i)
       expect(set_cookie).to match(/;\s*samesite=lax/i)
+    end
+
+    it "logs in an account whose bcrypt hash was written before authlogic" do
+      # What the previous scheme stored: bcrypt over the password alone, with an
+      # unrelated salt sitting in password_salt.
+      user.update_columns(
+        password_salt: Digest::SHA1.hexdigest("salt-whenever"),
+        password_hash: BCrypt::Password.create("AAbbcc1122!!").to_s,
+      )
+
+      host! site.host
+      post "/session", params: { user: { email: user.email, password: "AAbbcc1122!!" } }
+      expect(response).to redirect_to("/")
+    end
+
+    it "logs in an account still on the legacy sha1 hash, rehashing it to bcrypt" do
+      salt = Digest::SHA1.hexdigest("some-legacy-salt")
+      user.update_columns(
+        password_salt: salt,
+        password_hash: Digest::SHA1.hexdigest("#{salt}---AAbbcc1122!!"),
+      )
+
+      host! site.host
+      post "/session", params: { user: { email: user.email, password: "AAbbcc1122!!" } }
+      expect(response).to redirect_to("/")
+
+      expect(user.reload.password_hash).to start_with("$2")
+    end
+
+    it "refuses to log in an unverified account" do
+      unverified = User.create!(first_name: "unverified",
+        email: "unverified@example.com", password: "AAbbcc1122!!")
+
+      host! site.host
+      post "/session", params: { user: { email: unverified.email, password: "AAbbcc1122!!" } }
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include('action="/session"')
     end
 
     it "preserves remember_me value on failed login" do
@@ -108,14 +156,14 @@ RSpec.describe "Session", type: :request do
       expect(response).to redirect_to("/")
     end
 
-    it "clears the remember_me cookie on logout" do
+    it "clears the credentials cookie on logout" do
       host! site.host
       post "/session", params: { user: { email: user.email, password: "AAbbcc1122!!", remember_me: "1" } }
-      expect(response.cookies["remember_me"]).to be_present
+      expect(response.cookies["user_credentials"]).to be_present
 
       delete "/session"
       expect(response).to redirect_to("/")
-      expect(response.cookies["remember_me"]).to be_blank
+      expect(response.cookies["user_credentials"]).to be_blank
     end
   end
 end

@@ -11,7 +11,6 @@ class SessionController < BaseController
 
   def create
     if authenticate_user(params[:user])
-      remember_me! if params[:user][:remember_me]
       redirect_to params[:return_to] || "/", notice: "Logged in successfully."
     else
       @user = User.new(email: params[:user][:email])
@@ -24,8 +23,7 @@ class SessionController < BaseController
   def token_login
     user_id = Rails.application.message_verifier("login_as").verified(params[:token])
     if user_id && (user = User.find_by(id: user_id))
-      session[:uid] = user.id
-      set_user_cookie!(user)
+      login_user!(user)
       redirect_to "/admin", notice: "You are now logged in as #{user.name}."
     else
       redirect_to "/login", alert: "Invalid or expired login token."
