@@ -2,7 +2,13 @@ class PasswordController < BaseController
   renders_with_error_proc :below_field
   layout "login"
 
+  perishable_token_login!
+
+  # The reset link's token is the credential, and the session cookie is often
+  # gone by the time the form is submitted, so a valid token stands in for the
+  # authenticity token. Session-authenticated changes still require one.
   skip_forgery_protection only: :update
+  before_action :verify_authenticity_token, only: :update, unless: :password_reset_token?
 
   def new
   end
@@ -32,4 +38,12 @@ class PasswordController < BaseController
       render action: :edit
     end
   end
+
+  private
+
+    # Presence alone is not enough: an unrecognised token must not exempt a
+    # request that is riding someone else's session.
+    def password_reset_token?
+      params[:token].present? && User.find_using_perishable_token(params[:token]).present?
+    end
 end

@@ -2,6 +2,10 @@ module Adva
   module AuthenticateUser
     def self.included(target)
       target.extend(ClassMethods)
+      # Opt-in, because #current_user runs on every request: without this a
+      # password-reset token in the URL would establish a session anywhere in
+      # the app, including the admin area.
+      target.class_attribute :perishable_token_login, default: false, instance_writer: false
       target.helper_method(:current_user, :logged_in?, :authenticated?)
     end
 
@@ -33,6 +37,12 @@ module Adva
       # in a specific controller.
       def no_authentication_required
         skip_before_action :require_authentication
+      end
+
+      # Lets this controller establish a session from a perishable token in the
+      # URL. Only the password-reset flow should need this.
+      def perishable_token_login!
+        self.perishable_token_login = true
       end
     end
 
@@ -130,6 +140,8 @@ module Adva
     # A password reset link carries a perishable token in the URL. Consuming it
     # logs the user in so they can set a new password.
     def login_with_perishable_token
+      return nil unless perishable_token_login
+
       token = params[:token] if respond_to?(:params, true)
       return nil if token.blank?
 
