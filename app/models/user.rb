@@ -1,4 +1,6 @@
 class User < ActiveRecord::Base
+  LOGIN_AS_PURPOSE = :login_as
+
   acts_as_authentic do |c|
     c.crypted_password_field = :password_hash
     c.crypto_provider = Adva::CryptoProviders::BCrypt
@@ -34,6 +36,26 @@ class User < ActiveRecord::Base
       attributes[:anonymous] = true
       new attributes
     end
+
+    def login_as_verifier
+      Rails.application.message_verifier("login_as")
+    end
+
+    # Returns the user id carried by a /token_login token, or nil. Tokens
+    # without our purpose, or past their expiry, are rejected.
+    def verify_login_as_token(token)
+      return nil if token.blank?
+      login_as_verifier.verified(token, purpose: LOGIN_AS_PURPOSE)
+    end
+  end
+
+  # Mints a token for /token_login. Short-lived by default: it is a bearer
+  # credential that lands in a URL, and there is no way to revoke an individual
+  # token short of rotating secret_key_base.
+  def login_as_token(expires_in: 15.minutes)
+    self.class.login_as_verifier.generate(
+      id, purpose: LOGIN_AS_PURPOSE, expires_in: expires_in
+    )
   end
 
   def attributes=(attributes)

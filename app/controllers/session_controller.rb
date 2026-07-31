@@ -20,8 +20,11 @@ class SessionController < BaseController
     end
   end
 
+  # Tokens are minted by User#login_as_token, which scopes them to :login_as and
+  # gives them an expiry. Without both, any token ever generated stays a valid
+  # admin credential until secret_key_base is rotated.
   def token_login
-    user_id = Rails.application.message_verifier("login_as").verified(params[:token])
+    user_id = User.verify_login_as_token(params[:token])
     if user_id && (user = User.find_by(id: user_id))
       login_user!(user)
       redirect_to "/admin", notice: "You are now logged in as #{user.name}."
