@@ -27,11 +27,23 @@ class Admin::Page::CategoriesController < Admin::BaseController
     end
   end
 
+  # The tree widget posts parent_id/left_id per row. left_id is a positioning
+  # hint rather than a column, so move the nodes explicitly the way sections and
+  # contents do, instead of mass-assigning whatever was posted.
   def update_all
-    # FIXME we currently use :update_all to update the position for a single object
-    # instead we should either use :update_all to batch update all objects on this
-    # resource or use :update. applies to articles, sections, categories etc.
-    @section.categories.update(params[:categories].keys, params[:categories].values)
+    params.require(:categories).each do |id, attrs|
+      category = @section.categories.find(id)
+      parent = @section.categories.find_by(id: attrs[:parent_id])
+      left = @section.categories.find_by(id: attrs[:left_id])
+      if parent
+        category.move_to_child_with_index parent, 0
+      else
+        category.move_to_root
+        sibling = category.siblings.first
+        category.move_to_left_of sibling if sibling
+      end
+      category.move_to_right_of left if left
+    end
     @section.categories.update_paths!
     head :ok
   end
