@@ -19,7 +19,7 @@ class Admin::Page::ArticlesController < Admin::BaseController
 
   def new
     defaults = { comment_age: @section.comment_age, filter: @section.content_filter }
-    @article = @section.articles.build(defaults.update(params[:article] || {}))
+    @article = @section.articles.build(defaults.merge(article_params.to_h))
   end
 
   def edit
