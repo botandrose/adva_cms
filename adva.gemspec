@@ -37,7 +37,8 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency "rake"
   gem.add_development_dependency "simplecov", "~> 0.22"
   gem.add_development_dependency "simplecov-html", "~> 0.13"
-  gem.add_development_dependency "sqlite3", "~> 1.7"
+  gem.add_development_dependency "sqlite3", ">= 1.7"
+  gem.add_development_dependency "ostruct"
   gem.add_development_dependency "timecop"
   gem.add_development_dependency "debug"
 end
