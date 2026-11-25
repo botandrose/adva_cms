@@ -21,3 +21,5 @@ pkg
 *~
 /nbproject
 coverage/
+Gemfile.lock
+gemfiles/*.gemfile.lock
