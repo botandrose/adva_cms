@@ -60,7 +60,6 @@ CI matrix: Ruby 3.2/3.3/3.4 x Rails 7.2/8.0, plus independent runs for each vend
 - Public: `/:section_permalink`, `/:section_permalink/:permalink`, tag/category filter variants
 - Admin: `/admin/*` with nested resources
 - Auth: `/login`, `/logout`, `/session`, `/password`
-- Install redirect: `/` → `/admin/install` when no sites exist
 
 ### Vendored Gems (`vendor/gems/`)
 

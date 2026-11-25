@@ -1,8 +1,4 @@
 Rails.application.routes.draw do
-  scope constraints: ->(req) { Site.count.zero? } do
-    get "/" => redirect("/admin/install")
-  end
-
   scope constraints: lambda { |req| Page.where(permalink: req.params[:section_permalink]).exists? } do
     get "/:section_permalink" => "articles#index", as: :page
     get "/:section_permalink/tags/:tags" => "articles#index", as: :page_tag
@@ -24,9 +20,6 @@ Rails.application.routes.draw do
   get "/" => "articles#index", as: :root
 
   namespace :admin do
-    post "install" => "install#index"
-    get "install" => "install#index"
-
     resources :sites
     resource :site
 
